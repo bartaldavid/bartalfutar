@@ -1,6 +1,5 @@
 <script lang="ts">
-	import type { components, operations } from '../../data/bkk-openapi';
-	import { savedStops, editMode, user, type savedStop, fetchError } from '../../data/stores';
+	import { savedStops, type savedStop } from '../../data/stores';
 	import Stop from '../../components/Stop.svelte';
 	import { createQuery } from '@tanstack/svelte-query';
 	import { fetchStopsForQuery } from '../../util/fetch';
