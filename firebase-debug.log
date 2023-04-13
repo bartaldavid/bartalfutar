@@ -1,0 +1,31 @@
+[debug] [2023-04-13T20:45:47.533Z] ----------------------------------------------------------------------
+[debug] [2023-04-13T20:45:47.535Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\barta\AppData\Local\pnpm\global\5\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2023-04-13T20:45:47.536Z] CLI Version:   11.20.0
+[debug] [2023-04-13T20:45:47.536Z] Platform:      win32
+[debug] [2023-04-13T20:45:47.536Z] Node Version:  v18.15.0
+[debug] [2023-04-13T20:45:47.537Z] Time:          Thu Apr 13 2023 22:45:47 GMT+0200 (Central European Summer Time)
+[debug] [2023-04-13T20:45:47.537Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-04-13T20:45:47.631Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-04-13T20:45:47.632Z] > authorizing via signed-in user (bartaldvd@gmail.com)
+[debug] [2023-04-13T20:45:47.632Z] [iam] checking project bkk-svelte for permissions ["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2023-04-13T20:45:47.634Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/bkk-svelte:testIamPermissions [none]
+[debug] [2023-04-13T20:45:47.635Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/bkk-svelte:testIamPermissions x-goog-quota-user=projects/bkk-svelte
+[debug] [2023-04-13T20:45:47.635Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/bkk-svelte:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-13T20:45:48.455Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/bkk-svelte:testIamPermissions 200
+[debug] [2023-04-13T20:45:48.455Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/bkk-svelte:testIamPermissions {"permissions":["datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2023-04-13T20:45:48.456Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/bkk-svelte [none]
+[debug] [2023-04-13T20:45:48.724Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/bkk-svelte 200
+[debug] [2023-04-13T20:45:48.724Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/bkk-svelte {"projectId":"bkk-svelte","projectNumber":"656596007531","displayName":"bkk-svelte","name":"projects/bkk-svelte","resources":{"hostingSite":"bkk-svelte","storageBucket":"bkk-svelte.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_59ee98e3-0ed9-4eae-a6f7-33fd6c4589d6"}
+[debug] [2023-04-13T20:45:54.657Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/bkk-svelte/sites pageToken=&pageSize=10
+[debug] [2023-04-13T20:45:55.750Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/bkk-svelte/sites 200
+[debug] [2023-04-13T20:45:55.751Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/bkk-svelte/sites {"sites":[{"name":"projects/bkk-svelte/sites/bkk-svelte","defaultUrl":"https://bkk-svelte.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2023-04-13T20:45:55.753Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/bkk-svelte/sites 
+[debug] [2023-04-13T20:45:56.733Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/bkk-svelte/sites 200
+[debug] [2023-04-13T20:45:56.733Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/bkk-svelte/sites {"sites":[{"name":"projects/bkk-svelte/sites/bkk-svelte","defaultUrl":"https://bkk-svelte.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2023-04-13T20:45:56.734Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/bkk-svelte/webApps/-/config [none]
+[debug] [2023-04-13T20:45:57.493Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/bkk-svelte/webApps/-/config 200
+[debug] [2023-04-13T20:45:57.494Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/bkk-svelte/webApps/-/config {"projectId":"bkk-svelte","appId":"1:656596007531:web:5c79965bc76bb9a6168f2e","storageBucket":"bkk-svelte.appspot.com","locationId":"europe-west","apiKey":"AIzaSyD4remIrEwAp6iri5_uKQHmumgCsNoJJ8I","authDomain":"bkk-svelte.firebaseapp.com","messagingSenderId":"656596007531","measurementId":"G-1XG2KFL1H5"}
+[debug] [2023-04-13T20:46:13.550Z] Error: ENOENT: no such file or directory, lstat 'C:\Users\barta\Documents\Coding\bartalfutar-sveltekit\C:\Users\barta\Documents\Coding\bartalfutar-sveltekit\.svelte-kit\output\server'
+[error] 
+[error] Error: An unexpected error has occurred.
