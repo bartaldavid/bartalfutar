@@ -6,8 +6,8 @@ import {
 	defaultTripParams
 } from '../data/defaultParams';
 
-export async function fetchStopDepartures(stopId: string) {
-	const params = { ...defaultStopParams, stopId: stopId };
+export async function fetchStopDepartures(stopId: string, limit?: number) {
+	const params = { ...defaultStopParams, stopId: stopId, limit: limit ?? 10 };
 	const response = await fetch(stopDataUrl + new URLSearchParams(params as any));
 	const data: components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse'] =
 		await response.json();
