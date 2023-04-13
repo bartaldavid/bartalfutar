@@ -5,7 +5,7 @@ export const defaultStopParams: operations['getArrivalsAndDeparturesForStop']['p
 		version: '4',
 		onlyDepartures: true,
 		limit: 10,
-		minutesBefore: 0,
+		minutesBefore: 1,
 		minutesAfter: 90
 	};
 

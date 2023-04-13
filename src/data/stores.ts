@@ -21,7 +21,7 @@ export const stopsRef = writable<CollectionReference<DocumentData>>();
 let unsubData: Unsubscribe;
 
 onAuthStateChanged(auth, async (currentUser) => {
-	console.log('Auth state changed!');
+	console.log('Auth state changed!', currentUser?.uid);
 	if (currentUser) {
 		user.set(currentUser);
 		const { onSnapshot, collection, query } = await import('firebase/firestore');

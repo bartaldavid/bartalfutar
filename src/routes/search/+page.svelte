@@ -52,7 +52,7 @@
 		/>
 		<!-- FIXME this should only be a loading indicator -->
 		<button on:click={async () => await $searchData.refetch()} class="dark:text-slate-100"
-			>{$searchData.isLoading ? 'Loading...' : 'Search'}</button
+			>{$searchData.isFetching ? 'Loading...' : 'Search'}</button
 		>
 	</div>
 

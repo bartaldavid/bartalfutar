@@ -9,17 +9,9 @@
 	export let departure: components['schemas']['TransitScheduleStopTime'] = {};
 	export let references: components['schemas']['OTPTransitReferences'] = {};
 	export let expandedTripId: string;
+	export let expandable: boolean;
 
 	const dispatch = createEventDispatcher();
-
-	type tripDetailResponse = {
-		loading: boolean;
-		error: string;
-		data: components['schemas']['TransitEntryWithReferencesTransitTripDetailsOTP'];
-	};
-
-	let tripRef: components['schemas']['TransitReferences'];
-	let tripData: components['schemas']['TransitTripDetailsOTP'];
 
 	const routeId = references?.trips?.[departure?.tripId!]?.routeId;
 	const routeData = references?.routes?.[routeId!];
@@ -46,7 +38,7 @@
 
 <div
 	class="flex w-full flex-col rounded bg-slate-100 p-4 hover:cursor-pointer dark:bg-slate-800 dark:text-slate-50"
-	on:click={toggleDetails}
+	on:click={() => expandable && toggleDetails()}
 	on:keypress={() => {}}
 >
 	<div class="flex justify-between gap-6">
