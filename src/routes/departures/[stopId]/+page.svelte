@@ -16,20 +16,21 @@
 </script>
 
 <div class="flex h-screen w-full flex-col gap-2 pr-4 pt-4 sm:w-72 sm:overflow-auto">
-	<div class="flex items-center gap-2">
+	<div class="flex items-center gap-2 text-center">
 		<button
-			class="button-outline dark:text-slate-100"
+			class="flex-1 rounded p-2 dark:text-slate-100"
 			on:click={async () => await $stopData.refetch()}
 			><span class="material-symbols-outlined pr-1 align-bottom text-base">
 				refresh
 			</span>{$stopData.isFetching ? 'Loading...' : 'Refresh'}
 		</button>
-		<a href="/" class="button-outline dark:text-slate-100">Clear</a>
+		<a href="/" class="flex-1 rounded p-2 dark:text-slate-100">Clear</a>
 	</div>
 	{#if $stopData.isFetched}
 		<DeparturesList
 			departures={$stopData.data?.entry?.stopTimes}
 			references={$stopData.data?.references}
+			expandable={true}
 		/>
 	{/if}
 </div>
