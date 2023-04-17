@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { savedStops, type savedStop } from '../../data/stores';
-	import Stop from '../../components/Stop.svelte';
+	import type { savedStop } from '../../util/client/savedStop';
 	import { createQuery } from '@tanstack/svelte-query';
 	import { fetchStopsForQuery } from '../../util/fetch';
 	import { debounceIntervalMs, searchQueryMinimumLength } from '../../data/constants';
+	import { savedStops } from '../../util/client/stores';
+	import Stop from '../../components/Stop.svelte';
 
 	let searchQuery: string = '';
 	let timer: NodeJS.Timeout;

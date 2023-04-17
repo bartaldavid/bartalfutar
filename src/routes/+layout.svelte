@@ -3,12 +3,12 @@
 	import { QueryClientProvider, QueryClient } from '@tanstack/svelte-query';
 	import FirebaseUi from '../components/FirebaseUI.svelte';
 	import '../app.css';
-	import { onMount } from 'svelte';
-	import { savedStops, user } from '../data/stores';
-	import { signInAnonymously } from 'firebase/auth';
-	import { auth } from '../util/firebaseSetup';
-	import migrate from '../util/migrateToFirebase';
+	import { savedStops } from '../util/client/stores';
+
 	import StopsView from '../components/StopsView.svelte';
+	import { initializeFirebase } from '../util/client/firebase';
+	import type { LayoutData } from './$types';
+	import { onMount } from 'svelte';
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -19,11 +19,15 @@
 	});
 
 	onMount(async () => {
-		// if (!$user) {
-		// 	await signInAnonymously(auth);
-		// }
-		await migrate();
+		try {
+			initializeFirebase();
+		} catch (error) {
+			console.error(error);
+		}
 	});
+
+	export let data: LayoutData;
+	$savedStops = data.stops;
 </script>
 
 <svelte:head>

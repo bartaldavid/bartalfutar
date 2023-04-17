@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import type { components } from '../data/bkk-openapi';
-	import { savedStops, type savedStop } from '../data/stores';
-	import { removeStopFromFirestore, saveStopToFirestore } from '../util/manageFbData';
+	import { removeStopFromFirestore, saveStopToFirestore } from '../util/client/manageFbData';
 	import { createQuery } from '@tanstack/svelte-query';
 	import { fetchStopDepartures } from '../util/fetch';
 	import DeparturesList from './DeparturesList.svelte';
+	import { savedStops } from '../util/client/stores';
+	import type { savedStop } from '../util/client/savedStop';
 
 	export let references: components['schemas']['TransitReferences'] = {};
 	export let stop: savedStop = {};
@@ -76,7 +76,7 @@
 	</div>
 </div>
 {#if $departuresFromStop.isFetched && expanded}
-	<div class="p-1 bg-slate-700 flex flex-col gap-1 rounded">
+	<div class="flex flex-col gap-1 rounded bg-slate-700 p-1">
 		<DeparturesList
 			references={$departuresFromStop?.data?.references}
 			departures={$departuresFromStop?.data?.entry?.stopTimes}

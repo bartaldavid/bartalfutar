@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { components } from '../data/bkk-openapi';
-	import { type savedStop, savedStops } from '../data/stores';
+	import type { savedStop } from '../util/client/savedStop';
+	import { savedStops } from '../util/client/stores';
 	import SavedStopGroup from './SavedStopGroup.svelte';
 
 	type savedStopGroup = {

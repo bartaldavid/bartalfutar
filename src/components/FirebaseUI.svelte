@@ -1,19 +1,7 @@
 <script lang="ts">
-	import { GoogleAuthProvider, linkWithCredential, signInWithPopup, signOut } from 'firebase/auth';
-	import { user } from '../data/stores';
-	import { auth } from '../util/firebaseSetup';
-
-	// FIXME not working
-	async function elevateAnonToGoogle() {
-		const provider = new GoogleAuthProvider();
-		const result = await signInWithPopup(auth, provider);
-		const credential = GoogleAuthProvider.credentialFromResult(result);
-		if ($user && credential) {
-			linkWithCredential($user, credential)
-				.then(() => console.log('Elevation success'))
-				.catch((error) => console.log('Failure', error));
-		}
-	}
+	import { signOut } from 'firebase/auth';
+	import { user } from '../util/client/stores';
+	import { auth, elevateAnonToGoogle } from '../util/client/firebase';
 </script>
 
 <header
@@ -21,19 +9,13 @@
 >
 	<span class="flex-1 text-xl">BartalFUTÁR</span>
 	<span class="material-symbols-outlined text-xl dark:text-white"> account_circle </span>
-	{#if $user}
-		{#if $user.displayName}
-			<span>{$user.displayName}</span>
-		{/if}
-		<!-- {#if $user.isAnonymous} -->
-		<!-- {:else} -->
-		<button on:click={() => signOut(auth)}>Sign out</button>
-		<!-- {/if} -->
-		<!-- <button on:click={() => migrate()}>Migrate localstorage data</button> -->
-		<!-- {:else}
-      <button on:click={() => signInAnonymously(auth)}>Sign in anonymously</button
-        > -->
-		<span>{$user.uid}</span>
+	{#if $user?.displayName}
+		<span>{$user.displayName}</span>
 	{/if}
-	<button on:click={() => elevateAnonToGoogle()}>Sign in with Google</button>
+	{#if $user?.isAnonymous || !$user}
+		<button on:click={() => elevateAnonToGoogle()}>Sign in with Google</button>
+	{:else}
+		<button on:click={() => signOut(auth)}>Sign out</button>
+	{/if}
+	<!-- <button on:click={() => getUserFromIndexedDB()}>Log user from ls</button> -->
 </header>
