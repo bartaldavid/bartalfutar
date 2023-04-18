@@ -11,24 +11,16 @@ const firebaseConfig = {
 import { browser } from '$app/environment';
 // Import the functions you need from the SDKs you need
 // import { getAnalytics } from "firebase/analytics";
-import { initializeApp, type FirebaseApp } from 'firebase/app';
-import {
-	getAuth,
-	GoogleAuthProvider,
-	linkWithCredential,
-	onAuthStateChanged,
-	signInWithPopup,
-	type Auth,
-	type Unsubscribe
-} from 'firebase/auth';
-import { Firestore, initializeFirestore, persistentLocalCache } from 'firebase/firestore';
+import type { FirebaseApp } from 'firebase/app';
+import type { Unsubscribe } from 'firebase/auth';
+import type { Firestore } from 'firebase/firestore';
 import { stopsRef, user, savedStops } from './stores';
 import type { savedStop } from './savedStop';
 import { get } from 'svelte/store';
 
 export let app: FirebaseApp;
 export let db: Firestore;
-export let auth: Auth;
+// export let auth: Auth;
 
 async function setToken(token: string) {
 	const options = {
@@ -41,16 +33,17 @@ async function setToken(token: string) {
 	await fetch('/api/token', options);
 }
 
-function listenToAuth() {
-	auth = getAuth(app);
+async function listenToAuth() {
+	const { getAuth, onIdTokenChanged } = await import('firebase/auth');
+	const auth = getAuth(app);
 	let unsubData: Unsubscribe;
 
-	onAuthStateChanged(
+	onIdTokenChanged(
 		auth,
 		async (currentUser) => {
 			console.log('Auth state changed!', currentUser?.uid);
+			user.set(currentUser);
 			if (currentUser) {
-				user.set(currentUser);
 				await setToken(await currentUser.getIdToken());
 				const { onSnapshot, collection, query } = await import('firebase/firestore');
 				stopsRef.set(collection(db, `userdata/${currentUser.uid}/stops`));
@@ -66,6 +59,7 @@ function listenToAuth() {
 			} else {
 				unsubData && unsubData();
 				await setToken('');
+				// signInAnonymously(auth);
 			}
 		},
 		(err) => {
@@ -77,8 +71,10 @@ function listenToAuth() {
 export async function initializeFirebase() {
 	if (!browser) throw new Error('Not in browser');
 	if (!app) {
-		// Initialize Firebase
+		const { initializeApp } = await import('firebase/app');
 		app = initializeApp(firebaseConfig);
+
+		const { initializeFirestore, persistentLocalCache } = await import('firebase/firestore');
 		console.log('firebase initialized');
 		db = initializeFirestore(app, {
 			localCache: persistentLocalCache({})
@@ -88,13 +84,23 @@ export async function initializeFirebase() {
 }
 
 export async function elevateAnonToGoogle() {
-	if (!auth) throw new Error('Auth is not defined');
+	const { getAuth, GoogleAuthProvider, signInWithPopup, linkWithCredential } = await import(
+		'firebase/auth'
+	);
+	const auth = getAuth();
 	const provider = new GoogleAuthProvider();
-	await signInWithPopup(auth, provider);
-	// const credential = GoogleAuthProvider.credentialFromResult(result);
-	// if (get(user) !== null && credential) {
-	// 	linkWithCredential(get(user)!, credential)
-	// 		.then(() => console.log('Elevation success'))
-	// 		.catch((error) => console.log('Failure', error));
-	// }
+	const result = await signInWithPopup(auth, provider);
+	const credential = GoogleAuthProvider.credentialFromResult(result);
+	console.log(result);
+	if (get(user) !== null && credential) {
+		linkWithCredential(get(user)!, credential)
+			.then(() => console.log('Elevation success'))
+			.catch((error) => console.log('Failure', error));
+	}
+}
+
+export async function signUserOut() {
+	if (!app) throw Error('Firebase app not initialized');
+	const { getAuth, signOut } = await import('firebase/auth');
+	await signOut(getAuth(app));
 }

@@ -6,9 +6,13 @@
 	import { savedStops } from '../util/client/stores';
 
 	import StopsView from '../components/StopsView.svelte';
-	import { initializeFirebase } from '../util/client/firebase';
+	import { app, initializeFirebase } from '../util/client/firebase';
 	import type { LayoutData } from './$types';
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+
+	export let data: LayoutData;
+	$savedStops = data.stops;
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -21,13 +25,14 @@
 	onMount(async () => {
 		try {
 			initializeFirebase();
+			if (data.uid === null) {
+				const { signInAnonymously, getAuth } = await import('firebase/auth');
+				signInAnonymously(getAuth(app));
+			}
 		} catch (error) {
 			console.error(error);
 		}
 	});
-
-	export let data: LayoutData;
-	$savedStops = data.stops;
 </script>
 
 <svelte:head>
@@ -37,9 +42,9 @@
 	<FirebaseUi />
 	<main class="flex flex-row flex-wrap justify-center gap-4">
 		<div
-			class="ml-1 mr-1 mt-4 flex w-full flex-col {$savedStops.length === 0
+			class="ml-1 mr-1 mt-4 w-full flex-col sm:flex {$savedStops.length === 0
 				? 'justify-center'
-				: ''} gap-2 sm:w-72"
+				: ''} {$page.url.pathname === '/search' && 'hidden'} gap-2 sm:w-72"
 		>
 			<StopsView />
 

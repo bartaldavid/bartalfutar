@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { signOut } from 'firebase/auth';
 	import { user } from '../util/client/stores';
-	import { auth, elevateAnonToGoogle } from '../util/client/firebase';
+	import { elevateAnonToGoogle, signUserOut } from '../util/client/firebase';
 </script>
 
 <header
@@ -12,10 +11,11 @@
 	{#if $user?.displayName}
 		<span>{$user.displayName}</span>
 	{/if}
-	{#if $user?.isAnonymous || !$user}
+	{#if $user?.isAnonymous}
+		<span>Anonymous</span>
 		<button on:click={() => elevateAnonToGoogle()}>Sign in with Google</button>
-	{:else}
-		<button on:click={() => signOut(auth)}>Sign out</button>
+	{:else if $user}
+		<button on:click={() => signUserOut()}>Sign out</button>
 	{/if}
 	<!-- <button on:click={() => getUserFromIndexedDB()}>Log user from ls</button> -->
 </header>
