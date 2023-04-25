@@ -23,7 +23,7 @@ export let db: Firestore;
 // export let auth: Auth;
 
 async function setToken(token: string) {
-	const options = {
+	const options: RequestInit = {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
