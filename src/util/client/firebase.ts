@@ -30,7 +30,8 @@ async function setToken(token: string) {
 		},
 		body: JSON.stringify({ token })
 	};
-	await fetch('/api/token', options);
+	const response = await fetch('/api/token', options);
+	console.log(response.json());
 }
 
 async function listenToAuth() {
@@ -90,13 +91,13 @@ export async function elevateAnonToGoogle() {
 	const auth = getAuth();
 	const provider = new GoogleAuthProvider();
 	const result = await signInWithPopup(auth, provider);
-	const credential = GoogleAuthProvider.credentialFromResult(result);
-	console.log(result);
-	if (get(user) !== null && credential) {
-		linkWithCredential(get(user)!, credential)
-			.then(() => console.log('Elevation success'))
-			.catch((error) => console.log('Failure', error));
-	}
+	// const credential = GoogleAuthProvider.credentialFromResult(result);
+	// // console.log(result);
+	// if (get(user) !== null && credential) {
+	// 	linkWithCredential(get(user)!, credential)
+	// 		.then(() => console.log('Elevation success'))
+	// 		.catch((error) => console.log('Failure', error));
+	// }
 }
 
 export async function signUserOut() {

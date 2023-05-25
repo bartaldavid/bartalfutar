@@ -1,8 +1,8 @@
-import { decodeToken, getUserData } from '../util/firebase-server';
+import { decodeSessionCookie, getUserData } from '../util/firebase-server';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async ({ cookies }) => {
-	const decodedToken = await decodeToken(cookies.get('token') || '');
+	const decodedToken = await decodeSessionCookie(cookies.get('token') || '');
 
 	if (!decodedToken) return { stops: [], uid: null };
 
