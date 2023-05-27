@@ -9,6 +9,7 @@
 	let expandedTripId = '';
 </script>
 
+<!-- TODO if in searchview: show more -> link to departures/[stopId] -->
 {#each departures as departure (departure.tripId)}
 	<Departure
 		{departure}

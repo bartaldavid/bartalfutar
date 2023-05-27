@@ -83,6 +83,8 @@
 			<Countdown {countDownToDate} />
 			<div class="text-xs text-slate-700 dark:text-slate-100">perc múlva</div>
 		</div>
+
+		<!-- TODO show icon to indicate expandable behaviour -->
 	</div>
 
 	{#if expandedTripId === departure.tripId}
