@@ -4,8 +4,7 @@
 		"indexes": "firestore.indexes.json"
 	},
 	"hosting": {
-		"public": ".svelte-kit",
-		"source": ".",
+		"source": "src",
 		"site": "bartalfutar",
 		"ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
 	}
