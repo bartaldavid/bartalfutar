@@ -13,10 +13,10 @@
 	<span class="flex-1 text-xl">BartalFUTÁR</span>
 	<span class="material-symbols-outlined text-xl dark:text-white"> account_circle </span>
 	<span>{name}</span>
-	{#if $user?.isAnonymous}
+	{#if $user?.isAnonymous || !$userInfo.name}
 		<button on:click={() => elevateAnonToGoogle()}>Sign in with Google</button>
 	{/if}
-	{#if $user}
+	{#if $user || $userInfo.uid}
 		<button on:click={() => signUserOut()}>Sign out</button>
 	{/if}
 	<!-- <span>{$user?.uid ?? $userInfo.uid}</span> -->
