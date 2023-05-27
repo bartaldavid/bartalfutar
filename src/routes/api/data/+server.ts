@@ -1,12 +1,12 @@
-import { error, type RequestHandler } from '@sveltejs/kit';
-import { decodeSessionCookie, getUserData } from '../../../util/firebase-server';
+// import { error, type RequestHandler } from '@sveltejs/kit';
+// import { decodeSessionCookie, getUserData } from '../../../util/firebase-server';
 
-export const GET = (async ({ cookies }) => {
-	const decodedToken = await decodeSessionCookie(cookies.get('token') || '');
+// export const GET = (async ({ cookies }) => {
+// 	const decodedToken = await decodeSessionCookie(cookies.get('__session') || '');
 
-	if (!decodedToken) throw error(401, "You're not logged in");
+// 	if (!decodedToken) throw error(401, "You're not logged in");
 
-	const stops = await getUserData(decodedToken.uid);
+// 	const stops = await getUserData(decodedToken.uid);
 
-	return new Response(JSON.stringify(stops));
-}) satisfies RequestHandler;
+// 	return new Response(JSON.stringify(stops));
+// }) satisfies RequestHandler;

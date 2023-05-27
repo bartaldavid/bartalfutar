@@ -1,6 +1,10 @@
 <script lang="ts">
-	import { user } from '../util/client/stores';
+	import { user, userInfo } from '../util/client/stores';
 	import { elevateAnonToGoogle, signUserOut } from '../util/client/firebase';
+
+	const name = $userInfo?.name ?? $user?.displayName ?? 'Anonymous';
+
+	console.log($user);
 </script>
 
 <header
@@ -8,14 +12,12 @@
 >
 	<span class="flex-1 text-xl">BartalFUTÁR</span>
 	<span class="material-symbols-outlined text-xl dark:text-white"> account_circle </span>
-	{#if $user?.displayName}
-		<span>{$user.displayName}</span>
-	{/if}
+	<span>{name}</span>
 	{#if $user?.isAnonymous}
-		<span>Anonymous</span>
 		<button on:click={() => elevateAnonToGoogle()}>Sign in with Google</button>
-	{:else if $user}
+	{/if}
+	{#if $user}
 		<button on:click={() => signUserOut()}>Sign out</button>
 	{/if}
-	<!-- <button on:click={() => getUserFromIndexedDB()}>Log user from ls</button> -->
+	<!-- <span>{$user?.uid ?? $userInfo.uid}</span> -->
 </header>

@@ -14,7 +14,7 @@ import { browser } from '$app/environment';
 import type { FirebaseApp } from 'firebase/app';
 import type { Unsubscribe } from 'firebase/auth';
 import type { Firestore } from 'firebase/firestore';
-import { stopsRef, user, savedStops } from './stores';
+import { stopsRef, user, savedStops, userInfo } from './stores';
 import type { savedStop } from './savedStop';
 import { get } from 'svelte/store';
 
@@ -23,14 +23,12 @@ export let db: Firestore;
 // export let auth: Auth;
 
 async function setToken(token: string) {
-	const options: RequestInit = {
+	const response = await fetch('/api/token', {
 		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ token })
-	};
-	const response = await fetch('/api/token', options);
+		headers: new Headers({
+			Authorization: `Bearer ${token}`
+		})
+	});
 	console.log(response.json());
 }
 
@@ -44,8 +42,10 @@ async function listenToAuth() {
 		async (currentUser) => {
 			console.log('Auth state changed!', currentUser?.uid);
 			user.set(currentUser);
+
 			if (currentUser) {
 				await setToken(await currentUser.getIdToken());
+
 				const { onSnapshot, collection, query } = await import('firebase/firestore');
 				stopsRef.set(collection(db, `userdata/${currentUser.uid}/stops`));
 
@@ -54,13 +54,12 @@ async function listenToAuth() {
 					const stops: savedStop[] = [];
 					snap.forEach((doc) => stops.push(doc.data()));
 					savedStops.set(stops);
-					// const source = snap.metadata.fromCache ? 'local cache' : 'server';
-					// console.log('Data came from ' + source);
 				});
 			} else {
 				unsubData && unsubData();
 				await setToken('');
-				// signInAnonymously(auth);
+				userInfo.set({});
+				savedStops.set([]);
 			}
 		},
 		(err) => {
@@ -88,16 +87,16 @@ export async function elevateAnonToGoogle() {
 	const { getAuth, GoogleAuthProvider, signInWithPopup, linkWithCredential } = await import(
 		'firebase/auth'
 	);
-	const auth = getAuth();
+	const auth = getAuth(app);
 	const provider = new GoogleAuthProvider();
 	const result = await signInWithPopup(auth, provider);
-	// const credential = GoogleAuthProvider.credentialFromResult(result);
-	// // console.log(result);
-	// if (get(user) !== null && credential) {
-	// 	linkWithCredential(get(user)!, credential)
-	// 		.then(() => console.log('Elevation success'))
-	// 		.catch((error) => console.log('Failure', error));
-	// }
+	const credential = GoogleAuthProvider.credentialFromResult(result);
+	// console.log(result);
+	if (get(user) !== null && credential) {
+		linkWithCredential(get(user)!, credential)
+			.then(() => console.log('Elevation success'))
+			.catch((error) => console.log('Failure', error));
+	}
 }
 
 export async function signUserOut() {

@@ -3,7 +3,7 @@
 	import { QueryClientProvider, QueryClient } from '@tanstack/svelte-query';
 	import FirebaseUi from '../components/FirebaseUI.svelte';
 	import '../app.css';
-	import { savedStops } from '../util/client/stores';
+	import { savedStops, user, userInfo } from '../util/client/stores';
 
 	import StopsView from '../components/StopsView.svelte';
 	import { app, initializeFirebase } from '../util/client/firebase';
@@ -13,6 +13,8 @@
 
 	export let data: LayoutData;
 	$savedStops = data.stops;
+	$userInfo.name = data.name;
+	$userInfo.uid = data.uid;
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -23,15 +25,7 @@
 	});
 
 	onMount(async () => {
-		try {
-			initializeFirebase();
-			if (data.uid === null) {
-				const { signInAnonymously, getAuth } = await import('firebase/auth');
-				signInAnonymously(getAuth(app));
-			}
-		} catch (error) {
-			console.error(error);
-		}
+		initializeFirebase();
 	});
 </script>
 
@@ -41,32 +35,34 @@
 <QueryClientProvider client={queryClient}>
 	<FirebaseUi />
 	<main class="flex flex-row flex-wrap justify-center gap-4">
-		<div
-			class="ml-1 mr-1 mt-4 w-full flex-col sm:flex {$savedStops.length === 0
-				? 'justify-center'
-				: ''} {$page.url.pathname === '/search' && 'hidden'} gap-2 sm:w-72"
-		>
-			<StopsView />
-
-			{#if !$savedStops.length}
-				<div class="p-4 pb-0 text-center text-4xl dark:text-slate-50">BartalFUTÁR</div>
-				<div class="pb-10 text-center dark:text-slate-200">Add stops to get started</div>
-			{/if}
-
+		{#if $user || $userInfo.uid}
 			<div
-				class="flex gap-2 rounded bg-slate-50 p-2 dark:bg-slate-800 {$savedStops.length === 0
-					? 'w-52 self-center'
-					: ''}"
+				class="ml-1 mr-1 mt-4 w-full flex-col sm:flex {$savedStops.length === 0
+					? 'justify-center'
+					: ''} {$page.url.pathname === '/search' && 'hidden'} gap-2 sm:w-72"
 			>
-				<a
-					class="button-outline bg-white text-center dark:border-none dark:bg-slate-700 dark:text-white"
-					href="/search"
-					><span class="material-symbols-outlined align-bottom text-base"> add </span><span>
-						Add stop</span
-					>
-				</a>
+				<StopsView />
+
+				{#if !$savedStops.length}
+					<div class="p-4 pb-0 text-center text-4xl dark:text-slate-50">BartalFUTÁR</div>
+					<div class="pb-10 text-center dark:text-slate-200">Add stops to get started</div>
+				{/if}
+
+				<div
+					class="flex gap-2 rounded bg-slate-50 p-2 dark:bg-slate-800 {$savedStops.length === 0
+						? 'w-52 self-center'
+						: ''}"
+				>
+					<a
+						class="button-outline bg-white text-center dark:border-none dark:bg-slate-700 dark:text-white"
+						href="/search"
+						><span class="material-symbols-outlined align-bottom text-base"> add </span><span>
+							Add stop</span
+						>
+					</a>
+				</div>
 			</div>
-		</div>
+		{/if}
 		<slot />
 	</main>
 </QueryClientProvider>
