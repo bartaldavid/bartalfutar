@@ -21,7 +21,6 @@ export const load: LayoutServerLoad = async ({ cookies }): Promise<serverData> =
 	const stops = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
 	const name = (await serverAuth.getUser(decodedToken.uid)).displayName;
-	console.log((await serverAuth.getUser(decodedToken.uid)).toJSON());
 	return {
 		stops,
 		uid: decodedToken.uid,

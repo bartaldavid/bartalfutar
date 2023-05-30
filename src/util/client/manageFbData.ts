@@ -6,7 +6,6 @@ import { db } from './firebase';
 
 export async function removeStopFromFirestore(id: string) {
 	await deleteDoc(doc(db, `userdata/${get(user)?.uid}/stops`, id));
-	console.log('Removed');
 }
 
 export async function saveStopToFirestore(stop: savedStop) {
@@ -16,7 +15,6 @@ export async function saveStopToFirestore(stop: savedStop) {
 			doc(db, `userdata/${get(user)?.uid}/stops`, stop.id),
 			stop
 		);
-		console.log('Saved');
 	} else {
 		console.error('either uid or stopId is null');
 	}

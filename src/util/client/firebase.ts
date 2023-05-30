@@ -29,7 +29,6 @@ async function setToken(token: string) {
 			Authorization: `Bearer ${token}`
 		})
 	});
-	console.log(response.json());
 }
 
 async function listenToAuth() {
@@ -75,7 +74,6 @@ export async function initializeFirebase() {
 		app = initializeApp(firebaseConfig);
 
 		const { initializeFirestore, persistentLocalCache } = await import('firebase/firestore');
-		console.log('firebase initialized');
 		db = initializeFirestore(app, {
 			localCache: persistentLocalCache({})
 		});

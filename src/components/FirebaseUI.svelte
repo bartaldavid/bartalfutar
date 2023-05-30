@@ -3,8 +3,6 @@
 	import { elevateAnonToGoogle, signUserOut } from '../util/client/firebase';
 
 	const name = $userInfo?.name ?? $user?.displayName ?? 'Anonymous';
-
-	console.log($user);
 </script>
 
 <header

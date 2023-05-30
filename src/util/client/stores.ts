@@ -16,5 +16,3 @@ type UserInfo = {
 };
 
 export const userInfo = writable<UserInfo>({});
-
-savedStops.subscribe((stops) => console.log(stops));
