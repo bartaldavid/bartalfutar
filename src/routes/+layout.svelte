@@ -34,10 +34,10 @@
 </svelte:head>
 <QueryClientProvider client={queryClient}>
 	<FirebaseUi />
-	<main class="flex flex-row flex-wrap justify-center gap-4">
+	<main class="flex flex-row flex-wrap justify-center gap-4 mx-2">
 		{#if $user || $userInfo.uid}
 			<div
-				class="ml-1 mr-1 mt-4 w-full flex-col sm:flex {$savedStops.length === 0
+				class="mt-4 w-full flex-col flex gap-1 {$savedStops.length === 0
 					? 'justify-center'
 					: ''} {$page.url.pathname === '/search' && 'hidden'} gap-2 sm:w-72"
 			>

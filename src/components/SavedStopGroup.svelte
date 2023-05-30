@@ -12,7 +12,7 @@
 	}>();
 </script>
 
-<div class="mb-1 flex flex-row rounded bg-slate-50 p-2 dark:bg-slate-800">
+<div class="flex flex-row rounded bg-slate-50 p-2 dark:bg-slate-800">
 	<div class="flex">
 		<VehicleIcons vehicleType={groupType} />
 	</div>
