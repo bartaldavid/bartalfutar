@@ -22,7 +22,7 @@
 			<button
 				class="flex-1 break-words rounded bg-slate-100 p-2 text-sm dark:bg-slate-700 dark:text-slate-50"
 				on:click={() => {
-					stop.id && goto(`/departures/${stop.id}`);
+					stop.id && goto(`/stops/${stop.id}`);
 				}}
 				>{stop.name}
 			</button>
