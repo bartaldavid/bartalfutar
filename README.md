@@ -11,3 +11,4 @@
   - offline support
 - plan trip to stop
 - show nearest stops / departures
+- custom (at least dark) scrollbar
