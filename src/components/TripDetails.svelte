@@ -19,7 +19,7 @@
 			)}
 			<div
 				class="flex flex-row"
-				class:text-gray-500={estimatedDepArr && estimatedDepArr < new Date()}
+				class:text-gray-500={estimatedDepArr && estimatedDepArr.valueOf() < new Date().getTime()}
 			>
 				<span class="pr-2">
 					{displayDate(
