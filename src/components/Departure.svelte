@@ -16,11 +16,11 @@
 	const routeId = references?.trips?.[departure?.tripId!]?.routeId;
 	const routeData = references?.routes?.[routeId!];
 
-	const predictedDepartureDate = epochToDate(departure.predictedDepartureTime);
-	const departureDate = epochToDate(departure.departureTime);
+	$: predictedDepartureDate = epochToDate(departure.predictedDepartureTime);
+	$: departureDate = epochToDate(departure.departureTime);
 
-	// FIXME not a valid fallback
-	const countDownToDate = predictedDepartureDate ?? departureDate ?? new Date();
+	$: countDownToDate =
+		predictedDepartureDate ?? departureDate ?? epochToDate(departure.predictedArrivalTime);
 
 	const delayInMinutes =
 		departure.predictedDepartureTime && departure.departureTime
@@ -80,7 +80,9 @@
 			{/if}
 		</div>
 		<div class="flex flex-col justify-center text-center">
-			<Countdown {countDownToDate} />
+			{#if countDownToDate}
+				<Countdown {countDownToDate} />
+			{/if}
 			<div class="text-xs text-slate-700 dark:text-slate-100">perc múlva</div>
 		</div>
 
