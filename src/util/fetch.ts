@@ -10,12 +10,13 @@ import {
 import { PUBLIC_BKK_API_KEY } from '$env/static/public';
 
 // TODO refractor these to remove repetition
-
+// TODO throw errors here & catch them in tanstack query
 export async function fetchStopDepartures(stopId: string) {
 	const params = { ...defaultStopParams, stopId: stopId };
 	const response = await fetch(
 		stopDataUrl + new URLSearchParams({ key: PUBLIC_BKK_API_KEY, ...params } as any)
 	);
+	if (!response.ok) throw new Error(response.statusText);
 	const data: components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse'] =
 		await response.json();
 	return data.data;
