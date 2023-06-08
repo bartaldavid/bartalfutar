@@ -11,8 +11,8 @@ import { PUBLIC_BKK_API_KEY } from '$env/static/public';
 
 // TODO refractor these to remove repetition
 
-export async function fetchStopDepartures(stopId: string, limit?: number) {
-	const params = { ...defaultStopParams, stopId: stopId, limit: limit ?? 10 };
+export async function fetchStopDepartures(stopId: string) {
+	const params = { ...defaultStopParams, stopId: stopId };
 	const response = await fetch(
 		stopDataUrl + new URLSearchParams({ key: PUBLIC_BKK_API_KEY, ...params } as any)
 	);
