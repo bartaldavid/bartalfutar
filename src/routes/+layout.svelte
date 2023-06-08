@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import { QueryClientProvider, QueryClient } from '@tanstack/svelte-query';
-	import FirebaseUi from '../components/FirebaseUI.svelte';
+	import Header from '../components/Header.svelte';
 	import '../app.css';
 	import { savedStops, user, userInfo } from '../util/client/stores';
 
@@ -33,7 +33,7 @@
 	<title>BartalFUTÁR</title>
 </svelte:head>
 <QueryClientProvider client={queryClient}>
-	<FirebaseUi />
+	<Header />
 	<main class="flex flex-row flex-wrap justify-center gap-4 mx-2">
 		{#if $user || $userInfo.uid}
 			<div
