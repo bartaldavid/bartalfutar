@@ -79,12 +79,10 @@
 				{/each}
 			{/if}
 		</div>
-		<div class="flex flex-col justify-center text-center">
-			{#if countDownToDate}
-				<Countdown {countDownToDate} />
-			{/if}
-			<div class="text-xs text-slate-700 dark:text-slate-100">perc múlva</div>
-		</div>
+
+		{#if countDownToDate}
+			<Countdown {countDownToDate} />
+		{/if}
 
 		<!-- TODO show icon to indicate expandable behaviour -->
 	</div>
