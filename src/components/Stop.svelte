@@ -28,7 +28,7 @@
 
 	const departuresFromStop = createQuery({
 		queryKey: ['stop', stop.id!],
-		queryFn: async () => await fetchStopDepartures(stop.id!, 3),
+		queryFn: async () => await fetchStopDepartures({ stopId: [stop.id!], limit: 3 }),
 		enabled: false
 	});
 </script>

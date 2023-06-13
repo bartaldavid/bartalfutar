@@ -9,7 +9,7 @@
 	$: stopData = createQuery({
 		queryKey: ['stop', data.stopId],
 		refetchInterval: REFETCH_INTERVAL_MS,
-		queryFn: async () => await fetchStopDepartures(data.stopId),
+		queryFn: async () => await fetchStopDepartures({ stopId: [data.stopId] }),
 		// structuralSharing(oldData, newData) {
 		// 	return { ...oldData?.references, ...newData };
 		// },
