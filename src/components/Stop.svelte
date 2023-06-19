@@ -76,7 +76,7 @@
 	</div>
 </div>
 {#if $departuresFromStop.isFetched && expanded}
-	<div class="flex flex-col gap-1 rounded bg-slate-700 p-1">
+	<div class="flex flex-col gap-1 rounded bg-none dark:bg-slate-700 p-1">
 		<DeparturesList
 			references={$departuresFromStop?.data?.references}
 			departures={$departuresFromStop?.data?.entry?.stopTimes}
