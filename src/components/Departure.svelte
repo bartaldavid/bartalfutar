@@ -53,7 +53,7 @@
 					{displayDate(predictedDepartureDate)}
 				</span>
 				{#if delayInMinutes > 1}
-					<span class="text-xstext-red-500 dark:text-red-400">(+{delayInMinutes.toFixed(1)})</span>
+					<span class="text-xs text-red-500 dark:text-red-400">(+{delayInMinutes.toFixed(1)})</span>
 				{/if}
 			{/if}
 
