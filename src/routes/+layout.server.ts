@@ -1,30 +1,32 @@
+import { adminDB, serverAuth } from '../lib/server/firebase-admin';
 import type { savedStop } from '../util/client/savedStop';
-import { serverAuth, decodeSessionCookie } from '../util/firebase-server';
 
 import type { LayoutServerLoad } from './$types';
-import admin from 'firebase-admin';
 
-type serverData = {
-	stops: savedStop[];
-	uid: string;
-	name?: string;
-	isAnonymous: boolean;
-};
+type serverData =
+	| {
+			status: 'signedIn';
+			stops: savedStop[];
+			uid: string;
+			name?: string;
+			isAnonymous: boolean;
+	  }
+	| { status: 'signedOut' };
 
-export const load: LayoutServerLoad = async ({ cookies }): Promise<serverData> => {
-	const decodedToken = await decodeSessionCookie(cookies.get('__session') || '');
+export const load: LayoutServerLoad = async ({ locals }): Promise<serverData> => {
+	const userId = locals.userId;
 
-	if (!decodedToken) return { stops: [], uid: '', name: '', isAnonymous: false };
+	if (!userId) return { status: 'signedOut' };
 
-	const db = admin.firestore();
-	const querySnapshot = await db.collection(`userdata/${decodedToken.uid}/stops`).get();
+	const querySnapshot = await adminDB.collection(`userdata/${userId}/stops`).get();
 	const stops = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+	const user = await serverAuth.getUser(userId);
 
-	const name = (await serverAuth.getUser(decodedToken.uid)).displayName;
 	return {
+		status: 'signedIn',
 		stops,
-		uid: decodedToken.uid,
-		name,
-		isAnonymous: !(await serverAuth.getUser(decodedToken.uid)).email
+		uid: userId,
+		name: user.displayName,
+		isAnonymous: !user.email
 	};
 };
