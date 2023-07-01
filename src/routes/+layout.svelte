@@ -10,6 +10,8 @@
 	import type { LayoutData } from './$types';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	import { shortcut } from '../util/client/shortcut';
+	import { goto } from '$app/navigation';
 
 	export let data: LayoutData;
 	$savedStops = data.stops;
@@ -47,19 +49,19 @@
 					<div class="p-4 pb-0 text-center text-4xl dark:text-slate-50">BartalFUTÁR</div>
 					<div class="pb-10 text-center dark:text-slate-200">Add stops to get started</div>
 				{/if}
-
 				<div
 					class="flex gap-2 rounded bg-slate-50 p-2 dark:bg-slate-800 {$savedStops.length === 0
 						? 'w-52 self-center'
 						: ''}"
 				>
-					<a
+					<button
 						class="button-outline bg-white text-center dark:border-none dark:bg-slate-700 dark:text-white"
-						href="/search"
-						><span class="material-symbols-outlined align-bottom text-base"> add </span><span>
-							Add stop</span
+						on:click={() => goto('/search')}
+						use:shortcut={{ control: true, code: 'KeyK' }}
+						><span class="material-symbols-outlined align-bottom text-base"> search </span><span>
+							{' '}Search</span
 						>
-					</a>
+					</button>
 				</div>
 			</div>
 		{/if}
