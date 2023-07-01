@@ -8,10 +8,11 @@
 	export let expandable = false;
 
 	let expandedTripId = '';
+
+	// TODO move fetching/refetching here to separate logic
 </script>
 
-<!-- TODO if in searchview: show more -> link to departures/[stopId] -->
-{#each departures as departure (departure.tripId)}
+{#each departures as departure}
 	<Departure
 		{departure}
 		{references}
