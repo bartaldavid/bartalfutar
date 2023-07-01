@@ -1,15 +1,10 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import type { components } from '../data/bkk-openapi';
 	import VehicleIcons from './VehicleIcons.svelte';
 	import { goto } from '$app/navigation';
 
 	export let groupType: string;
 	export let groupItems: components['schemas']['TransitStop'][];
-
-	const dispatch = createEventDispatcher<{
-		stopSelected: { id: string };
-	}>();
 </script>
 
 <div class="flex flex-row rounded bg-slate-50 p-2 dark:bg-slate-800">
