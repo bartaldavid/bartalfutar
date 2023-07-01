@@ -41,7 +41,7 @@
 			<div
 				class="mt-4 w-full flex-col flex gap-1 {$savedStops.length === 0
 					? 'justify-center'
-					: ''} {$page.url.pathname === '/search' && 'hidden'} gap-2 sm:w-72"
+					: ''} {$page.url.pathname === '/search' && 'hidden md:flex'} gap-2 sm:w-72"
 			>
 				<StopsView />
 
@@ -50,7 +50,7 @@
 					<div class="pb-10 text-center dark:text-slate-200">Add stops to get started</div>
 				{/if}
 				<div
-					class="flex gap-2 rounded bg-slate-50 p-2 dark:bg-slate-800 {$savedStops.length === 0
+					class="flex gap-2 rounded bg-slate-50 dark:bg-slate-800 {$savedStops.length === 0
 						? 'w-52 self-center'
 						: ''}"
 				>
