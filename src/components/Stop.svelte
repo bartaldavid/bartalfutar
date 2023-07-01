@@ -6,6 +6,7 @@
 	import DeparturesList from './DeparturesList.svelte';
 	import { savedStops } from '../util/client/stores';
 	import type { savedStop } from '../util/client/savedStop';
+	import { goto } from '$app/navigation';
 
 	export let references: components['schemas']['TransitReferences'] = {};
 	export let stop: savedStop = {};
@@ -34,11 +35,16 @@
 </script>
 
 <div class="flex flex-row rounded border p-1 dark:border-none dark:bg-slate-800 dark:p-2">
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div
-		class="flex-1 cursor-pointer"
+		class="flex-1 cursor-pointer focus:outline-2"
 		on:click={() => {
 			expanded = !expanded;
+			$departuresFromStop.refetch();
+		}}
+		role="button"
+		tabindex={0}
+		on:keydown={(e) => {
+			if (e.key == 'Enter') expanded = !expanded;
 			$departuresFromStop.refetch();
 		}}
 	>
@@ -46,6 +52,13 @@
 			<div class="mb-1 dark:text-slate-50">{stop.name}</div>
 		</div>
 		<div class="flex flex-row flex-wrap gap-1">
+			{#if stop.locationType === 1}
+				<div class="text-sm flex gap-1 dark:text-slate-50">
+					<span class="material-symbols-outlined">multiple_stop</span><span class="">csomópont</span
+					>
+				</div>
+			{/if}
+
 			{#each stop?.routeIds ?? [] as routeid}
 				{@const routeRef = stop?.routeRef?.[routeid] ?? references?.routes?.[routeid]}
 				<span
@@ -82,5 +95,10 @@
 			departures={$departuresFromStop?.data?.entry?.stopTimes}
 			expandable={false}
 		/>
+		<button
+			class="dark:text-slate-50 flex justify-center p-2"
+			on:click={() => goto(`/stops/${stop.id}`)}
+			>Show more <span class="material-symbols-outlined">chevron_right</span></button
+		>
 	</div>
 {/if}
