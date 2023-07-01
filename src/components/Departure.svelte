@@ -40,13 +40,17 @@
 	class="flex w-full flex-col rounded bg-slate-100 p-4 hover:cursor-pointer dark:bg-slate-800 dark:text-slate-50"
 	on:click={() => expandable && toggleDetails()}
 	on:keypress={() => {}}
+	role="button"
+	tabindex="0"
 >
 	<div class="flex justify-between gap-6">
 		<div>
-			<span>{displayDate(departureDate)}</span>
+			{#if delayInMinutes >= 1 || !departure.predictedDepartureTime}
+				<span class="">{displayDate(departureDate)}</span>
+			{/if}
 			{#if departure.predictedDepartureTime}
 				<span
-					class={delayInMinutes > 1
+					class={delayInMinutes >= 1
 						? 'text-red-500 dark:text-red-400'
 						: 'text-green-500 dark:text-green-400'}
 				>
