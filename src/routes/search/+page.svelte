@@ -22,7 +22,7 @@
 
 	const searchData = createQuery({
 		queryKey: ['search', searchQuery],
-		queryFn: async () => await fetchStopsForQuery(searchQuery),
+		queryFn: async () => await fetchStopsForQuery({query: searchQuery}),
 		enabled: false
 	});
 
