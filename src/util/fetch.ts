@@ -31,8 +31,10 @@ export async function fetchTripDetails(tripId: string) {
 	const data: components['schemas']['TripDetailsOTPMethodResponse'] = await response.json();
 	return data.data;
 }
-export async function fetchStopsForQuery(searchQuery: string) {
-	const params = { ...defaultStopsForLocationParams, query: searchQuery };
+export async function fetchStopsForQuery(
+	options: operations['getStopsForLocation']['parameters']['query']
+) {
+	const params = { ...defaultStopsForLocationParams, ...options };
 	const response = await fetch(
 		stopsForLocationUrl + new URLSearchParams({ key: PUBLIC_BKK_API_KEY, ...params } as any)
 	);
