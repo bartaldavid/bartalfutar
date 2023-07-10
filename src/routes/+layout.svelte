@@ -3,18 +3,16 @@
 	import { QueryClientProvider, QueryClient } from '@tanstack/svelte-query';
 	import Header from '../components/Header.svelte';
 	import '../app.css';
-	import { savedStops, user, userInfo } from '../util/client/stores';
+	import { savedStops, user, userInfo } from '../util/client/firebase';
 
 	import StopsView from '../components/StopsView.svelte';
-	import { app, initializeFirebase } from '../util/client/firebase';
 	import type { LayoutData } from './$types';
-	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { shortcut } from '../util/client/shortcut';
 	import { goto } from '$app/navigation';
 
 	export let data: LayoutData;
-	$savedStops = data.stops;
+	// $savedStops = data?.stops ?? [];
 	$userInfo.name = data.name;
 	$userInfo.uid = data.uid;
 
@@ -24,10 +22,6 @@
 				enabled: browser
 			}
 		}
-	});
-
-	onMount(async () => {
-		initializeFirebase();
 	});
 </script>
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { components } from '../data/bkk-openapi';
 	import type { savedStop } from '../util/client/savedStop';
-	import { savedStops } from '../util/client/stores';
+	import { savedStops } from '../util/client/firebase';
 	import SavedStopGroup from './SavedStopGroup.svelte';
 
 	type savedStopGroup = {

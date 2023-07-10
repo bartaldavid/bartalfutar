@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { user, userInfo } from '../util/client/stores';
-	import { elevateAnonToGoogle, signUserOut } from '../util/client/firebase';
+	import { elevateAnonToGoogle, signUserOut, user, userInfo } from '../util/client/firebase';
 
 	const name = $userInfo?.name ?? $user?.displayName ?? 'Anonymous';
 </script>

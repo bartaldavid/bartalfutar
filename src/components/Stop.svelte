@@ -4,9 +4,9 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import { fetchStopDepartures } from '../util/fetch';
 	import DeparturesList from './DeparturesList.svelte';
-	import { savedStops } from '../util/client/stores';
 	import type { savedStop } from '../util/client/savedStop';
 	import { goto } from '$app/navigation';
+	import { savedStops } from '../util/client/firebase';
 
 	export let references: components['schemas']['TransitReferences'] = {};
 	export let stop: savedStop = {};

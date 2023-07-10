@@ -3,8 +3,8 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import { fetchStopsForQuery } from '../../util/fetch';
 	import { debounceIntervalMs, searchQueryMinimumLength } from '../../data/constants';
-	import { savedStops } from '../../util/client/stores';
 	import Stop from '../../components/Stop.svelte';
+	import { savedStops } from '../../util/client/firebase';
 
 	let searchQuery: string = '';
 	let timer: NodeJS.Timeout;
@@ -22,7 +22,7 @@
 
 	const searchData = createQuery({
 		queryKey: ['search', searchQuery],
-		queryFn: async () => await fetchStopsForQuery({query: searchQuery}),
+		queryFn: async () => await fetchStopsForQuery({ query: searchQuery }),
 		enabled: false
 	});
 

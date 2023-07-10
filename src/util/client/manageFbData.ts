@@ -1,6 +1,6 @@
 import { get } from 'svelte/store';
 import type { savedStop } from './savedStop';
-import { user } from './stores';
+import { user } from './firebase';
 import { db } from './firebase';
 
 export async function removeStopFromFirestore(id: string) {

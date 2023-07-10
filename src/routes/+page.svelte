@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { app, elevateAnonToGoogle } from '../util/client/firebase';
-	import { user, userInfo } from '../util/client/stores';
+	import { user, userInfo } from '../util/client/firebase';
 
 	async function anonymousLogin() {
 		const { signInAnonymously, getAuth } = await import('firebase/auth');
