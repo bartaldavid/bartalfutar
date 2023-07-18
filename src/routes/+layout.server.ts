@@ -1,32 +1,42 @@
+import { redirect } from '@sveltejs/kit';
 import { adminDB, serverAuth } from '../lib/server/firebase-admin';
 import type { savedStop } from '../util/client/savedStop';
-
 import type { LayoutServerLoad } from './$types';
+// import { goto } from '$app/navigation';
 
-type serverData =
-	| {
-			status: 'signedIn';
-			stops: savedStop[];
-			uid: string;
-			name?: string;
-			isAnonymous: boolean;
-	  }
-	| { status: 'signedOut' };
+export type serverData = {
+  signedIn: boolean;
+  stops?: savedStop[];
+  user?: serverUserData;
+};
 
-export const load: LayoutServerLoad = async ({ locals }): Promise<serverData> => {
-	const userId = locals.userId;
+export type serverUserData = {
+  uid?: string;
+  name?: string;
+  isAnonymous?: boolean;
+  photoUrl?: string;
+};
 
-	if (!userId) return { status: 'signedOut' };
+export const load: LayoutServerLoad = async ({ locals, url }): Promise<serverData> => {
+  const userId = locals.userId;
 
-	const querySnapshot = await adminDB.collection(`userdata/${userId}/stops`).get();
-	const stops = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-	const user = await serverAuth.getUser(userId);
+  if (!userId && url.pathname !== '/login') {
+    throw redirect(307, '/login');
+  } else if (!userId) {
+    return { signedIn: false };
+  }
 
-	return {
-		status: 'signedIn',
-		stops,
-		uid: userId,
-		name: user.displayName,
-		isAnonymous: !user.email
-	};
+  const querySnapshot = await adminDB.collection(`userdata/${userId}/stops`).get();
+  const stops = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  const user = await serverAuth.getUser(userId);
+  return {
+    signedIn: true,
+    stops,
+    user: {
+      uid: userId,
+      name: user.displayName,
+      isAnonymous: !user.email,
+      photoUrl: user.photoURL
+    }
+  };
 };

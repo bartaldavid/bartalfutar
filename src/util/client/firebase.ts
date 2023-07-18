@@ -1,104 +1,105 @@
 const firebaseConfig = {
-	apiKey: 'AIzaSyD4remIrEwAp6iri5_uKQHmumgCsNoJJ8I',
-	authDomain: 'bkk-svelte.firebaseapp.com',
-	projectId: 'bkk-svelte',
-	storageBucket: 'bkk-svelte.appspot.com',
-	messagingSenderId: '656596007531',
-	appId: '1:656596007531:web:0460358bb0a3897c168f2e',
-	measurementId: 'G-LV290MDXS8'
+  apiKey: 'AIzaSyD4remIrEwAp6iri5_uKQHmumgCsNoJJ8I',
+  authDomain: 'bkk-svelte.firebaseapp.com',
+  projectId: 'bkk-svelte',
+  storageBucket: 'bkk-svelte.appspot.com',
+  messagingSenderId: '656596007531',
+  appId: '1:656596007531:web:0460358bb0a3897c168f2e',
+  measurementId: 'G-LV290MDXS8'
 };
 
 import { browser } from '$app/environment';
-// Import the functions you need from the SDKs you need
-// import { getAnalytics } from "firebase/analytics";
-import type { FirebaseApp } from 'firebase/app';
-import type { Unsubscribe } from 'firebase/auth';
-import type { Firestore } from 'firebase/firestore';
-import { stopsRef, user, savedStops, userInfo } from './stores';
-import type { savedStop } from './savedStop';
-import { get } from 'svelte/store';
 
-export let app: FirebaseApp;
-export let db: Firestore;
-// export let auth: Auth;
+import { initializeApp } from 'firebase/app';
+import { getAuth, onAuthStateChanged, type User } from 'firebase/auth';
+// import { initializeFirestore, persistentLocalCache } from 'firebase/firestore';
+import type { savedStop } from './savedStop';
+import { derived, get, readable, writable, type Readable } from 'svelte/store';
+import { collection, getFirestore, onSnapshot, type Unsubscribe } from 'firebase/firestore';
+import { goto } from '$app/navigation';
+
+export const app = initializeApp(firebaseConfig);
+export const db = getFirestore();
+export const auth = getAuth();
 
 async function setToken(token: string) {
-	const response = await fetch('/api/token', {
-		method: 'POST',
-		headers: new Headers({
-			Authorization: `Bearer ${token}`
-		})
-	});
+  if (!browser) return;
+  await fetch('/api/token', {
+    method: 'POST',
+    headers: new Headers({
+      Authorization: `Bearer ${token}`
+    })
+  });
 }
 
-async function listenToAuth() {
-	const { getAuth, onIdTokenChanged } = await import('firebase/auth');
-	const auth = getAuth(app);
-	let unsubData: Unsubscribe;
+function userStore() {
+  if (!auth || !browser) {
+    console.warn('Auth is not initialized or not in browser.');
+    return readable<User | null>(null);
+  }
 
-	onIdTokenChanged(
-		auth,
-		async (currentUser) => {
-			console.log('Auth state changed!', currentUser?.uid);
-			user.set(currentUser);
+  let unsubscribe: Unsubscribe;
 
-			if (currentUser) {
-				await setToken(await currentUser.getIdToken());
+  const { subscribe } = readable(auth.currentUser, (set) => {
+    unsubscribe = onAuthStateChanged(auth, (user) => {
+      set(user);
+    });
 
-				const { onSnapshot, collection, query } = await import('firebase/firestore');
-				stopsRef.set(collection(db, `userdata/${currentUser.uid}/stops`));
+    return () => unsubscribe();
+  });
 
-				const q = query(get(stopsRef));
-				unsubData = onSnapshot(q, (snap) => {
-					const stops: savedStop[] = [];
-					snap.forEach((doc) => stops.push(doc.data()));
-					savedStops.set(stops);
-				});
-			} else {
-				unsubData && unsubData();
-				await setToken('');
-				userInfo.set({});
-				savedStops.set([]);
-			}
-		},
-		(err) => {
-			console.error(err);
-		}
-	);
+  return { subscribe };
 }
 
-export async function initializeFirebase() {
-	if (!browser) throw new Error('Not in browser');
-	if (!app) {
-		const { initializeApp } = await import('firebase/app');
-		app = initializeApp(firebaseConfig);
+export const user = userStore();
 
-		const { initializeFirestore, persistentLocalCache } = await import('firebase/firestore');
-		db = initializeFirestore(app, {
-			localCache: persistentLocalCache({})
-		});
-		listenToAuth();
-	}
+export function collectionStore<T>(path: string) {
+  let unsubscribe: Unsubscribe;
+
+  const query = collection(db, path);
+
+  return writable<T[]>([], (set) => {
+    unsubscribe = onSnapshot(query, (snapshot) => {
+      const docs: T[] = [];
+      snapshot.forEach((doc) => docs.push(doc.data() as T));
+      set(docs);
+    });
+
+    return () => unsubscribe();
+  });
 }
 
+export const savedStops: Readable<savedStop[]> = derived(user, ($user, set) => {
+  if ($user) {
+    return collectionStore<savedStop>(`userdata/${$user.uid}/stops`).subscribe(set);
+  } else {
+    set([]);
+  }
+});
+
+// TODO redirect signin, ignore handle provider already linked error
 export async function elevateAnonToGoogle() {
-	const { getAuth, GoogleAuthProvider, signInWithPopup, linkWithCredential } = await import(
-		'firebase/auth'
-	);
-	const auth = getAuth(app);
-	const provider = new GoogleAuthProvider();
-	const result = await signInWithPopup(auth, provider);
-	const credential = GoogleAuthProvider.credentialFromResult(result);
-	// console.log(result);
-	if (get(user) !== null && credential) {
-		linkWithCredential(get(user)!, credential)
-			.then(() => console.log('Elevation success'))
-			.catch((error) => console.log('Failure', error));
-	}
+  const { GoogleAuthProvider, signInWithPopup } = await import('firebase/auth');
+  const prevUser = get(user);
+
+  const provider = new GoogleAuthProvider();
+  const result = await signInWithPopup(auth, provider);
+  const credential = GoogleAuthProvider.credentialFromResult(result);
+  if (prevUser !== null && credential) {
+    try {
+      const { linkWithCredential } = await import('firebase/auth');
+      await linkWithCredential(prevUser, credential);
+    } catch (error) {
+      console.error('Elevation failure:', error);
+    }
+  }
+  await setToken(await result.user.getIdToken());
+  goto('/');
 }
 
 export async function signUserOut() {
-	if (!app) throw Error('Firebase app not initialized');
-	const { getAuth, signOut } = await import('firebase/auth');
-	await signOut(getAuth(app));
+  const { signOut } = await import('firebase/auth');
+  await setToken('');
+  await signOut(auth);
+  goto('/login');
 }
