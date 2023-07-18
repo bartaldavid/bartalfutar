@@ -13,4 +13,6 @@ vite.config.ts.timestamp-*
 .netlify
 .firebase
 
+*.log
+
 bkk-svelte-firebase-adminsdk*.json
