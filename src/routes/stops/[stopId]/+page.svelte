@@ -10,11 +10,8 @@
 		queryKey: ['stop', data.stopId],
 		refetchInterval: REFETCH_INTERVAL_MS,
 		queryFn: async () => await fetchStopDepartures({ stopId: [data.stopId] }),
-		// structuralSharing(oldData, newData) {
-		// 	return { ...oldData?.references, ...newData };
-		// },
+		initialData: data.initialData,
 		cacheTime: 0
-		// enabled: false
 	});
 </script>
 
