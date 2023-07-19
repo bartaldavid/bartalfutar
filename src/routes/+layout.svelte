@@ -11,6 +11,7 @@
   import { shortcut } from '../util/client/shortcut';
   import { goto } from '$app/navigation';
   import { setContext } from 'svelte';
+  import Search from "~icons/material-symbols/search"
   //   import { redirect } from '@sveltejs/kit';
   //   import { onMount } from 'svelte';
   // import {
@@ -70,7 +71,7 @@
             class="button-outline bg-white text-center dark:border-none dark:bg-slate-700 dark:text-white"
             on:click={() => goto('/search')}
             use:shortcut={{ control: true, code: 'KeyK' }}
-            ><span class="material-symbols-outlined align-bottom text-base"> search </span><span>
+            ><Search class="inline" inline={true}/><span>
               {' '}Search</span
             >
           </button>

@@ -16,7 +16,7 @@ import { getAuth, onAuthStateChanged, type User } from 'firebase/auth';
 import type { savedStop } from './savedStop';
 import { derived, get, readable, writable, type Readable } from 'svelte/store';
 import { collection, getFirestore, onSnapshot, type Unsubscribe } from 'firebase/firestore';
-import { goto } from '$app/navigation';
+import { goto, invalidateAll } from '$app/navigation';
 
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore();
@@ -101,5 +101,6 @@ export async function signUserOut() {
   const { signOut } = await import('firebase/auth');
   await setToken('');
   await signOut(auth);
+  await invalidateAll();
   goto('/login');
 }
