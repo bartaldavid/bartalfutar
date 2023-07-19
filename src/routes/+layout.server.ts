@@ -19,7 +19,7 @@ export type serverUserData = {
 
 export const load: LayoutServerLoad = async ({ locals, url }): Promise<serverData> => {
   const userId = locals.userId;
-
+  
   if (!userId && url.pathname !== '/login') {
     throw redirect(307, '/login');
   } else if (!userId) {

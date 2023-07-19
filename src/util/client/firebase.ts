@@ -97,6 +97,14 @@ export async function elevateAnonToGoogle() {
   goto('/');
 }
 
+export async function anonymousLogin() {
+  const { signInAnonymously } = await import('firebase/auth');
+  const result = await signInAnonymously(auth);
+  await setToken(await result.user.getIdToken())
+  goto('/');
+}
+
+
 export async function signUserOut() {
   const { signOut } = await import('firebase/auth');
   await setToken('');

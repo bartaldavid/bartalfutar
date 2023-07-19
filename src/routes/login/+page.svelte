@@ -1,13 +1,10 @@
 <script lang="ts">
   import { get } from 'svelte/store';
-  import { auth, elevateAnonToGoogle, user } from '../../util/client/firebase';
+  import { anonymousLogin, auth, elevateAnonToGoogle, user } from '../../util/client/firebase';
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
 
-  async function anonymousLogin() {
-    const { signInAnonymously } = await import('firebase/auth');
-    signInAnonymously(auth);
-  }
+
 
   onMount(() => {
     if (get(user)) {
