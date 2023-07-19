@@ -12,7 +12,7 @@ export default defineConfig({
 				name: 'BartalFUTÁR',
 				short_name: 'BartalFUTÁR',
 				start_url: '/',
-				theme_color: '#ffffff',
+				theme_color: '#334155',
 				icons: [
 					{
 						src: 'android-chrome-192x192.png',
