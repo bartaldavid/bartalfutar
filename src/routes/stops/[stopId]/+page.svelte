@@ -10,7 +10,7 @@
 		queryKey: ['stop', data.stopId],
 		refetchInterval: REFETCH_INTERVAL_MS,
 		queryFn: async () => await fetchStopDepartures({ stopId: [data.stopId] }),
-		initialData: data.initialData,
+		// initialData: data.initialData,
 		cacheTime: 0
 	});
 </script>
