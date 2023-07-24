@@ -11,7 +11,7 @@
   import { shortcut } from '../util/client/shortcut';
   import { goto } from '$app/navigation';
   import { setContext } from 'svelte';
-  import Search from "~icons/material-symbols/search"
+  import Search from '~icons/material-symbols/search';
   //   import { redirect } from '@sveltejs/kit';
   //   import { onMount } from 'svelte';
   // import {
@@ -24,15 +24,9 @@
   export let data: LayoutData;
   // $savedStops = data?.stops ?? [];
 
-  setContext('serverdata', data);
+  const isSarchOpen = $page.url.pathname === '/search';
 
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        enabled: browser
-      }
-    }
-  });
+  setContext('serverdata', data);
 
   // onMount(() => {
   // 	if (!data.user?.uid) return;
@@ -50,14 +44,14 @@
   <title>BartalFUTÁR</title>
 </svelte:head>
 
-<QueryClientProvider client={queryClient}>
+<QueryClientProvider client={data.queryClient}>
   <Header />
   <main class="flex flex-row flex-wrap justify-center gap-4 mx-2">
     {#if $user || data.user}
       <div
         class="mt-4 w-full flex-col flex gap-1 {$savedStops.length === 0
           ? 'justify-center'
-          : ''} {$page.url.pathname === '/search' && 'hidden md:flex'} gap-2 sm:w-72"
+          : ''} {isSarchOpen && 'hidden md:flex'} gap-2 sm:w-72"
       >
         {#if !$savedStops.length && !data.stops?.length}
           <div class="p-4 pb-0 text-center text-4xl dark:text-slate-50">BartalFUTÁR</div>
@@ -71,9 +65,7 @@
             class="button-outline bg-white text-center dark:border-none dark:bg-slate-700 dark:text-white"
             on:click={() => goto('/search')}
             use:shortcut={{ control: true, code: 'KeyK' }}
-            ><Search class="inline" inline={true}/><span>
-              {' '}Search</span
-            >
+            ><Search class="inline" inline={true} /><span> {' '}Search</span>
           </button>
         </div>
       </div>

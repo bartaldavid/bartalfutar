@@ -16,7 +16,7 @@
     {#each groupItems as stop (stop.id)}
       <a
         class="flex-1 break-words rounded bg-slate-100 p-2 text-sm dark:bg-slate-700 dark:text-slate-50 flex text-center items-center justify-center"
-        href={`stops/${stop.id}`}
+        href={`/stops/${stop.id}`}
         >{stop.name}
       </a>
     {/each}

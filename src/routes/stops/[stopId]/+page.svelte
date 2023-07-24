@@ -1,11 +1,13 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
   import DeparturesList from '../../../components/DeparturesList.svelte';
-  import type { PageData } from './$types';
+  import type { PageData, PageServerData } from './$types';
   import { REFETCH_INTERVAL_MS } from '../../../data/constants';
   import { safeFetch } from '$lib/safeFetch';
   import { arrivalsAndDeparturesForStopUrl, stopsForLocationUrl } from '../../../data/api-links';
   import type { components } from '../../../data/bkk-openapi';
+  import Autorenew from '~icons/material-symbols/autorenew';
+  import Refresh from '~icons/material-symbols/refresh';
 
   export let data: PageData;
 
@@ -15,9 +17,9 @@
     queryFn: async () =>
       await safeFetch<components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse']>(
         arrivalsAndDeparturesForStopUrl({ stopId: [data.stopId] })
-      ),
-    initialData: data?.departures ?? [],
-    cacheTime: 0
+      )
+    // initialData: data?.departures ?? []
+    // cacheTime: 0
   });
 
   $: stopName = $stopData.data?.data?.references?.stops?.[data.stopId]?.name;
@@ -34,10 +36,12 @@
       {stopName ?? 'Loading...'}
     </h1>
     <div class="flex items-center">
-      <button class="px-2" on:click={async () => await $stopData.refetch()}
-        ><span class="material-symbols-outlined text-base">
-          {$stopData.isFetching ? 'autorenew' : 'refresh'}
-        </span>
+      <button class="px-2" on:click={async () => await $stopData.refetch()}>
+        {#if $stopData.isFetching}
+          <Autorenew />
+        {:else}
+          <Refresh />
+        {/if}
       </button>
       <a href="/" class="px-2"><span class="material-symbols-outlined text-base"> close </span></a>
     </div>
