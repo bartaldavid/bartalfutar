@@ -17,9 +17,9 @@ export type serverUserData = {
   photoUrl?: string;
 };
 
-export const load: LayoutServerLoad = async ({ locals, url }): Promise<serverData> => {
+export const load: LayoutServerLoad = async ({ locals, url, fetch }): Promise<serverData> => {
   const userId = locals.userId;
-  
+
   if (!userId && url.pathname !== '/login') {
     throw redirect(307, '/login');
   } else if (!userId) {

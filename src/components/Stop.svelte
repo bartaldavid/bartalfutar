@@ -2,11 +2,12 @@
   import type { components } from '../data/bkk-openapi';
   import { removeStopFromFirestore, saveStopToFirestore } from '../util/client/manageFbData';
   import { createQuery } from '@tanstack/svelte-query';
-  import { fetchStopDepartures } from '../util/fetch';
   import DeparturesList from './DeparturesList.svelte';
   import type { savedStop } from '../util/client/savedStop';
   import { goto } from '$app/navigation';
   import { savedStops } from '../util/client/firebase';
+  import { safeFetch } from '$lib/safeFetch';
+  import { arrivalsAndDeparturesForStopUrl } from '../data/api-links';
 
   export let references: components['schemas']['TransitReferences'] = {};
   export let stop: savedStop = {};
@@ -29,7 +30,7 @@
 
   const departuresFromStop = createQuery({
     queryKey: ['stop', stop.id!],
-    queryFn: async () => await fetchStopDepartures({ stopId: [stop.id!], limit: 3 }),
+    queryFn: async () => await safeFetch<components["schemas"]["ArrivalsAndDeparturesForStopOTPMethodResponse"]>(arrivalsAndDeparturesForStopUrl({stopId: [stop.id!], limit: 3})),
     enabled: false
   });
 </script>
@@ -91,8 +92,8 @@
 {#if $departuresFromStop.isFetched && expanded}
   <div class="flex flex-col gap-1 rounded bg-none dark:bg-slate-700 p-1">
     <DeparturesList
-      references={$departuresFromStop?.data?.references}
-      departures={$departuresFromStop?.data?.entry?.stopTimes}
+      references={$departuresFromStop?.data?.data?.references}
+      departures={$departuresFromStop?.data?.data?.entry?.stopTimes}
       expandable={false}
     />
     <button

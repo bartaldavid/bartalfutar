@@ -14,13 +14,17 @@
   <div class="flex flex-wrap gap-1">
     <!-- TODO separate this into its own stop component? -->
     {#each groupItems as stop (stop.id)}
-      <button
-        class="flex-1 break-words rounded bg-slate-100 p-2 text-sm dark:bg-slate-700 dark:text-slate-50"
-        on:click={() => {
-          stop.id && goto(`/stops/${stop.id}`);
-        }}
+      <a
+        class="flex-1 break-words rounded bg-slate-100 p-2 text-sm dark:bg-slate-700 dark:text-slate-50 flex text-center items-center justify-center"
+        href={`stops/${stop.id}`}
         >{stop.name}
-      </button>
+      </a>
     {/each}
   </div>
 </div>
+
+<style>
+  a {
+    -webkit-touch-callout: none;
+  }
+</style>

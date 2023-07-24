@@ -1,10 +1,12 @@
 <script lang="ts">
 	import type { savedStop } from '../../util/client/savedStop';
 	import { createQuery } from '@tanstack/svelte-query';
-	import { fetchStopsForQuery } from '../../util/fetch';
 	import { debounceIntervalMs, searchQueryMinimumLength } from '../../data/constants';
 	import Stop from '../../components/Stop.svelte';
 	import { savedStops } from '../../util/client/firebase';
+  import { safeFetch } from '$lib/safeFetch';
+  import { stopsForLocationUrl } from '../../data/api-links';
+  import type { components } from '../../data/bkk-openapi';
 
 	let searchQuery: string = '';
 	let timer: NodeJS.Timeout;
@@ -14,15 +16,15 @@
 	$: stopsToDisplay =
 		searchQuery.length <= searchQueryMinimumLength
 			? $savedStops
-			: $searchData.data?.list
-			? $searchData.data?.list.filter((stop) => {
+			: $searchData.data?.data?.list
+			? $searchData.data?.data?.list.filter((stop) => {
 					return stop?.locationType == 0 && stop?.routeIds?.length;
 			  })
 			: [];
 
 	const searchData = createQuery({
 		queryKey: ['search', searchQuery],
-		queryFn: async () => await fetchStopsForQuery({ query: searchQuery }),
+		queryFn: async () => await safeFetch<components["schemas"]["StopsForLocationResponse"]>(stopsForLocationUrl({ query: searchQuery })),
 		enabled: false
 	});
 
@@ -59,7 +61,7 @@
 
 	<div class="flex flex-col gap-1">
 		{#each stopsToDisplay as stop}
-			<Stop references={$searchData.data?.references} {stop} />
+			<Stop references={$searchData.data?.data?.references} {stop} />
 		{/each}
 	</div>
 </div>
