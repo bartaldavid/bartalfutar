@@ -47,7 +47,7 @@
       <a href="/" class="px-2"><Close /></a>
     </div>
   </div>
-  {#if $stopData.isSuccess}
+  {#if !$stopData.isLoading && $stopData.isFetched}
     <DeparturesList
       departures={$stopData.data?.data?.entry?.stopTimes}
       references={$stopData.data?.data?.references}
