@@ -8,6 +8,7 @@
   import type { components } from '../../../data/bkk-openapi';
   import Autorenew from '~icons/material-symbols/autorenew';
   import Refresh from '~icons/material-symbols/refresh';
+  import Close from '~icons/material-symbols/close';
 
   export let data: PageData;
 
@@ -43,7 +44,7 @@
           <Refresh />
         {/if}
       </button>
-      <a href="/" class="px-2"><span class="material-symbols-outlined text-base"> close </span></a>
+      <a href="/" class="px-2"><Close /></a>
     </div>
   </div>
   {#if $stopData.isSuccess}
