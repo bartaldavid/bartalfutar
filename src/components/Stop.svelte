@@ -8,6 +8,10 @@
   import { savedStops } from '../util/client/firebase';
   import { safeFetch } from '$lib/safeFetch';
   import { arrivalsAndDeparturesForStopUrl } from '../data/api-links';
+  import FavoriteOutlineIcon from '~icons/material-symbols/favorite-outline';
+  import FavoriteIcon from '~icons/material-symbols/favorite';
+  import ChevronRight from '~icons/material-symbols/chevron-right';
+  import ArrowUpward from '~icons/material-symbols/arrow-upward';
 
   export let references: components['schemas']['TransitReferences'] = {};
   export let stop: savedStop = {};
@@ -30,7 +34,10 @@
 
   const departuresFromStop = createQuery({
     queryKey: ['stop', stop.id!],
-    queryFn: async () => await safeFetch<components["schemas"]["ArrivalsAndDeparturesForStopOTPMethodResponse"]>(arrivalsAndDeparturesForStopUrl({stopId: [stop.id!], limit: 3})),
+    queryFn: async () =>
+      await safeFetch<components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse']>(
+        arrivalsAndDeparturesForStopUrl({ stopId: [stop.id!], limit: 3 })
+      ),
     enabled: false
   });
 </script>
@@ -53,12 +60,12 @@
       <div class="mb-1 dark:text-slate-50">{stop.name}</div>
     </div>
     <div class="flex flex-row flex-wrap gap-1">
-      {#if stop.locationType === 1}
+      <!-- {#if stop.locationType === 1}
         <div class="text-sm flex gap-1 dark:text-slate-50">
           <span class="material-symbols-outlined">multiple_stop</span><span class="">csomópont</span
           >
         </div>
-      {/if}
+      {/if} -->
 
       {#each stop?.routeIds ?? [] as routeid}
         {@const routeRef = stop?.routeRef?.[routeid] ?? references?.routes?.[routeid]}
@@ -72,20 +79,19 @@
 
       {#if stop.direction}
         <span class="h-3 w-3 align-middle"
-          ><span
-            class="material-symbols-outlined dark:text-slate-50"
-            style="transform: rotate({stop.direction + 'deg'});">arrow_upward</span
-          ></span
+          ><ArrowUpward
+            class="dark:text-slate-50"
+            style="transform: rotate({stop.direction + 'deg'});"
+          /></span
         >
       {/if}
     </div>
   </div>
   <div class="flex w-8 flex-col self-center p-1">
     <button on:click={() => toggleStopSave()}>
-      <span
-        class="material-symbols-outlined dark:text-slate-100"
-        style:font-variation-settings={saved ? "'FILL' 1" : ''}>favorite</span
-      >
+      {#if saved}<FavoriteIcon class="dark:text-slate-100" />{:else}<FavoriteOutlineIcon
+          class="dark:text-slate-100"
+        />{/if}
     </button>
   </div>
 </div>
@@ -96,10 +102,8 @@
       departures={$departuresFromStop?.data?.data?.entry?.stopTimes}
       expandable={false}
     />
-    <button
-      class="dark:text-slate-50 flex justify-center p-2"
-      on:click={() => goto(`/stops/${stop.id}`)}
-      >Show more <span class="material-symbols-outlined">chevron_right</span></button
+    <a class="dark:text-slate-50 flex justify-center p-2 items-center" href={`/stops/${stop.id}`}
+      >Show more <ChevronRight /></a
     >
   </div>
 {/if}

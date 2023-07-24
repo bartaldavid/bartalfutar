@@ -2,13 +2,14 @@
   import { getContext } from 'svelte';
   import type { serverData } from '../routes/+layout.server';
   import { elevateAnonToGoogle, signUserOut, user } from '../util/client/firebase';
-  import AccountCircle from "~icons/material-symbols/account-circle";
+  import AccountCircle from '~icons/material-symbols/account-circle';
+  import LogOutIcon from '~icons/material-symbols/logout';
 
   const serverdata = getContext<serverData>('serverdata');
   // FIXME this falls back to anonymous after signing out
   $: name = serverdata?.user?.name ?? $user?.displayName ?? 'Anonymous';
 
-  $: profile_image_url = serverdata.user?.photoUrl ?? $user?.photoURL; 
+  $: profile_image_url = serverdata.user?.photoUrl ?? $user?.photoURL;
 </script>
 
 <header
@@ -16,7 +17,13 @@
 >
   <span class="flex-1 text-xl">BartalFUTÁR</span>
   {#if profile_image_url}
-    <img src={profile_image_url} alt="Profile picture" height="20" width="20"  class="rounded-full">
+    <img
+      src={profile_image_url}
+      alt="Profile picture"
+      height="20"
+      width="20"
+      class="rounded-full"
+    />
   {:else if $user}
     <AccountCircle />
   {/if}
@@ -25,6 +32,6 @@
     <button on:click={() => elevateAnonToGoogle()}>Sign in with Google</button>
   {/if}
   {#if $user || serverdata?.signedIn}
-    <button on:click={() => signUserOut()}>Sign out</button>
+    <button on:click={() => signUserOut()}><LogOutIcon class="text-red-700" /></button>
   {/if}
 </header>
