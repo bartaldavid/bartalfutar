@@ -1,35 +1,35 @@
 <script lang="ts">
-	import type { components } from '../data/bkk-openapi';
-	import { defaultStopParams } from '../data/defaultParams';
-	import Departure from './Departure.svelte';
+  import type { components } from '../data/bkk-openapi';
+  import { defaultStopParams } from '../data/defaultParams';
+  import Departure from './Departure.svelte';
 
-	export let departures: components['schemas']['TransitScheduleStopTime'][] = [];
-	export let references: components['schemas']['OTPTransitReferences'] = {};
-	export let expandable = false;
+  export let departures: components['schemas']['TransitScheduleStopTime'][] = [];
+  export let references: components['schemas']['OTPTransitReferences'] = {};
+  export let expandable = false;
 
-	let expandedTripId = '';
+  let expandedTripId = '';
 
-	// TODO move fetching/refetching here to separate logic
+  // TODO move fetching/refetching here to separate logic
 </script>
 
-{#each departures as departure}
-	<Departure
-		{departure}
-		{references}
-		{expandedTripId}
-		{expandable}
-		on:collapse={() => {
-			expandedTripId = '';
-		}}
-		on:expand={(event) => {
-			expandedTripId = event.detail.id;
-		}}
-	/>
+{#each departures as departure (departure.tripId)}
+  <Departure
+    {departure}
+    {references}
+    {expandedTripId}
+    {expandable}
+    on:collapse={() => {
+      expandedTripId = '';
+    }}
+    on:expand={(event) => {
+      expandedTripId = event.detail.id;
+    }}
+  />
 {:else}
-	<div class="flex flex-col items-center justify-center w-full h-12">
-		<!-- FIXME 90 should be a variable grabbed from the request -->
-		<span class="text-gray-200"
-			>{`No departure in the next ${defaultStopParams?.minutesAfter} minutes`}</span
-		>
-	</div>
+  <div class="flex flex-col items-center justify-center w-full h-12">
+    <!-- FIXME 90 should be a variable grabbed from the request -->
+    <span class="text-gray-200"
+      >{`No departure in the next ${defaultStopParams?.minutesAfter} minutes`}</span
+    >
+  </div>
 {/each}
