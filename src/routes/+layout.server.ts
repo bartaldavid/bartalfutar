@@ -1,3 +1,4 @@
+import { redirect } from '@sveltejs/kit';
 import { adminDB, serverAuth } from '../lib/server/firebase-admin';
 import type { savedStop } from '../util/client/savedStop';
 import type { LayoutServerLoad } from './$types';
@@ -16,10 +17,13 @@ export type serverUserData = {
   photoUrl?: string;
 };
 
-export const load: LayoutServerLoad = async ({ locals }): Promise<serverData> => {
+export const load: LayoutServerLoad = async ({ locals, route }): Promise<serverData> => {
   const userId = locals.userId;
 
-  if (!userId) {
+  if (!userId && route.id !== '/login') {
+    console.log(userId);
+    throw redirect(303, '/login');
+  } else if (!userId) {
     return { signedIn: false };
   }
 

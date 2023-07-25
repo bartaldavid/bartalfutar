@@ -1,10 +1,9 @@
-import { redirect, type Handle } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit';
 import { serverAuth } from './lib/server/firebase-admin';
 
 export const handle = (async ({ event, resolve }) => {
   const sessionCookie = event.cookies.get('__session');
 
-  if (!sessionCookie && event.url.pathname !== '/login') throw redirect(303, '/login');
   if (!sessionCookie) return resolve(event);
 
   try {
