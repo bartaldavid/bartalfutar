@@ -17,3 +17,5 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_BKK_SVELTE }}'
           channelId: live
           projectId: bkk-svelte
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks
