@@ -49,9 +49,8 @@
   <main class="flex flex-row flex-wrap justify-center gap-4 mx-2">
     {#if $user || data.user}
       <div
-        class="mt-4 w-full flex-col flex gap-1 {$savedStops.length === 0
-          ? 'justify-center'
-          : ''} {isSarchOpen && 'hidden md:flex'} gap-2 sm:w-72"
+        class="mt-4 w-full flex-col flex gap-1 {isSarchOpen && 'hidden md:flex'} gap-2 sm:w-72"
+        class:justify-center={!data.stops?.length}
       >
         {#if !$savedStops.length && !data.stops?.length}
           <div class="p-4 pb-0 text-center text-4xl dark:text-slate-50">BartalFUTÁR</div>
@@ -65,7 +64,10 @@
             class="button-outline bg-white text-center dark:border-none dark:bg-slate-700 dark:text-white"
             on:click={() => goto('/search')}
             use:shortcut={{ control: true, code: 'KeyK' }}
-            ><Search class="inline" inline={true} /><span> {' '}Search</span>
+          >
+            <div class="flex items-center gap-1 justify-center">
+              <Search class="inline" /><span>Search</span>
+            </div>
           </button>
         </div>
       </div>
