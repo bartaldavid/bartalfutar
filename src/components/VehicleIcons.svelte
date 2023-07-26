@@ -24,7 +24,7 @@
     TROLLEYBUS: { icon: Bus, color: '#009EE3' },
     COACH: { icon: Bus, color: '#F9AB13' },
     SUBURBAN_RAILWAY: { icon: Train, color: '#2E5EA8' },
-    MULTIPLE: { icon: ZoomOutMap, color: 'white' }
+    MULTIPLE: { icon: ZoomOutMap, color: '#94a3b8' }
   };
 </script>
 

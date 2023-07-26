@@ -12,32 +12,12 @@
   import { goto } from '$app/navigation';
   import { setContext } from 'svelte';
   import Search from '~icons/material-symbols/search';
-  //   import { redirect } from '@sveltejs/kit';
-  //   import { onMount } from 'svelte';
-  // import {
-  // 	clearLocalStorageData,
-  // 	getLocalStorageStops,
-  // 	getLocalStorageUser,
-  // 	setLocalStorageUser
-  // } from '../util/client/localstorage';
 
   export let data: LayoutData;
-  // $savedStops = data?.stops ?? [];
 
   const isSarchOpen = $page.url.pathname === '/search';
 
   setContext('serverdata', data);
-
-  // onMount(() => {
-  // 	if (!data.user?.uid) return;
-
-  // 	if (data.user.uid === getLocalStorageUser()) {
-  // 		console.log(getLocalStorageStops());
-  // 	} else {
-  // 		clearLocalStorageData();
-  // 		setLocalStorageUser(data.user.uid);
-  // 	}
-  // });
 </script>
 
 <svelte:head>
