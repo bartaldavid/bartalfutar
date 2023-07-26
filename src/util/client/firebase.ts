@@ -24,12 +24,13 @@ export const auth = getAuth();
 
 async function setToken(token: string) {
   if (!browser) return;
-  await fetch('/api/token', {
+  const uid = await fetch('/api/token', {
     method: 'POST',
     headers: new Headers({
       Authorization: `Bearer ${token}`
     })
   });
+  console.log(uid);
 }
 
 function userStore() {
@@ -54,6 +55,8 @@ function userStore() {
 export const user = userStore();
 
 export function collectionStore<T>(path: string) {
+  // TODO lazy load getfirestore here
+
   let unsubscribe: Unsubscribe;
 
   const query = collection(db, path);
@@ -93,22 +96,29 @@ export async function elevateAnonToGoogle() {
       console.error('Elevation failure:', error);
     }
   }
-  await setToken(await result.user.getIdToken());
-  goto('/');
+
+  const idToken = await result.user.getIdToken();
+  await setToken(idToken);
+  await goto('/');
+  console.log('gone!');
 }
 
 export async function anonymousLogin() {
   const { signInAnonymously } = await import('firebase/auth');
   const result = await signInAnonymously(auth);
-  await setToken(await result.user.getIdToken())
+  await setToken(await result.user.getIdToken());
   goto('/');
 }
 
-
 export async function signUserOut() {
   const { signOut } = await import('firebase/auth');
-  await setToken('');
-  await signOut(auth);
+  try {
+    console.log(auth);
+    await signOut(auth);
+  } catch (error) {
+    console.log(error);
+  }
   await invalidateAll();
+  await setToken('');
   goto('/login');
 }

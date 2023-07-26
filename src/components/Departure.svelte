@@ -28,8 +28,8 @@
       : 0;
 
   async function toggleDetails() {
-    if (expandedTripId !== departure.tripId && departure.tripId) {
-      dispatch('expand', { id: departure.tripId });
+    if (departure.tripId && expandedTripId !== departure.tripId + departure.stopId) {
+      dispatch('expand', { id: departure.tripId + departure.stopId });
     } else {
       dispatch('collapse');
     }
@@ -87,7 +87,7 @@
     <!-- TODO show icon to indicate expandable behaviour -->
   </div>
 
-  {#if expandedTripId === departure.tripId}
+  {#if departure.tripId && expandedTripId === departure.tripId + departure.stopId}
     <TripDetails tripId={departure.tripId} />
   {/if}
 </div>

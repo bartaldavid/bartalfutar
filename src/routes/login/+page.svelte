@@ -4,13 +4,9 @@
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
 
-
-
-  onMount(() => {
-    if (get(user)) {
-      goto('/');
-    }
-  });
+  $: if ($user) {
+    goto('/');
+  }
 </script>
 
 <div class="flex flex-col gap-4">

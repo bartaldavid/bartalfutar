@@ -12,6 +12,7 @@
   import FavoriteIcon from '~icons/material-symbols/favorite';
   import ChevronRight from '~icons/material-symbols/chevron-right';
   import ArrowUpward from '~icons/material-symbols/arrow-upward';
+  import MultipleStop from '~icons/material-symbols/zoom-out-map';
 
   export let references: components['schemas']['TransitReferences'] = {};
   export let stop: savedStop = {};
@@ -60,12 +61,11 @@
       <div class="mb-1 dark:text-slate-50">{stop.name}</div>
     </div>
     <div class="flex flex-row flex-wrap gap-1">
-      <!-- {#if stop.locationType === 1}
-        <div class="text-sm flex gap-1 dark:text-slate-50">
-          <span class="material-symbols-outlined">multiple_stop</span><span class="">csomópont</span
-          >
+      {#if stop.locationType === 1}
+        <div class="text-sm flex gap-1 dark:text-slate-300 items-center">
+          <MultipleStop /><span>stop area</span>
         </div>
-      {/if} -->
+      {/if}
 
       {#each stop?.routeIds ?? [] as routeid}
         {@const routeRef = stop?.routeRef?.[routeid] ?? references?.routes?.[routeid]}

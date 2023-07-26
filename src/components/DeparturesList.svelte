@@ -12,7 +12,7 @@
   // TODO move fetching/refetching here to separate logic
 </script>
 
-{#each departures as departure (departure.tripId)}
+{#each departures as departure ((departure?.tripId ?? '') + (departure?.stopId ?? crypto.randomUUID()))}
   <Departure
     {departure}
     {references}

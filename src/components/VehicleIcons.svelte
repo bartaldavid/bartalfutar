@@ -5,11 +5,12 @@
   import Bus from '~icons/material-symbols/directions-bus';
   import Subway from '~icons/material-symbols/subway';
   import Tram from '~icons/material-symbols/tram';
+  import ZoomOutMap from '~icons/material-symbols/zoom-out-map';
 
   export let vehicleType: string;
 
   type typeMap = {
-    [key in components['schemas']['TransitStop']['type'] as string]?: {
+    [key in components['schemas']['TransitStop']['type'] as string | 'MULTIPLE']?: {
       icon: any; // FIXME
       color: string;
     };
@@ -22,7 +23,8 @@
     TRAM: { icon: Tram, color: '#FFD800' },
     TROLLEYBUS: { icon: Bus, color: '#009EE3' },
     COACH: { icon: Bus, color: '#F9AB13' },
-    SUBURBAN_RAILWAY: { icon: Train, color: '#2E5EA8' }
+    SUBURBAN_RAILWAY: { icon: Train, color: '#2E5EA8' },
+    MULTIPLE: { icon: ZoomOutMap, color: 'white' }
   };
 </script>
 

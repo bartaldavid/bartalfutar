@@ -15,13 +15,12 @@
 
   // FIXME refractor this to be a bit cleaner
   $: stopsToDisplay =
-    searchQuery.length <= searchQueryMinimumLength
-      ? $savedStops
-      : $searchData.data?.data?.list
-      ? $searchData.data?.data?.list.filter((stop) => {
-          return stop?.locationType == 0 && stop?.routeIds?.length;
-        })
-      : [];
+    (searchQuery.length <= searchQueryMinimumLength ? $savedStops : $searchData.data?.data?.list) ??
+    [];
+  //   ? $searchData.data?.data?.list.filter((stop) => {
+  //       return stop?.locationType == 0 && stop?.routeIds?.length;
+  //     })
+  //   : [];
 
   const searchData = createQuery({
     queryKey: ['search', searchQuery],

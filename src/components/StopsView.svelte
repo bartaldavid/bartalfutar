@@ -19,6 +19,8 @@
   $: savedStopGroups = stops.reduce((result, currentStop) => {
     if (currentStop.type) {
       (result[currentStop.type] = result[currentStop.type] || []).push(currentStop);
+    } else if (currentStop.locationType === 1) {
+      (result['MULTIPLE'] = result['MULTIPLE'] || []).push(currentStop);
     }
     return result;
   }, {} as savedStopGroup);
