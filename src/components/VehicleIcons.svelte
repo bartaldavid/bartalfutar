@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { SvelteComponent, SvelteComponentTyped } from 'svelte';
   import type { components } from '../data/bkk-openapi';
   import Train from '~icons/material-symbols/train';
   import Bus from '~icons/material-symbols/directions-bus';
@@ -29,19 +28,6 @@
 </script>
 
 {#if vehicleType}
-  <!-- <span
-    class="material-symbols-outlined ml-1 self-center pr-3"
-    style:color={typesToIconsMap[vehicleType]?.color}
-  >
-    {typesToIconsMap[vehicleType]?.icon}
-  </span> -->
-
-  <!-- <svelte:component
-    this={typesToIconsMap[vehicleType]?.icon}
-    style:color={typesToIconsMap[vehicleType]?.color}
-    class="text-base ml-1 self-center pr-3"
-    /> -->
-
   <svelte:component
     this={typesToIconsMap[vehicleType]?.icon}
     class=" ml-1 self-center pr-3 text-3xl"

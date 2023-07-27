@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { browser } from '$app/environment';
   import { QueryClientProvider, QueryClient } from '@tanstack/svelte-query';
   import Header from '../components/Header.svelte';
   import '../app.css';
@@ -9,7 +8,6 @@
   import type { LayoutData } from './$types';
   import { page } from '$app/stores';
   import { shortcut } from '../util/client/shortcut';
-  import { goto } from '$app/navigation';
   import { setContext } from 'svelte';
   import Search from '~icons/material-symbols/search';
 
@@ -39,25 +37,18 @@
           <StopsView />
         {/if}
 
-        <div class="flex gap-2 rounded bg-slate-50 dark:bg-slate-800">
-          <button
-            class="button-outline bg-white text-center dark:border-none dark:bg-slate-700 dark:text-white"
-            on:click={() => goto('/search')}
-            use:shortcut={{ control: true, code: 'KeyK' }}
-          >
-            <div class="flex items-center gap-1 justify-center">
-              <Search class="inline" /><span>Search</span>
-            </div>
-          </button>
-        </div>
+        <a
+          class="p-2 rounded button-outline bg-white items-center justify-center flex dark:border-none dark:bg-slate-700 dark:text-white"
+          href="/search"
+          use:shortcut={{ control: true, code: 'KeyK' }}
+          role="button"
+        >
+          <div class="flex items-center gap-1 justify-center">
+            <Search class="inline" /><span>Search</span>
+          </div>
+        </a>
       </div>
     {/if}
     <slot />
   </main>
 </QueryClientProvider>
-
-<style>
-  .button-outline {
-    @apply flex-1 rounded border p-2;
-  }
-</style>
