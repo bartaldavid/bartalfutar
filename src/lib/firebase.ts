@@ -11,15 +11,12 @@ const firebaseConfig = {
 import { browser } from '$app/environment';
 
 import { initializeApp } from 'firebase/app';
-import { getAuth, onAuthStateChanged, type User } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, type Unsubscribe, type User } from 'firebase/auth';
 // import { initializeFirestore, persistentLocalCache } from 'firebase/firestore';
-import type { savedStop } from './savedStop';
-import { derived, get, readable, writable, type Readable } from 'svelte/store';
-import { collection, getFirestore, onSnapshot, type Unsubscribe } from 'firebase/firestore';
+import { get, readable } from 'svelte/store';
 import { goto, invalidateAll } from '$app/navigation';
 
 export const app = initializeApp(firebaseConfig);
-export const db = getFirestore();
 export const auth = getAuth();
 
 async function setToken(token: string) {
@@ -53,32 +50,6 @@ function userStore() {
 }
 
 export const user = userStore();
-
-export function collectionStore<T>(path: string) {
-  // TODO lazy load getfirestore here
-
-  let unsubscribe: Unsubscribe;
-
-  const query = collection(db, path);
-
-  return writable<T[]>([], (set) => {
-    unsubscribe = onSnapshot(query, (snapshot) => {
-      const docs: T[] = [];
-      snapshot.forEach((doc) => docs.push(doc.data() as T));
-      set(docs);
-    });
-
-    return () => unsubscribe();
-  });
-}
-
-export const savedStops: Readable<savedStop[]> = derived(user, ($user, set) => {
-  if ($user) {
-    return collectionStore<savedStop>(`userdata/${$user.uid}/stops`).subscribe(set);
-  } else {
-    set([]);
-  }
-});
 
 // TODO redirect signin, ignore handle provider already linked error
 export async function elevateAnonToGoogle() {

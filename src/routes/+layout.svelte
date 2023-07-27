@@ -2,14 +2,15 @@
   import { QueryClientProvider, QueryClient } from '@tanstack/svelte-query';
   import Header from '../components/Header.svelte';
   import '../app.css';
-  import { savedStops, user } from '../util/client/firebase';
+  import { user } from '../lib/firebase';
 
   import StopsView from '../components/StopsView.svelte';
   import type { LayoutData } from './$types';
   import { page } from '$app/stores';
-  import { shortcut } from '../util/client/shortcut';
+  import { shortcut } from '../lib/shortcut';
   import { setContext } from 'svelte';
   import Search from '~icons/material-symbols/search';
+  import { savedStops } from '$lib/stores/favorite-stops';
 
   export let data: LayoutData;
 

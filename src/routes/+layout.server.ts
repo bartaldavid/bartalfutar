@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import { adminDB, serverAuth } from '../lib/server/firebase-admin';
-import type { savedStop } from '../util/client/savedStop';
 import type { LayoutServerLoad } from './$types';
+import type { savedStop } from '$lib/stores/favorite-stops';
 // import { goto } from '$app/navigation';
 
 export type serverData = {

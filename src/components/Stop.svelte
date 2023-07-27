@@ -1,11 +1,9 @@
 <script lang="ts">
   import type { components } from '../data/bkk-openapi';
-  import { removeStopFromFirestore, saveStopToFirestore } from '../util/client/manageFbData';
+
   import { createQuery } from '@tanstack/svelte-query';
   import DeparturesList from './DeparturesList.svelte';
-  import type { savedStop } from '../util/client/savedStop';
-  import { goto } from '$app/navigation';
-  import { savedStops } from '../util/client/firebase';
+
   import { safeFetch } from '$lib/safeFetch';
   import { arrivalsAndDeparturesForStopUrl } from '../data/api-links';
   import FavoriteOutlineIcon from '~icons/material-symbols/favorite-outline';
@@ -13,6 +11,12 @@
   import ChevronRight from '~icons/material-symbols/chevron-right';
   import ArrowUpward from '~icons/material-symbols/arrow-upward';
   import MultipleStop from '~icons/material-symbols/zoom-out-map';
+  import {
+    savedStops,
+    type savedStop,
+    saveStopToFirestore,
+    removeStopFromFirestore
+  } from '$lib/stores/favorite-stops';
 
   export let references: components['schemas']['TransitReferences'] = {};
   export let stop: savedStop = {};

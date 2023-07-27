@@ -1,6 +1,6 @@
 <script lang="ts">
   import { get } from 'svelte/store';
-  import { anonymousLogin, auth, elevateAnonToGoogle, user } from '../../util/client/firebase';
+  import { anonymousLogin, auth, elevateAnonToGoogle, user } from '../../lib/firebase';
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
 

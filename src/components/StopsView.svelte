@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { components } from '../data/bkk-openapi';
-  import type { savedStop } from '../util/client/savedStop';
-  import { savedStops } from '../util/client/firebase';
+
   import SavedStopGroup from './SavedStopGroup.svelte';
   import { getContext } from 'svelte';
   import type { serverData } from '../routes/+layout.server';
+  import { savedStops, type savedStop } from '$lib/stores/favorite-stops';
 
   type savedStopGroup = {
     [key in components['schemas']['TransitStop']['type'] as string]: savedStop[];

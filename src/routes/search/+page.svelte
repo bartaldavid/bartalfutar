@@ -1,26 +1,20 @@
 <script lang="ts">
-  import type { savedStop } from '../../util/client/savedStop';
   import { createQuery } from '@tanstack/svelte-query';
   import { debounceIntervalMs, searchQueryMinimumLength } from '../../data/constants';
   import Stop from '../../components/Stop.svelte';
-  import { savedStops } from '../../util/client/firebase';
   import { safeFetch } from '$lib/safeFetch';
   import { stopsForLocationUrl } from '../../data/api-links';
   import type { components } from '../../data/bkk-openapi';
   import ArrowBackIcon from '~icons/material-symbols/arrow-back';
+  import { type savedStop, savedStops } from '$lib/stores/favorite-stops';
 
   let searchQuery: string = '';
   let timer: NodeJS.Timeout;
   let stopsToDisplay: savedStop[];
 
-  // FIXME refractor this to be a bit cleaner
   $: stopsToDisplay =
     (searchQuery.length <= searchQueryMinimumLength ? $savedStops : $searchData.data?.data?.list) ??
     [];
-  //   ? $searchData.data?.data?.list.filter((stop) => {
-  //       return stop?.locationType == 0 && stop?.routeIds?.length;
-  //     })
-  //   : [];
 
   const searchData = createQuery({
     queryKey: ['search', searchQuery],

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getContext } from 'svelte';
   import type { serverData } from '../routes/+layout.server';
-  import { elevateAnonToGoogle, signUserOut, user } from '../util/client/firebase';
+  import { elevateAnonToGoogle, signUserOut, user } from '../lib/firebase';
   import AccountCircle from '~icons/material-symbols/account-circle';
   import LogOutIcon from '~icons/material-symbols/logout';
 
