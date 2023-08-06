@@ -7,10 +7,12 @@
   import type { components } from '../../data/bkk-openapi';
   import ArrowBackIcon from '~icons/material-symbols/arrow-back';
   import { type savedStop, savedStops } from '$lib/stores/favorite-stops';
+  import { onMount } from 'svelte';
 
   let searchQuery: string = '';
   let timer: NodeJS.Timeout;
   let stopsToDisplay: savedStop[];
+  let inputRef: HTMLInputElement;
 
   $: stopsToDisplay =
     (searchQuery.length <= searchQueryMinimumLength ? $savedStops : $searchData.data?.data?.list) ??
@@ -31,9 +33,12 @@
       timer = setTimeout(() => $searchData.refetch(), debounceIntervalMs);
     }
   }
+
+  onMount(() => inputRef.focus());
 </script>
 
 <div class="m-1 mt-4 flex w-full flex-col sm:w-72">
+  <!-- TODO make this a submittable form with progressive enhancement -->
   <div class="mb-2 flex flex-row rounded bg-slate-200 p-2 dark:bg-slate-700">
     <a href="/" class="w-6 pr-2"
       ><ArrowBackIcon class="align-middle pr-2 dark:text-slate-100 text-2xl" /></a
@@ -45,7 +50,7 @@
       on:keyup={() => {
         debounceFetch();
       }}
-      autofocus
+      bind:this={inputRef}
       class="flex-1 bg-slate-200 outline-none dark:bg-slate-700 dark:text-slate-100"
     />
     <!-- FIXME this should only be a loading indicator -->
