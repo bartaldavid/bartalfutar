@@ -26,6 +26,8 @@
   }, {} as savedStopGroup);
 </script>
 
-{#each Object.entries(savedStopGroups) as [groupType, groupItems]}
-  <SavedStopGroup {groupType} {groupItems} />
-{/each}
+<div class="w-full sm:w-72 flex flex-col gap-1">
+  {#each Object.entries(savedStopGroups) as [groupType, groupItems]}
+    <SavedStopGroup {groupType} {groupItems} />
+  {/each}
+</div>

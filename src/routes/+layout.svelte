@@ -11,6 +11,7 @@
   import { setContext } from 'svelte';
   import Search from '~icons/material-symbols/search';
   import { savedStops } from '$lib/stores/favorite-stops';
+  import NavBar from '../components/NavBar.svelte';
 
   export let data: LayoutData;
 
@@ -24,9 +25,9 @@
 </svelte:head>
 
 <QueryClientProvider client={data.queryClient}>
-  <Header />
-  <main class="flex flex-row flex-wrap justify-center gap-4 mx-2">
-    {#if $user || data.user}
+  <!-- <Header /> -->
+  <main class="mx-2 flex justify-center">
+    <!-- {#if $user || data.user}
       <div
         class="mt-4 w-full flex-col flex gap-1 {isSarchOpen && 'hidden md:flex'} gap-2 sm:w-72"
         class:justify-center={!data.stops?.length}
@@ -49,7 +50,8 @@
           </div>
         </a>
       </div>
-    {/if}
+    {/if} -->
     <slot />
+    <NavBar />
   </main>
 </QueryClientProvider>

@@ -9,7 +9,7 @@
   import { type savedStop, savedStops } from '$lib/stores/favorite-stops';
   import { onMount } from 'svelte';
 
-  let searchQuery: string = '';
+  let searchQuery = '';
   let timer: NodeJS.Timeout;
   let stopsToDisplay: savedStop[];
   let inputRef: HTMLInputElement;
@@ -40,9 +40,9 @@
 <div class="m-1 mt-4 flex w-full flex-col sm:w-72">
   <!-- TODO make this a submittable form with progressive enhancement -->
   <div class="mb-2 flex flex-row rounded bg-slate-200 p-2 dark:bg-slate-700">
-    <a href="/" class="w-6 pr-2"
+    <!-- <a href="/" class="w-6 pr-2"
       ><ArrowBackIcon class="align-middle pr-2 dark:text-slate-100 text-2xl" /></a
-    >
+    > -->
     <input
       type="text"
       placeholder="Search for stops"
