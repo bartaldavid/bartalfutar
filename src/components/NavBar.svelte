@@ -24,13 +24,19 @@
 </script>
 
 <nav
-  class="fixed bottom-0 z-50 flex w-full justify-evenly py-3 font-light text-slate-700 backdrop-blur-3xl dark:text-slate-50"
+  class="fixed md:static md:flex-col md:justify-normal md:gap-5 md:w-auto md:m-10 md:mt-12 bottom-0 z-50 flex w-full justify-evenly py-3 font-light text-slate-700 backdrop-blur-3xl dark:text-slate-100"
 >
   {#each navItems as navItem}
     {@const active = navItem.path === $page.url.pathname}
-    <a href={navItem.path} class="flex flex-col items-center" class:font-medium={active}
+    <a href={navItem.path} class="flex flex-col items-center md:flex-row md:gap-2 p-2 rounded" class:active
       ><svelte:component this={navItem.icon} />
-      <span class="text-sm">{navItem.label}</span></a
+      <span class="text-sm md:text-base">{navItem.label}</span></a
     >
   {/each}
 </nav>
+
+<style>
+  .active {
+    @apply font-medium bg-slate-700;
+  }
+</style>
