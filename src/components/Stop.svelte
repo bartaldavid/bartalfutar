@@ -6,36 +6,15 @@
 
   import { safeFetch } from '$lib/safeFetch';
   import { arrivalsAndDeparturesForStopUrl } from '../data/api-links';
-  import FavoriteOutlineIcon from '~icons/material-symbols/favorite-outline';
-  import FavoriteIcon from '~icons/material-symbols/favorite';
+
   import ChevronRight from '~icons/material-symbols/chevron-right';
   import ArrowUpward from '~icons/material-symbols/arrow-upward';
   import MultipleStop from '~icons/material-symbols/zoom-out-map';
-  import {
-    savedStops,
-    type savedStop,
-    saveStopToFirestore,
-    removeStopFromFirestore
-  } from '$lib/stores/favorite-stops';
+  import type { savedStop } from '$lib/stores/favorite-stops';
 
   export let references: components['schemas']['TransitReferences'] = {};
   export let stop: savedStop = {};
-  $: saved = $savedStops.some((savedStop) => savedStop.id == stop.id);
   let expanded = false;
-
-  function toggleStopSave() {
-    if (!saved) {
-      let routeRefForStop: {
-        [key: string]: components['schemas']['TransitRoute'] | undefined;
-      } = {};
-      stop.routeIds?.forEach((routeId) => {
-        routeRefForStop[routeId] = references.routes?.[routeId];
-      });
-      saveStopToFirestore({ ...stop, routeRef: routeRefForStop });
-    } else {
-      stop.id && removeStopFromFirestore(stop.id);
-    }
-  }
 
   const departuresFromStop = createQuery({
     queryKey: ['stop', stop.id!],
@@ -66,8 +45,8 @@
     </div>
     <div class="flex flex-row flex-wrap gap-1">
       {#if stop.locationType === 1}
-        <div class="text-sm flex gap-1 dark:text-slate-300 items-center">
-          <MultipleStop /><span>stop area</span>
+        <div class="flex items-center gap-1 text-sm dark:text-slate-300">
+          <MultipleStop />
         </div>
       {/if}
 
@@ -91,22 +70,16 @@
       {/if}
     </div>
   </div>
-  <div class="flex w-8 flex-col self-center p-1">
-    <button on:click={() => toggleStopSave()}>
-      {#if saved}<FavoriteIcon class="dark:text-slate-100" />{:else}<FavoriteOutlineIcon
-          class="dark:text-slate-100"
-        />{/if}
-    </button>
-  </div>
+  <div class="flex w-8 flex-col self-center p-1"></div>
 </div>
 {#if $departuresFromStop.isFetched && expanded}
-  <div class="flex flex-col gap-1 rounded bg-none dark:bg-slate-700 p-1">
+  <div class="flex flex-col gap-1 rounded bg-none p-1 dark:bg-slate-700">
     <DeparturesList
       references={$departuresFromStop?.data?.data?.references}
       departures={$departuresFromStop?.data?.data?.entry?.stopTimes}
       expandable={false}
     />
-    <a class="dark:text-slate-50 flex justify-center p-2 items-center" href={`/stops/${stop.id}`}
+    <a class="flex items-center justify-center p-2 dark:text-slate-50" href={`/stops/${stop.id}`}
       >Show more <ChevronRight /></a
     >
   </div>

@@ -34,7 +34,7 @@ export function stopsForLocationUrl(
 export function nearbyDeparturesUrl(
   query: operations['getArrivalsAndDeparturesForLocation']['parameters']['query']
 ) {
-  const params = { key: PUBLIC_BKK_API_KEY, ...defaultStopsForLocationParams, ...query };
+  const params = { key: PUBLIC_BKK_API_KEY, ...query };
   const queryString = new URLSearchParams(params as any).toString();
-  return `${BASE_PATH}/arrivals-and-departures-for-location.json?${queryString}`;
+  return `${BASE_PATH}/arrivals-and-departures-for-location?${queryString}`;
 }
