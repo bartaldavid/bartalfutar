@@ -1,10 +1,11 @@
 <script lang="ts">
-  import type { components, operations } from '../data/bkk-openapi';
+  import type { components } from '../data/bkk-openapi';
 
   import Countdown from './Countdown.svelte';
   import TripDetails from './TripDetails.svelte';
-  import { epochToDate, displayDate } from '../util/dateMagic';
+  import { displayDate, useTransitStopTime } from '../lib/util/date';
   import { createEventDispatcher, onMount } from 'svelte';
+  import RouteIcon from './RouteIcon.svelte';
 
   export let departure: components['schemas']['TransitScheduleStopTime'] = {};
   export let references: components['schemas']['OTPTransitReferences'] = {};
@@ -16,16 +17,14 @@
   const routeId = references?.trips?.[departure?.tripId!]?.routeId;
   const routeData = references?.routes?.[routeId!];
 
-  $: predictedDepartureDate = epochToDate(departure.predictedDepartureTime);
-  $: departureDate = epochToDate(departure.departureTime);
-
-  $: countDownToDate =
-    predictedDepartureDate ?? departureDate ?? epochToDate(departure.predictedArrivalTime);
-
-  $: delayInMinutes =
-    departure.predictedDepartureTime && departure.departureTime
-      ? (departure?.predictedDepartureTime - departure?.departureTime) / 60
-      : 0;
+  $: ({
+    departureDate,
+    predictedDepartureDate,
+    delayInMinutes,
+    relevantDate,
+    isRealtime,
+    isDelayed
+  } = useTransitStopTime(departure));
 
   async function toggleDetails() {
     if (departure.tripId && expandedTripId !== departure.tripId + departure.stopId) {
@@ -45,10 +44,10 @@
 >
   <div class="flex justify-between gap-6">
     <div>
-      {#if delayInMinutes >= 1 || !departure.predictedDepartureTime}
+      {#if isDelayed || !isRealtime}
         <span class="">{displayDate(departureDate)}</span>
       {/if}
-      {#if departure.predictedDepartureTime}
+      {#if isRealtime}
         <span
           class={delayInMinutes >= 1
             ? 'text-red-500 dark:text-red-400'
@@ -56,21 +55,15 @@
         >
           {displayDate(predictedDepartureDate)}
         </span>
-        {#if delayInMinutes > 1}
-          <span class="text-xs text-red-500 dark:text-red-400">(+{delayInMinutes.toFixed(1)})</span>
+        {#if isDelayed}
+          <span class="text-xs text-red-500 dark:text-red-400">(+{delayInMinutes.toFixed(0)})</span>
         {/if}
       {/if}
 
-      <div class="my-1 text-sm">
-        <span
-          style:color={'#' + routeData?.style?.icon?.textColor}
-          style:background-color={'#' + routeData?.style?.color}
-          class="rounded p-1"
-        >
-          {routeData?.shortName}
-        </span>
-        <span class="text-sm">{departure.stopHeadsign}</span>
-      </div>
+      {#if routeData}
+        <RouteIcon {routeData} headSign={departure?.stopHeadsign} />
+      {/if}
+
       {#if departure.alertIds}
         {#each departure.alertIds as alertId}
           <div class="mt-2 text-xs text-red-500 dark:text-red-400">
@@ -80,8 +73,8 @@
       {/if}
     </div>
 
-    {#if countDownToDate}
-      <Countdown {countDownToDate} />
+    {#if relevantDate}
+      <Countdown countDownToDate={relevantDate} />
     {/if}
 
     <!-- TODO show icon to indicate expandable behaviour -->
