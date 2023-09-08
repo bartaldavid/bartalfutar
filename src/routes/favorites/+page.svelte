@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { user } from '$lib/firebase';
+  import { elevateAnonToGoogle, user } from '$lib/firebase';
   import { savedStops } from '$lib/stores/favorite-stops';
   import { getContext } from 'svelte';
   import StopsView from '../../components/StopsView.svelte';
@@ -7,6 +7,7 @@
   import PageLayout from '../../components/PageLayout.svelte';
   import type { PageData } from './$types';
 
+  import AccountCircleIcon from "~icons/material-symbols/account-circle";
   const serverdata = getContext<serverData>('serverdata');
 
   export let data: PageData;
@@ -16,14 +17,22 @@
 </script>
 
 <PageLayout pageTitle="Favorites">
-  <img
-    slot="header"
+  <svelte:fragment slot="header">
+{#if profile_image_url}
+    <img
     src={profile_image_url}
     alt="Profile"
     height="30"
     width="30"
     class="rounded-full m-1"
-  />
+    />
+    {:else if $user} 
+  <AccountCircleIcon class="m-1 dark:text-slate-50"/>{:else}
+  <button on:click={elevateAnonToGoogle} class="text-white bg-slate-700 rounded p-2"
+  >Sign in</button
+>
+    {/if}
+  </svelte:fragment>
   <svelte:fragment slot="content">
         {#if stops.length}
           <StopsView {stops}/>
