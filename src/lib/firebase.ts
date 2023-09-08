@@ -21,18 +21,16 @@ export const auth = getAuth();
 
 async function setToken(token: string) {
   if (!browser) return;
-  const uid = await fetch('/api/token', {
+  await fetch('/api/token', {
     method: 'POST',
     headers: new Headers({
       Authorization: `Bearer ${token}`
     })
   });
-  console.log(uid);
 }
 
 function userStore() {
   if (!auth || !browser) {
-    console.warn('Auth is not initialized or not in browser.');
     return readable<User | null>(null);
   }
 
@@ -71,7 +69,6 @@ export async function elevateAnonToGoogle() {
   const idToken = await result.user.getIdToken();
   await setToken(idToken);
   await goto('/');
-  console.log('gone!');
 }
 
 export async function anonymousLogin() {
@@ -84,7 +81,6 @@ export async function anonymousLogin() {
 export async function signUserOut() {
   const { signOut } = await import('firebase/auth');
   try {
-    console.log(auth);
     await signOut(auth);
   } catch (error) {
     console.log(error);
