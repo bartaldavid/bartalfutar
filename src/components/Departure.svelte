@@ -61,7 +61,10 @@
       {/if}
 
       {#if routeData}
-        <RouteIcon {routeData} headSign={departure?.stopHeadsign} />
+      <div class="my-1 text-sm">
+          <RouteIcon {routeData} />
+          <span>{departure.stopHeadsign}</span>
+      </div>
       {/if}
 
       {#if departure.alertIds}
