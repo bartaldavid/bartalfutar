@@ -2,6 +2,7 @@
   import type { components } from '../data/bkk-openapi';
   import VehicleIcons from './VehicleIcons.svelte';
   import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
 
   export let groupType: string;
   export let groupItems: components['schemas']['TransitStop'][];
@@ -16,7 +17,7 @@
     {#each groupItems as stop (stop.id)}
       <a
         class="flex-1 break-words rounded bg-slate-100 p-2 text-sm dark:bg-slate-700 dark:text-slate-50 flex text-center items-center justify-center"
-        href={`/stops/${stop.id}`}
+        href={`/stops/${stop.id}?from=${encodeURIComponent($page.url.pathname)}`}
         >{stop.name}
       </a>
     {/each}

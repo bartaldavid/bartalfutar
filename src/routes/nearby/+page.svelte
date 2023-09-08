@@ -9,11 +9,8 @@
   import { loadLocation, location } from '$lib/stores/geolocation';
   import { REFETCH_INTERVAL_MS } from '../../data/constants';
 
-  let coordinates: GeolocationCoordinates | null = null;
-  let geoLocationError: GeolocationPositionError;
-
   $: nearbyDepartures = createQuery({
-    queryKey: ['departuresForLocation', coordinates],
+    queryKey: ['departuresForLocation'],
     queryFn: async () =>
       safeFetch<components['schemas']['ArrivalsAndDeparturesForLocationOTPMethodResponse']>(
         nearbyDeparturesUrl({
@@ -48,6 +45,5 @@
         <DepartureGroup {departureGroup} references={$nearbyDepartures.data?.data?.references} />
       {/each}
     </div>
-    )
   </svelte:fragment>
 </PageLayout>

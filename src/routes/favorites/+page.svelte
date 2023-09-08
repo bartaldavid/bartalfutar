@@ -5,7 +5,13 @@
   import StopsView from '../../components/StopsView.svelte';
   import type { serverData } from '../+layout.server';
   import PageLayout from '../../components/PageLayout.svelte';
+  import type { PageData } from './$types';
+
   const serverdata = getContext<serverData>('serverdata');
+
+  export let data: PageData;
+
+  $: stops = $savedStops.length ? $savedStops : data.stops ?? [];
   $: profile_image_url = serverdata.user?.photoUrl ?? $user?.photoURL;
 </script>
 
@@ -19,14 +25,10 @@
     class="rounded-full m-1"
   />
   <svelte:fragment slot="content">
-    {#if $user}
-      <div class="">
-        {#if $savedStops.length}
-          <StopsView />
+        {#if stops.length}
+          <StopsView {stops}/>
         {:else}
           <div class="text-center dark:text-slate-200">Add stops to get started</div>
         {/if}
-      </div>
-    {/if}
   </svelte:fragment>
 </PageLayout>

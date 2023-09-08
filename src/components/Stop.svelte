@@ -14,6 +14,7 @@
   import FavoriteOutlineIcon from '~icons/material-symbols/favorite-outline'
 
   import {type  savedStop, savedStops, saveStopToFirestore, removeStopFromFirestore } from '$lib/stores/favorite-stops';
+  import { page } from '$app/stores';
 
   export let references: components['schemas']['TransitReferences'] = {};
   export let stop: savedStop = {};
@@ -104,7 +105,7 @@
       departures={$departuresFromStop?.data?.data?.entry?.stopTimes}
       expandable={false}
     />
-    <a class="flex items-center justify-center p-2 dark:text-slate-50" href={`/stops/${stop.id}`}
+    <a class="flex items-center justify-center p-2 dark:text-slate-50" href={`/stops/${stop.id}?from=${encodeURIComponent($page.url.pathname)}`}
       >Show more <ChevronRight /></a
     >
   </div>

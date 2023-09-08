@@ -2,19 +2,15 @@
   import type { components } from '../data/bkk-openapi';
 
   import SavedStopGroup from './SavedStopGroup.svelte';
-  import { getContext } from 'svelte';
-  import type { serverData } from '../routes/+layout.server';
-  import { savedStops, type savedStop } from '$lib/stores/favorite-stops';
+  import type { savedStop } from '$lib/stores/favorite-stops';
+
+  export let stops: savedStop[] = [];
 
   type savedStopGroup = {
     [key in components['schemas']['TransitStop']['type'] as string]: savedStop[];
   };
 
-  let savedStopGroups: savedStopGroup;
-
-  const serverdata = getContext<serverData>('serverdata');
-
-  $: stops = $savedStops.length ? $savedStops : serverdata.stops ?? [];
+  let savedStopGroups: savedStopGroup = {};
 
   $: savedStopGroups = stops.reduce((result, currentStop) => {
     if (currentStop.type) {
