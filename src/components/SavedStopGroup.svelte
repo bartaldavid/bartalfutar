@@ -10,7 +10,7 @@
 
 <div class="flex flex-row rounded bg-slate-50 p-2 dark:bg-slate-800">
   <div class="flex">
-    <VehicleIcons vehicleType={groupType} />
+    <VehicleIcons vehicleType={groupType} class="ml-1 text-3xl pr-3 self-center"/>
   </div>
   <div class="flex flex-wrap gap-1">
     <!-- TODO separate this into its own stop component? -->

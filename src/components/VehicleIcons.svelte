@@ -30,7 +30,7 @@
 {#if vehicleType}
   <svelte:component
     this={typesToIconsMap[vehicleType]?.icon}
-    class=" ml-1 self-center pr-3 text-3xl"
+    class={$$restProps.class}
     style={`color:${typesToIconsMap[vehicleType]?.color};`}
   />
 {/if}
