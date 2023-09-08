@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let countDownToDate: Date;
-
+	export let isShort: boolean = false;
 	let [hoursC, minutesC, secondsC] = countdown(countDownToDate);
 
 	function countdown(date: Date): number[] {
@@ -31,5 +31,7 @@
 
 <div class="flex flex-col justify-center text-center">
 	<div>{displayCountdown([hoursC, minutesC, secondsC])}</div>
+	{#if !isShort}
 	<div class="text-xs text-slate-700 dark:text-slate-100">perc múlva</div>
+	{/if}
 </div>
