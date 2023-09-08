@@ -3,7 +3,7 @@ import { writable } from 'svelte/store';
 type PositionState = {
   enabled: boolean;
   position: GeolocationPosition | null;
-  error: GeolocationPositionError | string | null;
+  error: GeolocationPositionError | { message: string }| null;
   isLoading: boolean;
   isLoaded: boolean;
   isDenied: boolean;
@@ -32,18 +32,21 @@ export function loadLocation(options: PositionOptions = defaultOptions) {
   if (!navigator.geolocation) {
     location.set({
       ...initialState,
-      error: 'Geolocation is not supported by this browser.'
+      error: {message: 'Geolocation is not supported by this browser.'}
     });
   }
 
-  navigator.geolocation.watchPosition(
+  location.update((state) => ({...state, isLoading: true}));
+
+  navigator.geolocation.getCurrentPosition(
     (pos) => {
-      console.log('accurate to' + pos.coords.accuracy);
+      console.log('accurate to ' + pos.coords.accuracy);
       location.update((state) => ({
         ...state,
         position: pos,
         isSupported: true,
-        isLoaded: true
+        isLoaded: true,
+        error: null,
       }));
     },
     (err) => {
@@ -55,5 +58,5 @@ export function loadLocation(options: PositionOptions = defaultOptions) {
       }));
     },
     options
-  );
+    );
 }
