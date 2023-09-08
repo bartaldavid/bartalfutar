@@ -23,7 +23,7 @@
     delayInMinutes,
     relevantDate,
     isRealtime,
-    isDelayed
+    isDelayed, isDeparted
   } = useTransitStopTime(departure));
 
   async function toggleDetails() {
@@ -36,7 +36,7 @@
 </script>
 
 <div
-  class="flex w-full flex-col rounded bg-slate-100 p-4 hover:cursor-pointer dark:bg-slate-800 dark:text-slate-50"
+  class="flex w-full flex-col rounded bg-slate-100 p-4 hover:cursor-pointer dark:bg-slate-800 dark:text-slate-50 {isDeparted && "opacity-70 text-xs"}"
   on:click={() => expandable && toggleDetails()}
   on:keypress={() => {}}
   role="button"
@@ -44,19 +44,21 @@
 >
   <div class="flex justify-between gap-6">
     <div>
-      {#if isDelayed || !isRealtime}
-        <span class="">{displayDate(departureDate)}</span>
-      {/if}
-      {#if isRealtime}
-        <span
-          class={delayInMinutes >= 1
-            ? 'text-red-500 dark:text-red-400'
-            : 'text-green-600 dark:text-green-400'}
-        >
-          {displayDate(predictedDepartureDate)}
-        </span>
-        {#if isDelayed}
-          <span class="text-xs text-red-500 dark:text-red-400">(+{delayInMinutes.toFixed(0)})</span>
+      {#if !isDeparted}
+        {#if (isDelayed || !isRealtime)}
+          <span class="">{displayDate(departureDate)}</span>
+        {/if}
+        {#if isRealtime}
+          <span
+            class={delayInMinutes >= 1
+              ? 'text-red-500 dark:text-red-400'
+              : 'text-green-600 dark:text-green-400'}
+          >
+            {displayDate(predictedDepartureDate)}
+          </span>
+          {#if isDelayed}
+            <span class="text-xs text-red-500 dark:text-red-400">(+{delayInMinutes.toFixed(0)})</span>
+          {/if}
         {/if}
       {/if}
 
@@ -67,7 +69,7 @@
       </div>
       {/if}
 
-      {#if departure.alertIds}
+      {#if departure.alertIds && !isDeparted}
         {#each departure.alertIds as alertId}
           <div class="mt-2 text-xs text-red-500 dark:text-red-400">
             {references?.alerts?.[alertId]?.header?.someTranslation}
@@ -77,7 +79,7 @@
     </div>
 
     {#if relevantDate}
-      <Countdown countDownToDate={relevantDate} />
+      <Countdown countDownToDate={relevantDate} isShort={isDeparted}/>
     {/if}
 
     <!-- TODO show icon to indicate expandable behaviour -->
