@@ -30,15 +30,10 @@
 >
   {#each navItems as navItem}
     {@const active = navItem.path === $page.url.pathname || navItem.path === parent}
-    <a href={navItem.path} class="flex flex-col items-center md:flex-row md:gap-2 p-2 rounded" class:active
+    <a href={navItem.path} class="flex flex-col items-center md:flex-row md:gap-2 p-2 rounded {active && "font-medium md:dark:bg-slate-700 md:bg-slate-200"}"
       ><svelte:component this={navItem.icon} />
       <span class="text-sm md:text-base">{navItem.label}</span></a
     >
   {/each}
 </nav>
 
-<style>
-  .active {
-    @apply font-medium bg-slate-700;
-  }
-</style>
