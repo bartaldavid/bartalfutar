@@ -10,11 +10,29 @@
   import ChevronRight from '~icons/material-symbols/chevron-right';
   import ArrowUpward from '~icons/material-symbols/arrow-upward';
   import MultipleStop from '~icons/material-symbols/zoom-out-map';
-  import type { savedStop } from '$lib/stores/favorite-stops';
+  import FavoriteIcon from '~icons/material-symbols/favorite';
+  import FavoriteOutlineIcon from '~icons/material-symbols/favorite-outline'
+
+  import {type  savedStop, savedStops, saveStopToFirestore, removeStopFromFirestore } from '$lib/stores/favorite-stops';
 
   export let references: components['schemas']['TransitReferences'] = {};
   export let stop: savedStop = {};
+  $: saved = $savedStops.some((savedStop) => savedStop.id == stop.id);
   let expanded = false;
+
+  function toggleStopSave() {
+    if (!saved) {
+      let routeRefForStop: {
+        [key: string]: components['schemas']['TransitRoute'] | undefined;
+      } = {};
+      stop.routeIds?.forEach((routeId) => {
+        routeRefForStop[routeId] = references.routes?.[routeId];
+      });
+      saveStopToFirestore({ ...stop, routeRef: routeRefForStop });
+    } else {
+      stop.id && removeStopFromFirestore(stop.id);
+    }
+  }
 
   const departuresFromStop = createQuery({
     queryKey: ['stop', stop.id!],
@@ -70,7 +88,14 @@
       {/if}
     </div>
   </div>
-  <div class="flex w-8 flex-col self-center p-1"></div>
+  <div class="flex w-8 flex-col self-center p-1">
+    <!-- TODO extract this into FavoriteToggle? -->
+    <button on:click={() => toggleStopSave()}>
+      {#if saved}<FavoriteIcon class="dark:text-slate-100" />{:else}<FavoriteOutlineIcon
+          class="dark:text-slate-100"
+        />{/if}
+    </button>
+  </div>
 </div>
 {#if $departuresFromStop.isFetched && expanded}
   <div class="flex flex-col gap-1 rounded bg-none p-1 dark:bg-slate-700">
