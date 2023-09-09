@@ -20,7 +20,7 @@
 
 	function displayCountdown([h, m, s]: number[]): string {
 		if (h > 0) return `${h}h ${m}`;
-		if (m > 10) return m.toString();
+		if (m >= 10) return m.toString();
 		if (m < 0) return `${s} s`;
 		return `${m}:${s.toLocaleString('hu', {
 			minimumIntegerDigits: 2,
@@ -29,9 +29,9 @@
 	}
 </script>
 
-<div class="flex flex-col justify-center text-center">
-	<div>{displayCountdown([hoursC, minutesC, secondsC])}</div>
+<div class="flex flex-col justify-center text-center {$$restProps.class}">
+	<div>{displayCountdown([hoursC, minutesC, secondsC])}{isShort && minutesC > 1 ? " min" : ""}</div>
 	{#if !isShort}
-	<div class="text-xs text-slate-700 dark:text-slate-100">perc múlva</div>
+		<div class="text-xs text-slate-700 dark:text-slate-100">perc múlva</div>
 	{/if}
 </div>

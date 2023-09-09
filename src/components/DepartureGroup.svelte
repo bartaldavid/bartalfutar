@@ -17,17 +17,17 @@
     <RouteIcon {routeData} />
     <span>{departureGroup.headsign}</span>
   </div>
-  <div class="flex gap-1 text-sm">
+  <div class="flex gap-1">
     {#if departureGroup.stopTimes}
       {#each departureGroup.stopTimes as stopTime}
         {@const { relevantDate, isDelayed, isRealtime } = useTransitStopTime(stopTime)}
         <!-- <span>{stopTime.stopId}</span> -->
-        <span class:text-red-500={isDelayed} class:text-green-500={isRealtime && !isDelayed}
+        <!-- <span class:text-red-500={isDelayed} class:text-green-500={isRealtime && !isDelayed}
           >{displayDate(relevantDate)}</span
-        >
-        <!-- {#if relevantDate}
-          <Countdown countDownToDate={relevantDate} />
-        {/if} -->
+        > -->
+        {#if relevantDate}
+          <Countdown countDownToDate={relevantDate} isShort class="text-base {isRealtime && "text-green-500"} {isDelayed && "text-red-500"}"/>
+        {/if}
       {/each}
     {:else}
       <span class="text-slate-200">No departure in the next 90 minutes</span>
