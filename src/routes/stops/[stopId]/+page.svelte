@@ -11,6 +11,7 @@
   import Close from '~icons/material-symbols/close';
   import PageLayout from '../../../components/PageLayout.svelte';
   import { page } from '$app/stores';
+  import RefreshButton from '../../../components/RefreshButton.svelte';
 
   export let data: PageData;
 
@@ -26,7 +27,7 @@
   });
 
   $: stopName = $stopData.data?.data?.references?.stops?.[data.stopId]?.name;
-
+  // TODO extract this to a global store maybe?
   $: parent = $page.url.searchParams.get('from');
 </script>
 
@@ -37,13 +38,7 @@
 <PageLayout pageTitle={stopName ?? "Loading..."}>
   <svelte:fragment slot="header">
     <div class="flex gap-1 dark:text-slate-100">
-      <button class="px-2" on:click={async () => await $stopData.refetch()}>
-        {#if $stopData.isFetching}
-        <Autorenew />
-        {:else}
-        <Refresh />
-        {/if}
-      </button>
+      <RefreshButton isFetching={$stopData.isFetching} on:refresh={async () => await $stopData.refetch()}/>
       <a href={parent ?? "/"} class="px-2"><Close /></a>
     </div>
   </svelte:fragment>

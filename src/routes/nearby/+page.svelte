@@ -8,10 +8,11 @@
   import DepartureGroup from '../../components/DepartureGroup.svelte';
   import { loadLocation, location } from '$lib/stores/geolocation';
   import { REFETCH_INTERVAL_MS } from '../../data/constants';
-  import LocationSearchingIcon from "~icons/material-symbols/location-searching";
-  import MyLocationIcon from "~icons/material-symbols/my-location";
-  import LocationDisabledIcon from "~icons/material-symbols/location-disabled"
+  import LocationSearchingIcon from '~icons/material-symbols/location-searching';
+  import MyLocationIcon from '~icons/material-symbols/my-location';
+  import LocationDisabledIcon from '~icons/material-symbols/location-disabled';
   import { error } from '@sveltejs/kit';
+  import RefreshButton from '../../components/RefreshButton.svelte';
 
   $: nearbyDepartures = createQuery({
     queryKey: ['departuresForLocation', $location.position?.coords],
@@ -20,7 +21,8 @@
         nearbyDeparturesUrl({
           lon: $location.position?.coords.longitude,
           lat: $location.position?.coords.latitude,
-          radius: 500,
+          radius: 300,
+          minutesBefore: 0,
           minutesAfter: 180,
           onlyDepartures: true,
           limit: 50,
@@ -39,18 +41,25 @@
 
 <PageLayout pageTitle="Around you">
   <svelte:fragment slot="header">
-    <button
-      class="text-white"
-      on:click={() => {
-        loadLocation();
-      }}>{#if $location.isLoaded}
-          <MyLocationIcon />
-        {:else if $location.error}
-        <LocationDisabledIcon />
-        {:else}
-        <LocationSearchingIcon />
-      {/if}</button
+    <div class="flex gap-1 dark:text-slate-50">
+      <RefreshButton isFetching={$nearbyDepartures.isFetching} on:refresh={async () => await $nearbyDepartures.refetch()}/>  
+        <button
+        on:click={() => {
+          loadLocation();
+        }}
     >
+    {#if $location.isLoaded}
+    <MyLocationIcon />
+    <!-- <span class="text-xs">
+      {$location.position?.coords.accuracy.toFixed(0)}m
+    </span> -->
+    {:else if $location.error}
+    <LocationDisabledIcon />
+    {:else}
+    <LocationSearchingIcon />
+    {/if}
+  </button>
+</div>
   </svelte:fragment>
   <svelte:fragment slot="content">
     <div class="flex flex-col gap-2">
