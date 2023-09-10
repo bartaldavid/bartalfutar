@@ -1,4 +1,4 @@
-import { user } from '$lib/firebase';
+import { anonymousLogin, user } from '$lib/firebase';
 import { get, writable } from 'svelte/store';
 import type { components } from '../data/bkk-openapi';
 
@@ -19,7 +19,10 @@ export async function removeStopFromFirestore(id: string) {
 }
 
 export async function saveStopToFirestore(stop: savedStop) {
-  if (!get(user)?.uid) throw Error('No user found');
+  if (!get(user)?.uid) {
+    await anonymousLogin();
+  }
+
   if (!stop?.id) throw Error('No stopId');
 
   const { setDoc, doc, getFirestore } = await import('firebase/firestore');
@@ -41,30 +44,3 @@ user.subscribe(async ($user) => {
     savedStops.set(stops);
   });
 });
-
-// FIXME this is a nicer implementation but cannot lazy load
-// export function collectionStore<T>(path: string) {
-//   // TODO lazy load getfirestore here
-
-//   let unsubscribe: Unsubscribe;
-
-//   const query = collection(db, path);
-
-//   return writable<T[]>([], (set) => {
-//     unsubscribe = onSnapshot(query, (snapshot) => {
-//       const docs: T[] = [];
-//       snapshot.forEach((doc) => docs.push(doc.data() as T));
-//       set(docs);
-//     });
-
-//     return () => unsubscribe();
-//   });
-// }
-
-// export const savedStops: Readable<savedStop[]> = derived(user, ($user, set) => {
-//   if ($user) {
-//     return collectionStore<savedStop>(`userdata/${$user.uid}/stops`).subscribe(set);
-//   } else {
-//     set([]);
-//   }
-// });

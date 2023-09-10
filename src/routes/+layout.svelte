@@ -1,23 +1,20 @@
 <script lang="ts">
   import { QueryClientProvider, QueryClient } from '@tanstack/svelte-query';
-  import Header from '../components/Header.svelte';
   import '../app.css';
-  import { user } from '../lib/firebase';
-
-  import StopsView from '../components/StopsView.svelte';
   import type { LayoutData } from './$types';
-  import { page } from '$app/stores';
-  import { shortcut } from '../lib/shortcut';
-  import { setContext } from 'svelte';
-  import Search from '~icons/material-symbols/search';
-  import { savedStops } from '$lib/stores/favorite-stops';
+  import { onMount, setContext } from 'svelte';
   import NavBar from '../components/NavBar.svelte';
+  import { browser } from '$app/environment';
+  import { setToken, user } from '$lib/firebase';
 
   export let data: LayoutData;
-
-  const isSarchOpen = $page.url.pathname === '/search';
-
   setContext('serverdata', data);
+  onMount(async () => {
+    // resets token when cookie expires or is deleted
+    if (browser && !data.user && $user) {
+      await setToken(await $user.getIdToken());
+    }
+  });
 </script>
 
 <svelte:head>

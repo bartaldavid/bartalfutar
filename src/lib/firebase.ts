@@ -19,7 +19,7 @@ import { goto, invalidateAll } from '$app/navigation';
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
 
-async function setToken(token: string) {
+export async function setToken(token: string) {
   if (!browser) return;
   await fetch('/api/token', {
     method: 'POST',
@@ -68,14 +68,12 @@ export async function elevateAnonToGoogle() {
 
   const idToken = await result.user.getIdToken();
   await setToken(idToken);
-  await goto('/');
 }
 
 export async function anonymousLogin() {
   const { signInAnonymously } = await import('firebase/auth');
   const result = await signInAnonymously(auth);
   await setToken(await result.user.getIdToken());
-  goto('/');
 }
 
 export async function signUserOut() {
@@ -87,5 +85,4 @@ export async function signUserOut() {
   }
   await invalidateAll();
   await setToken('');
-  goto('/login');
 }

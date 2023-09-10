@@ -12,24 +12,34 @@
 
   export let data: PageData;
 
-  $: $savedStops = data.stops;
+  $: stops = $savedStops.length ? $savedStops : data.stops ?? [];
   $: profile_image_url = serverdata.user?.photoUrl ?? $user?.photoURL;
 </script>
 
 <PageLayout pageTitle="Favorites">
   <svelte:fragment slot="header">
-    {#if profile_image_url}
-      <img src={profile_image_url} alt="Profile" height="30" width="30" class="m-1 rounded-full" />
-    {:else if $user}
-      <AccountCircleIcon class="m-1 dark:text-slate-50" />{:else}
+    {#if $user}
+      {#if profile_image_url}
+        <img
+          src={profile_image_url}
+          alt="Profile"
+          height="30"
+          width="30"
+          class="m-1 rounded-full"
+        />
+      {:else if !$user?.isAnonymous}
+        <AccountCircleIcon class="m-1 dark:text-slate-50" />
+      {/if}
+    {/if}
+    {#if !serverdata.user && (!$user || $user?.isAnonymous)}
       <button on:click={elevateAnonToGoogle} class="rounded bg-slate-700 p-2 text-white"
         >Sign in</button
       >
     {/if}
   </svelte:fragment>
   <svelte:fragment slot="content">
-    {#if $savedStops.length}
-      <StopsView stops={$savedStops} />
+    {#if stops.length}
+      <StopsView {stops} />
     {:else}
       <div class="text-center dark:text-slate-200">Add stops to get started</div>
     {/if}
