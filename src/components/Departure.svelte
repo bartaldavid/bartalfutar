@@ -23,7 +23,8 @@
     delayInMinutes,
     relevantDate,
     isRealtime,
-    isDelayed, isDeparted
+    isDelayed,
+    isDeparted
   } = useTransitStopTime(departure));
 
   async function toggleDetails() {
@@ -36,7 +37,8 @@
 </script>
 
 <div
-  class="flex w-full flex-col rounded bg-slate-100 p-4 hover:cursor-pointer dark:bg-slate-800 dark:text-slate-50 {isDeparted && "opacity-70 text-xs"}"
+  class="flex w-full flex-col rounded bg-slate-100 p-4 hover:cursor-pointer dark:bg-slate-800 dark:text-slate-50 {isDeparted &&
+    'text-xs opacity-70'}"
   on:click={() => expandable && toggleDetails()}
   on:keypress={() => {}}
   role="button"
@@ -45,7 +47,7 @@
   <div class="flex justify-between gap-6">
     <div>
       {#if !isDeparted}
-        {#if (isDelayed || !isRealtime)}
+        {#if isDelayed || !isRealtime}
           <span class="">{displayDate(departureDate)}</span>
         {/if}
         {#if isRealtime}
@@ -57,16 +59,18 @@
             {displayDate(predictedDepartureDate)}
           </span>
           {#if isDelayed}
-            <span class="text-xs text-red-500 dark:text-red-400">(+{delayInMinutes.toFixed(0)})</span>
+            <span class="text-xs text-red-500 dark:text-red-400"
+              >(+{delayInMinutes.toFixed(0)})</span
+            >
           {/if}
         {/if}
       {/if}
 
       {#if routeData}
-      <div class="my-1 text-sm">
+        <div class="my-1 text-sm">
           <RouteIcon {routeData} />
           <span>{departure.stopHeadsign}</span>
-      </div>
+        </div>
       {/if}
 
       {#if departure.alertIds && !isDeparted}
@@ -79,7 +83,10 @@
     </div>
 
     {#if relevantDate}
-      <Countdown countDownToDate={relevantDate} isShort={isDeparted}/>
+      <div class="flex flex-col justify-center text-center">
+        <Countdown countDownToDate={relevantDate} />
+        <span class="text-xs text-slate-700 dark:text-slate-100">perc múlva</span>
+      </div>
     {/if}
 
     <!-- TODO show icon to indicate expandable behaviour -->

@@ -12,21 +12,17 @@
 </script>
 
 <div class="flex flex-col gap-1 rounded bg-slate-100 p-4 dark:bg-slate-800 dark:text-slate-50">
-  <div class="flex flex-row text-sm my-1 items-center gap-1">
-    <VehicleIcons vehicleType={routeData?.type ?? ''} class="self-center text-lg"/>
+  <div class="my-1 flex flex-row items-center gap-1 text-sm">
+    <VehicleIcons vehicleType={routeData?.type ?? ''} class="self-center text-lg" />
     <RouteIcon {routeData} />
     <span>{departureGroup.headsign}</span>
   </div>
-  <div class="flex gap-1">
+  <div class="flex gap-2">
     {#if departureGroup.stopTimes}
       {#each departureGroup.stopTimes as stopTime}
         {@const { relevantDate, isDelayed, isRealtime } = useTransitStopTime(stopTime)}
-        <!-- <span>{stopTime.stopId}</span> -->
-        <!-- <span class:text-red-500={isDelayed} class:text-green-500={isRealtime && !isDelayed}
-          >{displayDate(relevantDate)}</span
-        > -->
         {#if relevantDate}
-          <Countdown countDownToDate={relevantDate} isShort class="text-base {isRealtime && "text-green-500"} {isDelayed && "text-red-500"}"/>
+          <Countdown countDownToDate={relevantDate} showApostrophe />
         {/if}
       {/each}
     {:else}
