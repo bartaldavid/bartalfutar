@@ -1,19 +1,24 @@
 <script lang="ts">
-  import type { components } from '../data/bkk-openapi';
+  import type { components } from '../lib/data/bkk-openapi';
 
   import { createQuery } from '@tanstack/svelte-query';
   import DeparturesList from './DeparturesList.svelte';
 
   import { safeFetch } from '$lib/safeFetch';
-  import { arrivalsAndDeparturesForStopUrl } from '../data/api-links';
+  import { arrivalsAndDeparturesForStopUrl } from '../lib/data/api-links';
 
   import ChevronRight from '~icons/material-symbols/chevron-right';
   import ArrowUpward from '~icons/material-symbols/arrow-upward';
   import MultipleStop from '~icons/material-symbols/zoom-out-map';
   import FavoriteIcon from '~icons/material-symbols/favorite';
-  import FavoriteOutlineIcon from '~icons/material-symbols/favorite-outline'
+  import FavoriteOutlineIcon from '~icons/material-symbols/favorite-outline';
 
-  import {type  savedStop, savedStops, saveStopToFirestore, removeStopFromFirestore } from '$lib/stores/favorite-stops';
+  import {
+    type savedStop,
+    savedStops,
+    saveStopToFirestore,
+    removeStopFromFirestore
+  } from '$lib/stores/favorite-stops';
   import { page } from '$app/stores';
 
   export let references: components['schemas']['TransitReferences'] = {};
@@ -105,7 +110,9 @@
       departures={$departuresFromStop?.data?.data?.entry?.stopTimes}
       expandable={false}
     />
-    <a class="flex items-center justify-center p-2 dark:text-slate-50" href={`/stops/${stop.id}?from=${encodeURIComponent($page.url.pathname)}`}
+    <a
+      class="flex items-center justify-center p-2 dark:text-slate-50"
+      href={`/stops/${stop.id}?from=${encodeURIComponent($page.url.pathname)}`}
       >Show more <ChevronRight /></a
     >
   </div>

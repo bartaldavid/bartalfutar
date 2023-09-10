@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { components } from '../data/bkk-openapi';
-  import { defaultStopParams } from '../data/defaultParams';
+  import type { components } from '../lib/data/bkk-openapi';
+  import { defaultStopParams } from '../lib/data/defaultParams';
   import Departure from './Departure.svelte';
 
   export let departures: components['schemas']['TransitScheduleStopTime'][] = [];

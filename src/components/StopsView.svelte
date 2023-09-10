@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { components } from '../data/bkk-openapi';
+  import type { components } from '../lib/data/bkk-openapi';
 
   import SavedStopGroup from './SavedStopGroup.svelte';
   import type { savedStop } from '$lib/stores/favorite-stops';
@@ -22,7 +22,7 @@
   }, {} as savedStopGroup);
 </script>
 
-<div class="w-full sm:w-72 flex flex-col gap-1">
+<div class="flex w-full flex-col gap-1 sm:w-72">
   {#each Object.entries(savedStopGroups) as [groupType, groupItems]}
     <SavedStopGroup {groupType} {groupItems} />
   {/each}

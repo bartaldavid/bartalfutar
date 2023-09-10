@@ -6,7 +6,7 @@
     saveStopToFirestore,
     removeStopFromFirestore
   } from '$lib/stores/favorite-stops';
-  import type { components } from '../data/bkk-openapi';
+  import type { components } from '../lib/data/bkk-openapi';
   import { createEventDispatcher } from 'svelte';
 
   export let stopId: string;

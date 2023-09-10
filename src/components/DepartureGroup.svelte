@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { components } from '../data/bkk-openapi';
+  import type { components } from '../lib/data/bkk-openapi';
   import { displayDate, useTransitStopTime } from '../lib/util/date';
   import Countdown from './Countdown.svelte';
   import RouteIcon from './RouteIcon.svelte';

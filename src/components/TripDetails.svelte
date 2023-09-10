@@ -2,8 +2,8 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { displayDate, useTransitStopTime } from '../lib/util/date';
   import { safeFetch } from '$lib/safeFetch';
-  import { tripDetailsUrl } from '../data/api-links';
-  import type { components } from '../data/bkk-openapi';
+  import { tripDetailsUrl } from '../lib/data/api-links';
+  import type { components } from '../lib/data/bkk-openapi';
 
   export let tripId: string;
 

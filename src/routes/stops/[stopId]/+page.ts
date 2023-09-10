@@ -1,5 +1,5 @@
-import { arrivalsAndDeparturesForStopUrl } from '../../../data/api-links';
-import type { components } from '../../../data/bkk-openapi';
+import { arrivalsAndDeparturesForStopUrl } from '../../../lib/data/api-links';
+import type { components } from '../../../lib/data/bkk-openapi';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ parent, fetch, params }) => {

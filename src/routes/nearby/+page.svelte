@@ -1,13 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import PageLayout from '../../components/PageLayout.svelte';
-  import { nearbyDeparturesUrl } from '../../data/api-links';
+  import { nearbyDeparturesUrl } from '../../lib/data/api-links';
   import { safeFetch } from '$lib/safeFetch';
-  import type { components } from '../../data/bkk-openapi';
+  import type { components } from '../../lib/data/bkk-openapi';
   import { createQuery } from '@tanstack/svelte-query';
   import DepartureGroup from '../../components/DepartureGroup.svelte';
   import { loadLocation, location } from '$lib/stores/geolocation';
-  import { REFETCH_INTERVAL_MS } from '../../data/constants';
+  import { REFETCH_INTERVAL_MS } from '../../lib/data/constants';
   import LocationSearchingIcon from '~icons/material-symbols/location-searching';
   import MyLocationIcon from '~icons/material-symbols/my-location';
   import LocationDisabledIcon from '~icons/material-symbols/location-disabled';

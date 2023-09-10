@@ -1,10 +1,10 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { debounceIntervalMs, searchQueryMinimumLength } from '../../data/constants';
+  import { debounceIntervalMs, searchQueryMinimumLength } from '../../lib/data/constants';
   import Stop from '../../components/Stop.svelte';
   import { safeFetch } from '$lib/safeFetch';
-  import { stopsForLocationUrl } from '../../data/api-links';
-  import type { components } from '../../data/bkk-openapi';
+  import { stopsForLocationUrl } from '../../lib/data/api-links';
+  import type { components } from '../../lib/data/bkk-openapi';
   import ArrowBackIcon from '~icons/material-symbols/arrow-back';
   import { type savedStop, savedStops } from '$lib/stores/favorite-stops';
   import { onMount } from 'svelte';

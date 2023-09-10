@@ -1,6 +1,6 @@
 // FIXME should null cases be handled elsewhere?
 
-import type { components } from '../../data/bkk-openapi';
+import type { components } from '../data/bkk-openapi';
 
 export function epochToDate(epochDate: number | null | undefined): Date | null {
   if (!epochDate) return null;

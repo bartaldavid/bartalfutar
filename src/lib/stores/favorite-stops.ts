@@ -1,6 +1,6 @@
 import { user } from '$lib/firebase';
 import { get, writable } from 'svelte/store';
-import type { components } from '../../data/bkk-openapi';
+import type { components } from '../data/bkk-openapi';
 
 // FIXME this type declaration shouldn't be here
 

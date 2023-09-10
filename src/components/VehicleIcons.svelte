@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { components } from '../data/bkk-openapi';
+  import type { components } from '../lib/data/bkk-openapi';
   import Train from '~icons/material-symbols/train';
   import Bus from '~icons/material-symbols/directions-bus';
   import Subway from '~icons/material-symbols/subway';
