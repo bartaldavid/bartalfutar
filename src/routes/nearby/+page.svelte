@@ -13,6 +13,7 @@
   import LocationDisabledIcon from '~icons/material-symbols/location-disabled';
   import { error } from '@sveltejs/kit';
   import RefreshButton from '../../components/RefreshButton.svelte';
+  import LoadingCards from '../../components/LoadingCards.svelte';
 
   $: nearbyDepartures = createQuery({
     queryKey: ['departuresForLocation', $location.position?.coords],
@@ -21,7 +22,7 @@
         nearbyDeparturesUrl({
           lon: $location.position?.coords.longitude,
           lat: $location.position?.coords.latitude,
-          radius: 300,
+          radius: 400,
           minutesBefore: 0,
           minutesAfter: 180,
           onlyDepartures: true,
@@ -31,7 +32,10 @@
         })
       ),
     refetchInterval: REFETCH_INTERVAL_MS,
-    enabled: $location.isLoaded
+    enabled: $location.isLoaded,
+    onSuccess(data) {
+      console.log('nearby departures', data);
+    }
   });
 
   onMount(() => {
@@ -42,30 +46,41 @@
 <PageLayout pageTitle="Around you">
   <svelte:fragment slot="header">
     <div class="flex gap-1 dark:text-slate-50">
-      <RefreshButton isFetching={$nearbyDepartures.isFetching} on:refresh={async () => await $nearbyDepartures.refetch()}/>  
-        <button
+      <RefreshButton
+        isFetching={$nearbyDepartures.isFetching}
+        on:refresh={async () => await $nearbyDepartures.refetch()}
+      />
+      <button
         on:click={() => {
           loadLocation();
         }}
-    >
-    {#if $location.isLoaded}
-    <MyLocationIcon />
-    <!-- <span class="text-xs">
+      >
+        {#if $location.isLoaded}
+          <MyLocationIcon />
+          <!-- <span class="text-xs">
       {$location.position?.coords.accuracy.toFixed(0)}m
     </span> -->
-    {:else if $location.error}
-    <LocationDisabledIcon />
-    {:else}
-    <LocationSearchingIcon />
-    {/if}
-  </button>
-</div>
+        {:else if $location.error}
+          <LocationDisabledIcon />
+        {:else}
+          <LocationSearchingIcon />
+        {/if}
+      </button>
+    </div>
   </svelte:fragment>
   <svelte:fragment slot="content">
     <div class="flex flex-col gap-2">
-      {#each $nearbyDepartures.data?.data?.list ?? [] as departureGroup ((departureGroup.routeId ?? '') + departureGroup.headsign)}
-        <DepartureGroup {departureGroup} references={$nearbyDepartures.data?.data?.references} />
-      {/each}
+      {#if !$nearbyDepartures.isFetched}
+        <LoadingCards numberOfItems={3} />
+      {:else if $nearbyDepartures.isError}
+        <div class="text-red-500">{$nearbyDepartures.error}</div>
+      {:else}
+        {#each $nearbyDepartures.data?.data?.list ?? [] as departureGroup ((departureGroup.routeId ?? '') + departureGroup.headsign)}
+          <DepartureGroup {departureGroup} references={$nearbyDepartures.data?.data?.references} />
+        {:else}
+          <div class="text-gray-500 text-center">No departures found</div>
+        {/each}
+      {/if}
       {#if $location.error}
         <div class="text-red-500">{$location.error.message}</div>
       {/if}
