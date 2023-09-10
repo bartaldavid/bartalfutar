@@ -14,7 +14,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, type Unsubscribe, type User } from 'firebase/auth';
 // import { initializeFirestore, persistentLocalCache } from 'firebase/firestore';
 import { get, readable } from 'svelte/store';
-import { goto, invalidateAll } from '$app/navigation';
+import { invalidateAll } from '$app/navigation';
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth();

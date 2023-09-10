@@ -18,18 +18,10 @@
 
 <PageLayout pageTitle="Favorites">
   <svelte:fragment slot="header">
-    {#if $user}
-      {#if profile_image_url}
-        <img
-          src={profile_image_url}
-          alt="Profile"
-          height="30"
-          width="30"
-          class="m-1 rounded-full"
-        />
-      {:else if !$user?.isAnonymous}
-        <AccountCircleIcon class="m-1 dark:text-slate-50" />
-      {/if}
+    {#if profile_image_url}
+      <img src={profile_image_url} alt="Profile" height="30" width="30" class="m-1 rounded-full" />
+    {:else if $user && !$user?.isAnonymous}
+      <AccountCircleIcon class="m-1 dark:text-slate-50" />
     {/if}
     {#if !serverdata.user && (!$user || $user?.isAnonymous)}
       <button on:click={elevateAnonToGoogle} class="rounded bg-slate-700 p-2 text-white"
