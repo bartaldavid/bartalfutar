@@ -14,25 +14,23 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, type Unsubscribe, type User } from 'firebase/auth';
 // import { initializeFirestore, persistentLocalCache } from 'firebase/firestore';
 import { get, readable } from 'svelte/store';
-import { goto, invalidateAll } from '$app/navigation';
+import { invalidateAll } from '$app/navigation';
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
 
-async function setToken(token: string) {
+export async function setToken(token: string) {
   if (!browser) return;
-  const uid = await fetch('/api/token', {
+  await fetch('/api/token', {
     method: 'POST',
     headers: new Headers({
       Authorization: `Bearer ${token}`
     })
   });
-  console.log(uid);
 }
 
 function userStore() {
   if (!auth || !browser) {
-    console.warn('Auth is not initialized or not in browser.');
     return readable<User | null>(null);
   }
 
@@ -70,26 +68,21 @@ export async function elevateAnonToGoogle() {
 
   const idToken = await result.user.getIdToken();
   await setToken(idToken);
-  await goto('/');
-  console.log('gone!');
 }
 
 export async function anonymousLogin() {
   const { signInAnonymously } = await import('firebase/auth');
   const result = await signInAnonymously(auth);
   await setToken(await result.user.getIdToken());
-  goto('/');
 }
 
 export async function signUserOut() {
   const { signOut } = await import('firebase/auth');
   try {
-    console.log(auth);
     await signOut(auth);
   } catch (error) {
     console.log(error);
   }
   await invalidateAll();
   await setToken('');
-  goto('/login');
 }

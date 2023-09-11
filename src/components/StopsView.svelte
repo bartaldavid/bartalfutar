@@ -1,20 +1,16 @@
 <script lang="ts">
-  import type { components } from '../data/bkk-openapi';
+  import type { components } from '../lib/data/bkk-openapi';
 
   import SavedStopGroup from './SavedStopGroup.svelte';
-  import { getContext } from 'svelte';
-  import type { serverData } from '../routes/+layout.server';
-  import { savedStops, type savedStop } from '$lib/stores/favorite-stops';
+  import type { savedStop } from '$lib/stores/favorite-stops';
+
+  export let stops: savedStop[] = [];
 
   type savedStopGroup = {
     [key in components['schemas']['TransitStop']['type'] as string]: savedStop[];
   };
 
-  let savedStopGroups: savedStopGroup;
-
-  const serverdata = getContext<serverData>('serverdata');
-
-  $: stops = $savedStops.length ? $savedStops : serverdata.stops ?? [];
+  let savedStopGroups: savedStopGroup = {};
 
   $: savedStopGroups = stops.reduce((result, currentStop) => {
     if (currentStop.type) {
@@ -26,6 +22,8 @@
   }, {} as savedStopGroup);
 </script>
 
-{#each Object.entries(savedStopGroups) as [groupType, groupItems]}
-  <SavedStopGroup {groupType} {groupItems} />
-{/each}
+<div class="flex w-full flex-col gap-1 sm:w-72">
+  {#each Object.entries(savedStopGroups) as [groupType, groupItems]}
+    <SavedStopGroup {groupType} {groupItems} />
+  {/each}
+</div>
