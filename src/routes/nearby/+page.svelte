@@ -37,9 +37,11 @@
       console.log('nearby departures', data);
     }
   });
-
-  onMount(() => {
-    loadLocation();
+  let permissionState: PermissionState = "prompt";
+  
+  onMount(async () => {
+    permissionState = (await navigator.permissions.query({ name: "geolocation" })).state;
+    if (permissionState === "granted") loadLocation()
   });
 </script>
 
@@ -58,8 +60,8 @@
         {#if $location.isLoaded}
           <MyLocationIcon />
           <!-- <span class="text-xs">
-      {$location.position?.coords.accuracy.toFixed(0)}m
-    </span> -->
+            {$location.position?.coords.accuracy.toFixed(0)}m
+          </span> -->
         {:else if $location.error}
           <LocationDisabledIcon />
         {:else}
@@ -81,8 +83,12 @@
           <div class="text-gray-500 text-center">No departures found</div>
         {/each}
       {/if}
-      {#if $location.error}
-        <div class="text-red-500">{$location.error.message}</div>
+
+      {#if permissionState === "prompt"}
+        <div class="text-slate-500">Please grant access to your location to show departures around you.</div>
+        <button on:click={() => loadLocation()}>Grant access</button>
+      {:else if permissionState === "denied"}
+        <span>You didn't allow us to see where you are. That's understandable, but we cannot help in this case.</span>
       {/if}
     </div>
   </svelte:fragment>

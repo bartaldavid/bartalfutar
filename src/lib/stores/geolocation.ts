@@ -32,11 +32,12 @@ export function loadLocation(options: PositionOptions = defaultOptions) {
   if (!navigator.geolocation) {
     location.set({
       ...initialState,
-      error: {message: 'Geolocation is not supported by this browser.'}
+      error: {message: 'Geolocation is not supported by this browser.'},
+      isSupported: false
     });
   }
 
-  location.update((state) => ({...state, isLoading: true}));
+  location.update((state) => ({...state, isLoading: true, isSupported: true}));
 
   navigator.geolocation.getCurrentPosition(
     (pos) => {
