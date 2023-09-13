@@ -15,7 +15,6 @@ import { getAuth, onAuthStateChanged, type Unsubscribe, type User } from 'fireba
 // import { initializeFirestore, persistentLocalCache } from 'firebase/firestore';
 import { get, readable } from 'svelte/store';
 import { invalidateAll } from '$app/navigation';
-import { savedStops } from './stores/favorite-stops';
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
@@ -86,5 +85,4 @@ export async function signUserOut() {
   }
   await invalidateAll();
   await setToken('');
-  savedStops.set([]);
 }
