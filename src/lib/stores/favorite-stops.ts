@@ -33,7 +33,10 @@ export async function saveStopToFirestore(stop: savedStop) {
 export const savedStops = writable<savedStop[]>([]);
 
 user.subscribe(async ($user) => {
-  if (!$user) return;
+  if (!$user) {
+    savedStops.set([]);
+    return;
+  }
 
   const { onSnapshot, collection, getFirestore } = await import('firebase/firestore');
 
