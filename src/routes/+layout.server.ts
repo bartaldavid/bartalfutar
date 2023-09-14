@@ -20,7 +20,7 @@ export const load: LayoutServerLoad = async ({ locals }): Promise<serverData> =>
   const userId = locals.userId;
 
   if (!userId) {
-    return {signedIn: false};
+    return { signedIn: false };
   }
 
   // const querySnapshot = await adminDB.collection(`userdata/${userId}/stops`).get();

@@ -5,7 +5,8 @@
   import { onMount, setContext } from 'svelte';
   import NavBar from '../components/NavBar.svelte';
   import { browser } from '$app/environment';
-  import { setToken, user } from '$lib/firebase';
+  import { auth, setToken, user } from '$lib/firebase';
+  import { userStore } from 'sveltefire';
 
   export let data: LayoutData;
   setContext('serverdata', data);
@@ -15,6 +16,8 @@
       await setToken(await $user.getIdToken());
     }
   });
+
+  // const user2 = userStore
 </script>
 
 <svelte:head>

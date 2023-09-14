@@ -14,6 +14,9 @@ dependencies:
   firebase-admin:
     specifier: ^11.10.1
     version: 11.10.1
+  sveltefire:
+    specifier: ^0.4.2
+    version: 0.4.2(firebase@10.3.1)(svelte@4.2.0)
   ts-results-es:
     specifier: ^4.0.0
     version: 4.0.0
@@ -5900,6 +5903,16 @@ packages:
       locate-character: 3.0.0
       magic-string: 0.30.3
       periscopic: 3.1.0
+
+  /sveltefire@0.4.2(firebase@10.3.1)(svelte@4.2.0):
+    resolution: {integrity: sha512-3kt+C8/s+DGCDoyL4nDjvxY7Pq9VEhLbmbuVVzlUW4SpAYqhfutZhitKytnJdT6AwmsahV6x6iGyX0Mwg3sZgw==}
+    peerDependencies:
+      firebase: ^9.0.0
+      svelte: ^4.0.0
+    dependencies:
+      firebase: 10.3.1
+      svelte: 4.2.0
+    dev: false
 
   /tailwindcss@3.3.3:
     resolution: {integrity: sha512-A0KgSkef7eE4Mf+nKJ83i75TMyq8HqY3qmFIJSWy8bNt0v1lG7jUcpGpoTFxAwYcWOphcTBLPPJg+bDfhDf52w==}
