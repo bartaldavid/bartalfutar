@@ -12,16 +12,16 @@
 		"format": "prettier --write  --plugin prettier-plugin-svelte ."
 	},
 	"devDependencies": {
-		"@iconify-json/material-symbols": "^1.1.57",
+		"@iconify-json/material-symbols": "^1.1.58",
 		"@sveltejs/adapter-auto": "^2.1.0",
-		"@sveltejs/kit": "^1.24.1",
-		"@typescript-eslint/eslint-plugin": "^6.6.0",
-		"@typescript-eslint/parser": "^6.6.0",
-		"@vite-pwa/sveltekit": "^0.2.5",
+		"@sveltejs/kit": "^1.25.0",
+		"@typescript-eslint/eslint-plugin": "^6.7.0",
+		"@typescript-eslint/parser": "^6.7.0",
+		"@vite-pwa/sveltekit": "^0.2.7",
 		"autoprefixer": "^10.4.15",
-		"eslint": "^8.48.0",
+		"eslint": "^8.49.0",
 		"eslint-config-prettier": "^9.0.0",
-		"eslint-plugin-svelte": "^2.33.0",
+		"eslint-plugin-svelte": "^2.33.1",
 		"postcss": "^8.4.29",
 		"prettier": "^3.0.3",
 		"prettier-plugin-svelte": "^3.0.3",
@@ -36,7 +36,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@tanstack/svelte-query": "^4.35.0",
+		"@tanstack/svelte-query": "^4.35.3",
 		"firebase": "^10.3.1",
 		"firebase-admin": "^11.10.1",
 		"ts-results-es": "^4.0.0"
