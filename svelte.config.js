@@ -13,7 +13,25 @@ const config = {
     // See https://kit.svelte.dev/docs/adapters for more information about adapters.
     adapter: adapter({
       runtime: 'edge',
-      regions: ['dub1', 'fra1']
+      regions: ['dub1', 'fra1'],
+      external: [
+        'stream',
+        'buffer',
+        'https',
+        'os',
+        'util',
+        'querystring',
+        'http',
+        'url',
+        'events',
+        'zlib',
+        'assert',
+        'child_process',
+        'fs',
+        'path',
+        'net',
+        'crypto'
+      ]
     })
   }
 };
