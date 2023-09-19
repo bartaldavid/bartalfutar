@@ -9,12 +9,15 @@
 
   export let data: LayoutData;
   setContext('serverdata', data);
-  onMount(async () => {
-    // resets token when cookie expires or is deleted
-    if (browser && !data.user && $user) {
-      await setToken(await $user.getIdToken());
-    }
-  });
+
+  $: if (browser && !data.user && $user) {
+    resetToken();
+  }
+
+  async function resetToken() {
+    if (!$user) return;
+    await setToken(await $user.getIdToken());
+  }
 </script>
 
 <svelte:head>
