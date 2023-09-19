@@ -30,7 +30,8 @@ const config = {
         'fs',
         'path',
         'net',
-        'crypto'
+        'crypto',
+        'tls'
       ]
     })
   }
