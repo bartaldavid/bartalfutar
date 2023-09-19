@@ -17,6 +17,7 @@
 		"@sveltejs/kit": "^1.25.0",
 		"@typescript-eslint/eslint-plugin": "^6.7.0",
 		"@typescript-eslint/parser": "^6.7.0",
+		"@vite-pwa/assets-generator": "^0.0.10",
 		"@vite-pwa/sveltekit": "^0.2.7",
 		"autoprefixer": "^10.4.15",
 		"eslint": "^8.49.0",
@@ -37,7 +38,7 @@
 	"type": "module",
 	"dependencies": {
 		"@tanstack/svelte-query": "^4.35.3",
-		"firebase": "^10.3.1",
+		"firebase": "^10.4.0",
 		"firebase-admin": "^11.10.1",
 		"ts-results-es": "^4.0.0"
 	}
