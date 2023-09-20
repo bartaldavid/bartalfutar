@@ -43,6 +43,12 @@
     permissionState = (await navigator.permissions.query({ name: "geolocation" })).state;
     if (permissionState === "granted") loadLocation()
   });
+  
+  async function loadLocationAndSetPermission () {
+    loadLocation()
+    permissionState = (await navigator.permissions.query({ name: "geolocation" })).state;
+    console.log(permissionState)
+  }
 </script>
 
 <PageLayout pageTitle="Around you">
@@ -86,8 +92,8 @@
       
       {#if permissionState === "prompt"}
         <div class="bg-slate-50 dark:bg-slate-800 p-2 justify-center flex flex-col gap-2">
-          <div class="text-slate-700">Please grant access to your location to show departures around you.</div>
-          <button on:click={() => loadLocation()} class="bg-slate-200 dark:bg-slate-700 p-2 rounded text-blue-600">Allow</button>
+          <div class="text-slate-700">Please allow us to access your location to show departures around you.</div>
+          <button on:click={() => loadLocationAndSetPermission()} class="bg-slate-200 dark:bg-slate-700 p-2 rounded text-blue-600">Allow</button>
         </div>
       {:else if permissionState === "denied"}
         <span class="text-red-600 text-sm">You didn't allow us to see where you are. That's understandable, but we cannot help in this case.</span>

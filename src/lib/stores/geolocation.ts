@@ -46,6 +46,7 @@ export function loadLocation(options: PositionOptions = defaultOptions) {
         ...state,
         position: pos,
         isSupported: true,
+        isLoading: false,
         isLoaded: true,
         error: null,
       }));
@@ -55,6 +56,8 @@ export function loadLocation(options: PositionOptions = defaultOptions) {
         ...state,
         error: err,
         isSupported: true,
+        isLoading: false,
+        isLoaded: true,
         isDenied: err.code === err.PERMISSION_DENIED
       }));
     },
