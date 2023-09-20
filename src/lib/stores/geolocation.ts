@@ -32,11 +32,12 @@ export function loadLocation(options: PositionOptions = defaultOptions) {
   if (!navigator.geolocation) {
     location.set({
       ...initialState,
-      error: {message: 'Geolocation is not supported by this browser.'}
+      error: {message: 'Geolocation is not supported by this browser.'},
+      isSupported: false
     });
   }
 
-  location.update((state) => ({...state, isLoading: true}));
+  location.update((state) => ({...state, isLoading: true, isSupported: true}));
 
   navigator.geolocation.getCurrentPosition(
     (pos) => {
@@ -45,6 +46,7 @@ export function loadLocation(options: PositionOptions = defaultOptions) {
         ...state,
         position: pos,
         isSupported: true,
+        isLoading: false,
         isLoaded: true,
         error: null,
       }));
@@ -54,6 +56,8 @@ export function loadLocation(options: PositionOptions = defaultOptions) {
         ...state,
         error: err,
         isSupported: true,
+        isLoading: false,
+        isLoaded: false,
         isDenied: err.code === err.PERMISSION_DENIED
       }));
     },
