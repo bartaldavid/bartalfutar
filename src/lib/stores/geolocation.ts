@@ -57,7 +57,7 @@ export function loadLocation(options: PositionOptions = defaultOptions) {
         error: err,
         isSupported: true,
         isLoading: false,
-        isLoaded: true,
+        isLoaded: false,
         isDenied: err.code === err.PERMISSION_DENIED
       }));
     },
