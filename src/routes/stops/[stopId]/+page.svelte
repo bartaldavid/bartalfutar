@@ -40,7 +40,7 @@
         isFetching={$stopData.isFetching}
         on:refresh={async () => await $stopData.refetch()}
       />
-      <a href={parent ?? '/'} class="px-2"><Close /></a>
+      <a href={parent ?? '/'} class="px-2" aria-label="Close"><Close /></a>
     </div>
   </svelte:fragment>
   <svelte:fragment slot="content">
