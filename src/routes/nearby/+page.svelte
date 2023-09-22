@@ -54,6 +54,7 @@
         on:click={() => {
           loadLocation();
         }}
+        aria-label="Reload location"
       >
         {#if $location.isLoaded}
           <MyLocationIcon />

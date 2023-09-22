@@ -29,7 +29,8 @@ export default defineConfig({
 			},
 			devOptions: {
 				enabled: true
-			}
+			},
+			
 		}),
 		Icons({ compiler: "svelte" }),
 	]
