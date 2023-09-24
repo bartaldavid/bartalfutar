@@ -11,7 +11,7 @@ export default defineConfig({
       manifest: {
         name: 'BartalFUTÁR',
         short_name: 'BartalFUTÁR',
-        start_url: '/',
+        start_url: '/favorites',
         theme_color: '#334155',
         icons: [
           {
