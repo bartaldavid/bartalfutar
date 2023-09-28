@@ -20,13 +20,14 @@
     removeStopFromFirestore
   } from '$lib/stores/favorite-stops';
   import { page } from '$app/stores';
+  import { saveStopToSupabase } from '$lib/supabase/setup';
 
   export let references: components['schemas']['TransitReferences'] = {};
   export let stop: savedStop = {};
   $: saved = $savedStops.some((savedStop) => savedStop.id == stop.id);
   let expanded = false;
 
-  function toggleStopSave() {
+  async function toggleStopSave() {
     if (!saved) {
       let routeRefForStop: {
         [key: string]: components['schemas']['TransitRoute'] | undefined;
@@ -34,7 +35,8 @@
       stop.routeIds?.forEach((routeId) => {
         routeRefForStop[routeId] = references.routes?.[routeId];
       });
-      saveStopToFirestore({ ...stop, routeRef: routeRefForStop });
+      await saveStopToFirestore({ ...stop, routeRef: routeRefForStop });
+      await saveStopToSupabase({ ...stop, routeRef: routeRefForStop });
     } else {
       stop.id && removeStopFromFirestore(stop.id);
     }
