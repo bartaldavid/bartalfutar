@@ -1,9 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
-import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
+import { NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } from '$env/static/private';
 import type { Database } from './supabase';
 import type { savedStop } from '$lib/stores/favorite-stops';
 
-const supabase = createClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
+const supabase = createClient<Database>(NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 export async function saveStopToSupabase(stop: savedStop) {
   if (!stop.id) return;
@@ -23,5 +23,5 @@ export async function saveStopToSupabase(stop: savedStop) {
     })
     .select();
   if (error) console.error(error);
-  console.log(data);
+  return { data, error };
 }

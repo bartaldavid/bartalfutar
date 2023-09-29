@@ -20,7 +20,6 @@
     removeStopFromFirestore
   } from '$lib/stores/favorite-stops';
   import { page } from '$app/stores';
-  import { saveStopToSupabase } from '$lib/supabase/setup';
 
   export let references: components['schemas']['TransitReferences'] = {};
   export let stop: savedStop = {};
@@ -36,7 +35,11 @@
         routeRefForStop[routeId] = references.routes?.[routeId];
       });
       await saveStopToFirestore({ ...stop, routeRef: routeRefForStop });
-      await saveStopToSupabase({ ...stop, routeRef: routeRefForStop });
+      const response = await fetch('/api/stops', {
+        method: 'POST',
+        body: JSON.stringify({ stopId: stop.id })
+      });
+      console.log(await response.json());
     } else {
       stop.id && removeStopFromFirestore(stop.id);
     }
@@ -105,6 +108,7 @@
     </button>
   </div>
 </div>
+
 {#if $departuresFromStop.isFetched && expanded}
   <div class="flex flex-col gap-1 rounded bg-none p-1 dark:bg-slate-700">
     <DeparturesList
