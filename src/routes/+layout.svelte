@@ -22,6 +22,7 @@
 
 <svelte:head>
   <title>BartalFUTÁR</title>
+  <meta name="description" content="Faster alternative to BudapestGo" />
 </svelte:head>
 
 <QueryClientProvider client={data.queryClient}>
