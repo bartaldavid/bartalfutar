@@ -1,9 +1,10 @@
 import { createClient } from '@supabase/supabase-js';
-import { NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } from '$env/static/private';
+import { SUPABASE_SERVICE_ROLE_KEY } from '$env/static/private';
 import type { Database } from './supabase';
 import type { components } from '$lib/data/bkk-openapi';
+import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 
-const supabase = createClient<Database>(NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+const supabase = createClient<Database>(PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 export async function saveStopToSupabase({
   stop,

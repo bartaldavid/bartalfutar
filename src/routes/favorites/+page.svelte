@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { elevateAnonToGoogle, user } from '$lib/firebase';
+  import { elevateAnonToGoogle, signUserOut, user } from '$lib/firebase';
   import { savedStops } from '$lib/stores/favorite-stops';
   import { getContext } from 'svelte';
   import StopsView from '../../components/StopsView.svelte';
@@ -35,5 +35,8 @@
     {:else}
       <div class="text-center dark:text-slate-200">Add stops to get started</div>
     {/if}
+    <button class="rounded bg-slate-700 p-2 text-white" on:click={() => console.log(data.session)}
+      >Get user</button
+    >
   </svelte:fragment>
 </PageLayout>
