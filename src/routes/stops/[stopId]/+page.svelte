@@ -10,8 +10,10 @@
   import PageLayout from '../../../components/PageLayout.svelte';
   import { page } from '$app/stores';
   import RefreshButton from '../../../components/RefreshButton.svelte';
+  import FavoriteToggle from '../../../components/FavoriteToggle.svelte';
 
   export let data: PageData;
+  let isOpen = false;
 
   $: stopData = createQuery({
     queryKey: ['stop', data.stopId],
@@ -27,6 +29,7 @@
   $: stopName = $stopData.data?.data?.references?.stops?.[data.stopId]?.name;
   // TODO extract this to a global store maybe?
   $: parent = $page.url.searchParams.get('from');
+  $: console.log(isOpen);
 </script>
 
 <svelte:head>
@@ -55,5 +58,6 @@
         <div class="text-red-500">{$stopData.error}</div>
       {/if}
     </div>
+    <FavoriteToggle stopId={data.stopId} />
   </svelte:fragment>
 </PageLayout>

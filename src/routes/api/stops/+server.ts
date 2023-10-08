@@ -3,7 +3,6 @@ import type { components } from '$lib/data/bkk-openapi.js';
 import { getStopsFromSupabase, saveStopToSupabase } from '$lib/server/supabase/setup.js';
 import { json } from '@sveltejs/kit';
 
-/** @type {import('./$types').RequestHandler} */
 export async function POST({ request, fetch }) {
   const { stopId } = await request.json();
 
