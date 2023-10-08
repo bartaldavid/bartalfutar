@@ -16,9 +16,25 @@
 //   return resolve(event);
 // }) satisfies Handle;
 
+import { SUPABASE_SERVICE_ROLE_KEY } from '$env/static/private';
+import { SupabaseAdapter } from '@auth/supabase-adapter';
 import { SvelteKitAuth } from '@auth/sveltekit';
-// import { GITHUB_ID, GITHUB_SECRET } from '$env/static/private';
+import { GITHUB_ID, GITHUB_SECRET } from '$env/static/private';
+import Github from '@auth/core/providers/github';
+import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 
 export const handle = SvelteKitAuth({
-  providers: []
+  providers: [Github({ clientId: GITHUB_ID, clientSecret: GITHUB_SECRET })],
+  adapter: SupabaseAdapter({
+    url: PUBLIC_SUPABASE_URL,
+    secret: SUPABASE_SERVICE_ROLE_KEY
+  }),
+  callbacks: {
+    session: async ({ session, user }) => {
+      if (session.user) {
+        session.user.id = user.id;
+      }
+      return Promise.resolve(session);
+    }
+  }
 });

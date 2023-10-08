@@ -27,8 +27,15 @@ export async function POST({ request, fetch }) {
   });
 }
 
-export async function GET() {
-  const stops = await getStopsFromSupabase();
+export async function GET({ locals }) {
+  const session = await locals.getSession();
+  const userId = session?.user.id;
+
+  if (!userId) {
+    return json({ stops: [] });
+  }
+
+  const stops = await getStopsFromSupabase(userId);
 
   return json(stops);
 }

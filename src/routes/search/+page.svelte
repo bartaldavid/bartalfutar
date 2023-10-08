@@ -64,7 +64,7 @@
     data-sveltekit-keepfocus
   >
     <input
-      type="text"
+      type="search"
       placeholder="Search for stops"
       bind:value={searchQuery}
       on:keyup={() => {

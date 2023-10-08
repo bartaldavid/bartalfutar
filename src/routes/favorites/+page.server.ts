@@ -1,23 +1,23 @@
-// import { adminDB } from '$lib/server/firebase-admin';
-// import type { savedStop } from '$lib/stores/favorite-stops';
-// import type { PageServerLoad } from './$types';
-
-// export const load = (async ({ locals, fetch }) => {
-//   const userId = locals.userId;
-
-//   if (!userId) {
-//     return { stops: [] };
-//   }
-
-//   const querySnapshot = await adminDB.collection(`userdata/${userId}/stops`).get();
-//   const stops = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as savedStop);
-
-//   const supabaseStops = await fetch('/api/stops').then((res) => res.json());
-//   console.log(supabaseStops);
-
-//   return { stops };
-// }) satisfies PageServerLoad;
+import { sql } from '$lib/server/db.js';
 
 export async function load({ locals }) {
-  return { session: await locals.getSession(), stops: [] };
+  const session = await locals.getSession();
+  const userId = session?.user.id;
+
+  if (!userId) {
+    return { stops: [] };
+  }
+
+  const stops = await sql`
+    SELECT 
+      stops.stop_id stopId, 
+      type, 
+      stops.name, 
+      route_ids routeIds
+    FROM stops
+    JOIN favorite_stops ON stops.stop_id = favorite_stops.stop_id
+    WHERE favorite_stops.user_id = ${userId}`;
+
+  console.log(stops, userId);
+  return { stops };
 }

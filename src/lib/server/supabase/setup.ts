@@ -62,7 +62,10 @@ export async function saveStopToSupabase({
   return { routeError, routeStatus, stopError, stopStatus };
 }
 
-export async function getStopsFromSupabase() {
-  const { data: stops, error } = await supabase.from('stops_with_routes').select('*');
+export async function getStopsFromSupabase(userId: string) {
+  const { data: stops, error } = await supabase
+    .from('favorite_stops')
+    .select(`*, stops ( * )`)
+    .eq('favorite_stops.user_id', userId);
   return { stops, error };
 }

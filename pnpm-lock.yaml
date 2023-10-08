@@ -8,6 +8,9 @@ dependencies:
   '@auth/core':
     specifier: ^0.16.1
     version: 0.16.1
+  '@auth/supabase-adapter':
+    specifier: ^0.1.4
+    version: 0.1.4(@supabase/supabase-js@2.38.0)
   '@auth/sveltekit':
     specifier: ^0.3.9
     version: 0.3.9(@sveltejs/kit@1.25.1)(svelte@4.2.1)
@@ -23,6 +26,9 @@ dependencies:
   firebase-admin:
     specifier: ^11.11.0
     version: 11.11.0
+  postgres:
+    specifier: ^3.3.5
+    version: 3.3.5
   ts-results-es:
     specifier: ^4.0.0
     version: 4.0.0
@@ -151,6 +157,17 @@ packages:
       oauth4webapi: 2.3.0
       preact: 10.11.3
       preact-render-to-string: 5.2.3(preact@10.11.3)
+    dev: false
+
+  /@auth/supabase-adapter@0.1.4(@supabase/supabase-js@2.38.0):
+    resolution: {integrity: sha512-IdfeEZaTweCSppz7iIgyUPSoqovIEwkjWjLYIaPAk87HSJgGayfl9nfYVsgyLr2F24kXFjXfBmpPk1zpFDxTXw==}
+    peerDependencies:
+      '@supabase/supabase-js': ^2.0.5
+    dependencies:
+      '@auth/core': 0.16.1
+      '@supabase/supabase-js': 2.38.0
+    transitivePeerDependencies:
+      - nodemailer
     dev: false
 
   /@auth/sveltekit@0.3.9(@sveltejs/kit@1.25.1)(svelte@4.2.1):
@@ -5396,6 +5413,10 @@ packages:
       nanoid: 3.3.6
       picocolors: 1.0.0
       source-map-js: 1.0.2
+
+  /postgres@3.3.5:
+    resolution: {integrity: sha512-+JD93VELV9gHkqpV5gdL5/70HdGtEw4/XE1S4BC8f1mcPmdib3K5XsKVbnR1XcAyC41zOnifJ+9YRKxdIsXiUw==}
+    dev: false
 
   /preact-render-to-string@5.2.3(preact@10.11.3):
     resolution: {integrity: sha512-aPDxUn5o3GhWdtJtW0svRC2SS/l8D9MAgo2+AWml+BhDImb27ALf04Q2d+AHqUUOc6RdSXFIBVa2gxzgMKgtZA==}
