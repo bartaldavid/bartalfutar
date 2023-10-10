@@ -11,6 +11,8 @@
   export let data: PageData;
 
   $: stops = data.stops ?? [];
+
+  $: console.log(data.stops);
 </script>
 
 <PageLayout pageTitle="Favorites">

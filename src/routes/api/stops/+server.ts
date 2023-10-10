@@ -1,12 +1,17 @@
 import { PUBLIC_BKK_API_KEY } from '$env/static/public';
 import type { components } from '$lib/data/bkk-openapi.js';
-import { getStopsFromSupabase, saveStopToSupabase } from '$lib/server/supabase/setup.js';
+import { saveStopToSupabase } from '$lib/server/supabase/setup.js';
 import { json } from '@sveltejs/kit';
 
-export async function POST({ request, fetch }) {
-  const { stopId } = await request.json();
+export async function POST({ request, fetch, locals }) {
+  const userId = (await locals.getSession())?.user.id;
 
-  // const userId = locals.userId;
+  if (!userId) {
+    // FIXME maybe do anonymous login here
+    return json({ error: 'Not logged in' }, { status: 401 });
+  }
+
+  const { stopId } = await request.json();
 
   const { data }: { data: components['schemas']['ReferencesMethodResponse'] } = await (
     await fetch(
@@ -19,7 +24,7 @@ export async function POST({ request, fetch }) {
 
   if (!stopData || !routeRef) return json({ error: 'No stop found' }, { status: 404 });
 
-  const response = await saveStopToSupabase({ stop: stopData, routeReference: routeRef });
+  const response = await saveStopToSupabase({ stop: stopData, routeReference: routeRef, userId });
 
   return json({
     stopId,
@@ -27,15 +32,15 @@ export async function POST({ request, fetch }) {
   });
 }
 
-export async function GET({ locals }) {
-  const session = await locals.getSession();
-  const userId = session?.user.id;
+// export async function GET({ locals }) {
+//   const session = await locals.getSession();
+//   const userId = session?.user.id;
 
-  if (!userId) {
-    return json({ stops: [] });
-  }
+//   if (!userId) {
+//     return json({ stops: [] });
+//   }
 
-  const stops = await getStopsFromSupabase(userId);
+//   const stops = await getStopsFromSupabase(userId);
 
-  return json(stops);
-}
+//   return json(stops);
+// }

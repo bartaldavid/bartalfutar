@@ -11,6 +11,7 @@
   import { page } from '$app/stores';
   import RefreshButton from '../../../components/RefreshButton.svelte';
   import FavoriteToggle from '../../../components/FavoriteToggle.svelte';
+  import { json } from '@sveltejs/kit';
 
   export let data: PageData;
   let isOpen = false;
@@ -59,5 +60,14 @@
       {/if}
     </div>
     <FavoriteToggle stopId={data.stopId} />
+    <button
+      on:click={async () => {
+        const response = await fetch('/api/stops', {
+          method: 'POST',
+          body: JSON.stringify({ stopId: data.stopId })
+        });
+        console.log(response.json());
+      }}>Save!</button
+    >
   </svelte:fragment>
 </PageLayout>

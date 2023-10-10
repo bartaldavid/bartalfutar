@@ -7,8 +7,17 @@ export const actions = {
     const saved = data.get('saved') === 'true';
 
     if (saved) {
-      const response = await fetch(`/api/stops/${stopId}`, { method: 'DELETE' });
-      console.log(response.json());
+      const response = await fetch(`/api/stops/`, {
+        method: 'DELETE',
+        body: JSON.stringify({ stopId })
+      });
+      console.log(await response.json());
+    } else {
+      const response = await fetch(`/api/stops/`, {
+        method: 'POST',
+        body: JSON.stringify({ stopId })
+      });
+      console.log(await response.json());
     }
 
     throw redirect(303, `/stops/${stopId}`);

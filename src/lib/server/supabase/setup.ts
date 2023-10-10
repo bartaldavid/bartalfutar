@@ -8,10 +8,12 @@ const supabase = createClient<Database>(PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_RO
 
 export async function saveStopToSupabase({
   stop,
-  routeReference
+  routeReference,
+  userId
 }: {
   stop: components['schemas']['TransitStop'];
   routeReference: { [key: string]: components['schemas']['TransitRoute'] | undefined };
+  userId: string;
 }) {
   if (!stop.id) return;
 
@@ -59,13 +61,17 @@ export async function saveStopToSupabase({
     .from('transit_routes')
     .upsert(routesArray);
 
-  return { routeError, routeStatus, stopError, stopStatus };
+  const { error: favoriteError, status: favoriteStatus } = await supabase
+    .from('favorite_stops')
+    .upsert({ created_at: new Date().toISOString(), stop_id: stop.id, user_id: userId });
+
+  return { routeError, routeStatus, stopError, stopStatus, favoriteError, favoriteStatus };
 }
 
-export async function getStopsFromSupabase(userId: string) {
-  const { data: stops, error } = await supabase
-    .from('favorite_stops')
-    .select(`*, stops ( * )`)
-    .eq('favorite_stops.user_id', userId);
-  return { stops, error };
-}
+// export async function getStopsFromSupabase(userId: string) {
+//   const { data: stops, error } = await supabase
+//     .from('favorite_stops')
+//     .select(`*, stops ( * )`)
+//     .eq('favorite_stops.user_id', userId);
+//   return { stops, error };
+// }
