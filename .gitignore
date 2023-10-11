@@ -12,7 +12,7 @@ vite.config.ts.timestamp-*
 # Local Netlify folder
 .netlify
 .firebase
-
+.vercel
 *.log
 
 bkk-svelte-firebase-adminsdk*.json

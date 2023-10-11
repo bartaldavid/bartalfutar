@@ -1,4 +1,4 @@
-<script lang="ts">
+z<script lang="ts">
   import type { components } from '../lib/data/bkk-openapi';
 
   import { createQuery } from '@tanstack/svelte-query';

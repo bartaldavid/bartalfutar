@@ -11,7 +11,6 @@
   import { page } from '$app/stores';
   import RefreshButton from '../../../components/RefreshButton.svelte';
   import FavoriteToggle from '../../../components/FavoriteToggle.svelte';
-  import { json } from '@sveltejs/kit';
 
   export let data: PageData;
   let isOpen = false;
@@ -23,11 +22,10 @@
       await safeFetch<components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse']>(
         arrivalsAndDeparturesForStopUrl({ stopId: [data.stopId] })
       )
-    // initialData: data?.departures ?? []
-    // cacheTime: 0
   });
 
   $: stopName = $stopData.data?.data?.references?.stops?.[data.stopId]?.name;
+
   // TODO extract this to a global store maybe?
   $: parent = $page.url.searchParams.get('from');
   $: console.log(isOpen);
@@ -40,11 +38,15 @@
 <PageLayout pageTitle={stopName ?? 'Loading...'}>
   <svelte:fragment slot="header">
     <div class="flex gap-1 dark:text-slate-100">
+      <FavoriteToggle
+        stop={$stopData.data?.data?.references?.stops?.[data.stopId]}
+        references={$stopData.data?.data?.references}
+      />
       <RefreshButton
         isFetching={$stopData.isFetching}
         on:refresh={async () => await $stopData.refetch()}
       />
-      <a href={parent ?? '/'} class="px-2"><Close /></a>
+      <a href={parent ?? '/'} class="p-1"><Close /></a>
     </div>
   </svelte:fragment>
   <svelte:fragment slot="content">
