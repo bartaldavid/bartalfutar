@@ -62,7 +62,6 @@ export async function load({ fetch, url }) {
 
     const end = performance.now();
     console.log(`Query took ${end - now}ms`);
-    console.log(favorite_stops, routes);
 
     return {
       searchData: {

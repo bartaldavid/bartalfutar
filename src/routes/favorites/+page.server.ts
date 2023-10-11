@@ -39,12 +39,11 @@ export async function load({ parent }) {
     SELECT 
       stops.stop_id id, 
       type, 
-      stops.name, 
+      name, 
       location_type as "locationType"
     FROM stops
     JOIN favorite_stops ON stops.stop_id = favorite_stops.stop_id
     WHERE favorite_stops.user_id = ${userId}`;
 
-  console.log(stops, userId);
   return { stops };
 }

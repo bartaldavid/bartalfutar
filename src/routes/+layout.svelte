@@ -2,10 +2,8 @@
   import { QueryClientProvider, QueryClient } from '@tanstack/svelte-query';
   import '../app.css';
   import type { LayoutData } from './$types';
-  import { onMount, setContext } from 'svelte';
+  import { setContext } from 'svelte';
   import NavBar from '../components/NavBar.svelte';
-  import { browser } from '$app/environment';
-  import { setToken, user } from '$lib/firebase';
   import { writable } from 'svelte/store';
 
   export let data: LayoutData;

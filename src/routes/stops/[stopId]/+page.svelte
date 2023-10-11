@@ -38,10 +38,7 @@
 <PageLayout pageTitle={stopName ?? 'Loading...'}>
   <svelte:fragment slot="header">
     <div class="flex gap-1 dark:text-slate-100">
-      <FavoriteToggle
-        stop={$stopData.data?.data?.references?.stops?.[data.stopId]}
-        references={$stopData.data?.data?.references}
-      />
+      <FavoriteToggle stopId={data.stopId} />
       <RefreshButton
         isFetching={$stopData.isFetching}
         on:refresh={async () => await $stopData.refetch()}
