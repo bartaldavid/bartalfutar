@@ -6,10 +6,16 @@
   import NavBar from '../components/NavBar.svelte';
   import { browser } from '$app/environment';
   import { setToken, user } from '$lib/firebase';
+  import { writable } from 'svelte/store';
 
   export let data: LayoutData;
-  setContext('serverdata', data);
 
+  const favoriteStopIds = writable<string[]>([]);
+  $: $favoriteStopIds = data.favorite_stops_ids;
+
+  setContext('favoriteStops', favoriteStopIds);
+
+  /*
   $: if (browser && !data.user && $user) {
     resetToken();
   }
@@ -18,6 +24,7 @@
     if (!$user) return;
     await setToken(await $user.getIdToken());
   }
+  */
 </script>
 
 <svelte:head>

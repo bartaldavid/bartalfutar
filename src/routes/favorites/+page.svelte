@@ -1,18 +1,10 @@
 <script lang="ts">
-  import { elevateAnonToGoogle, signUserOut, user } from '$lib/firebase';
-  import { savedStops } from '$lib/stores/favorite-stops';
-  import { getContext } from 'svelte';
   import StopsView from '../../components/StopsView.svelte';
   import PageLayout from '../../components/PageLayout.svelte';
   import type { PageData } from './$types';
 
-  import AccountCircleIcon from '~icons/material-symbols/account-circle';
-
   export let data: PageData;
-
   $: stops = data.stops ?? [];
-
-  $: console.log(data.stops);
 </script>
 
 <PageLayout pageTitle="Favorites">

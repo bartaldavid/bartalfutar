@@ -10,40 +10,14 @@
   import ChevronRight from '~icons/material-symbols/chevron-right';
   import ArrowUpward from '~icons/material-symbols/arrow-upward';
   import MultipleStop from '~icons/material-symbols/zoom-out-map';
-  import FavoriteIcon from '~icons/material-symbols/favorite';
-  import FavoriteOutlineIcon from '~icons/material-symbols/favorite-outline';
 
-  import {
-    type savedStop,
-    savedStops,
-    saveStopToFirestore,
-    removeStopFromFirestore
-  } from '$lib/stores/favorite-stops';
+  import type { savedStop } from '$lib/stores/favorite-stops';
   import { page } from '$app/stores';
+  import FavoriteToggle from './FavoriteToggle.svelte';
 
   export let references: components['schemas']['TransitReferences'] = {};
   export let stop: savedStop = {};
-  $: saved = $savedStops.some((savedStop) => savedStop.id == stop.id);
   let expanded = false;
-
-  async function toggleStopSave() {
-    if (!saved) {
-      let routeRefForStop: {
-        [key: string]: components['schemas']['TransitRoute'] | undefined;
-      } = {};
-      stop.routeIds?.forEach((routeId) => {
-        routeRefForStop[routeId] = references.routes?.[routeId];
-      });
-      await saveStopToFirestore({ ...stop, routeRef: routeRefForStop });
-      const response = await fetch('/api/stops', {
-        method: 'POST',
-        body: JSON.stringify({ stopId: stop.id })
-      });
-      console.log(await response.json());
-    } else {
-      stop.id && removeStopFromFirestore(stop.id);
-    }
-  }
 
   const departuresFromStop = createQuery({
     queryKey: ['stop', stop.id!],
@@ -99,14 +73,11 @@
       {/if}
     </div>
   </div>
-  <div class="flex w-8 flex-col self-center p-1">
-    <!-- TODO extract this into FavoriteToggle? -->
-    <button on:click={() => toggleStopSave()}>
-      {#if saved}<FavoriteIcon class="dark:text-slate-100" />{:else}<FavoriteOutlineIcon
-          class="dark:text-slate-100"
-        />{/if}
-    </button>
-  </div>
+  {#if stop.id}
+    <div class="flex w-8 flex-col self-center p-1">
+      <FavoriteToggle stopId={stop.id} />
+    </div>
+  {/if}
 </div>
 
 {#if $departuresFromStop.isFetched && expanded}

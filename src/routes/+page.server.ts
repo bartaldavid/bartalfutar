@@ -1,7 +1,9 @@
 import { redirect } from '@sveltejs/kit';
 
-export function load({ locals }) {
-  if (locals.userId) {
+export async function load({ parent }) {
+  const { session } = await parent();
+  
+  if (session?.user) {
     throw redirect(303, '/favorites');
   } else {
     throw redirect(303, '/nearby');

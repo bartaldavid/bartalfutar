@@ -5,7 +5,7 @@
   import { safeFetch } from '$lib/safeFetch';
   import { stopsForLocationUrl } from '../../lib/data/api-links';
   import type { components } from '../../lib/data/bkk-openapi';
-  import { type savedStop, savedStops } from '$lib/stores/favorite-stops';
+  import type { savedStop } from '$lib/stores/favorite-stops';
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
 
@@ -47,15 +47,17 @@
   // FIXME refractor this
   $: stopsToDisplay =
     (searchQuery.length <= searchQueryMinimumLength
-      ? $savedStops
-      : isServerDataUpToDate
-      ? data.searchData?.data?.list
+      ? isServerDataUpToDate
+        ? data.searchData?.data?.list
+        : $searchData.data?.data?.list
       : $searchData.data?.data?.list) ?? [];
 
   $: references =
     isServerDataUpToDate && data?.searchData?.data?.references
       ? data.searchData.data.references
       : $searchData.data?.data?.references ?? {};
+
+  $: console.log(stopsToDisplay, references);
 </script>
 
 <div class="m-1 mt-4 flex w-full flex-col sm:w-72">

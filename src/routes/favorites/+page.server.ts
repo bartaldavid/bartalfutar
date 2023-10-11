@@ -27,8 +27,8 @@ type Stop = {
   locationType?: number;
 };
 
-export async function load({ locals }) {
-  const session = await locals.getSession();
+export async function load({ parent }) {
+  const { session } = await parent();
   const userId = session?.user.id;
 
   if (!userId) {
