@@ -1,10 +1,10 @@
-import { PGPASSWORD } from '$env/static/private';
+import { PGCONNECTIONURL } from '$env/static/private';
 import postgres from 'postgres';
 
-export const sql = postgres({
-  host: 'db.sdhyrcdacommsndlyjue.supabase.co',
-  database: 'postgres',
-  user: 'postgres',
-  port: 5432,
-  password: PGPASSWORD
-});
+export const sql = postgres(PGCONNECTIONURL);
+
+// import { NEON_URL } from '$env/static/private';
+// import { neon } from '@neondatabase/serverless';
+// const sql = neon(NEON_URL);
+
+// export default sql;

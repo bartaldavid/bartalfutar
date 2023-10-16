@@ -4,7 +4,7 @@ import type { Database } from './supabase';
 import type { components } from '$lib/data/bkk-openapi';
 import { PUBLIC_SUPABASE_URL } from '$env/static/public';
 
-const supabase = createClient<Database>(PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+export const supabase = createClient<Database>(PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 export async function saveStopToSupabase({
   stop,
