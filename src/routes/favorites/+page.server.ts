@@ -1,4 +1,6 @@
-import { sql } from '$lib/server/db.js';
+import { favoriteStops, stops } from '$lib/schemas/user-data.js';
+import { db } from '$lib/server/db.js';
+import { eq } from 'drizzle-orm';
 
 // FIXME casting type to an enum here is not legit
 type Stop = {
@@ -35,15 +37,17 @@ export async function load({ parent }) {
     return { stops: [] as Stop[] };
   }
 
-  const stops = await sql<Stop[]>`
-    SELECT 
-      stops.stop_id id, 
-      type, 
-      name, 
-      location_type as "locationType"
-    FROM stops
-    JOIN favorite_stops ON stops.stop_id = favorite_stops.stop_id
-    WHERE favorite_stops.user_id = ${userId}`;
+  const result = await db
+    .select({
+      id: stops.id,
+      type: stops.type,
+      name: stops.name,
+      locationType: stops.locationType
+    })
+    .from(stops)
+    .innerJoin(favoriteStops, eq(stops.id, favoriteStops.stopId))
+    .where(eq(favoriteStops.userId, userId))
+    .execute();
 
-  return { stops };
+  return { stops: result };
 }

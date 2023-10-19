@@ -1,10 +1,9 @@
-import { PGCONNECTIONURL } from '$env/static/private';
-import postgres from 'postgres';
+import { neon, neonConfig } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-http';
+ 
+neonConfig.fetchConnectionCache = true;
 
-export const sql = postgres(PGCONNECTIONURL);
-
-// import { NEON_URL } from '$env/static/private';
-// import { neon } from '@neondatabase/serverless';
-// const sql = neon(NEON_URL);
-
-// export default sql;
+// TODO add neon string
+const sql = neon("");
+export const db = drizzle(sql);
+ 
