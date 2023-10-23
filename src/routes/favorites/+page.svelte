@@ -16,15 +16,9 @@
         height="30"
         width="30"
         class="m-1 aspect-square rounded-full"
+        loading="lazy"
       />
-      <!-- {:else if $user && !$user?.isAnonymous}
-      <AccountCircleIcon class="m-1 dark:text-slate-50" /> -->
     {/if}
-    <!-- {#if data.session?.user && (!$user || $user?.isAnonymous)}
-      <button on:click={elevateAnonToGoogle} class="rounded bg-slate-700 p-2 text-white"
-        >Sign in</button
-      >
-    {/if} -->
   </svelte:fragment>
   <svelte:fragment slot="content">
     {#if stops.length}

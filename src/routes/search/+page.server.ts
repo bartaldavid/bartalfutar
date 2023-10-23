@@ -1,49 +1,44 @@
 import { stopsForLocationUrl } from '$lib/data/api-links.js';
 import type { components } from '$lib/data/bkk-openapi';
-import {
-  favoriteStopsTable,
-  transitRoutesTable,
-  transitStopsTable
-} from '$lib/schemas/user-data.js';
-import { db, sql } from '$lib/server/db.js';
-import { arrayContains, eq } from 'drizzle-orm';
 
-export async function load({ fetch, url }) {
+import { db } from '$lib/server/db.js';
+import { favoriteStops, routes, stops, stopsRoutes } from '$lib/server/schema.js';
+import { eq } from 'drizzle-orm';
+
+export async function load({ fetch, url, locals }) {
   const query = url.searchParams.get('q')?.toString();
-  // const userId = (await locals.getSession())?.user.id;
+  const userId = (await locals.getSession())?.user.id;
 
-  if (!query || query.length < 3) {
+  if ((!query || query.length < 3) && userId) {
     const now = performance.now();
 
-    const favorite_stops_query = db
-      .select({
-        id: transitStopsTable.id,
-        name: transitStopsTable.name,
-        type: transitStopsTable.type,
-        locationType: transitStopsTable.locationType,
-        direction: transitStopsTable.direction,
-        routeIds: transitStopsTable.routeIds
-      })
-      .from(transitStopsTable)
-      .innerJoin(favoriteStopsTable, eq(transitStopsTable.id, favoriteStopsTable.stopId))
-      .where(eq(favoriteStopsTable.userId, 'userId'))
-      .toSQL().sql;
-    const routes_query = db
-      .select({
-        id: transitRoutesTable.id,
-        shortName: transitRoutesTable.shortName,
-        style: transitRoutesTable.style
-      })
-      .from(transitRoutesTable)
-      .innerJoin(
-        transitStopsTable,
-        arrayContains(transitStopsTable.routeIds, transitRoutesTable.id)
-      )
-      .innerJoin(favoriteStopsTable, eq(transitStopsTable.id, favoriteStopsTable.stopId))
-      .where(eq(favoriteStopsTable.userId, 'userId'))
-      .toSQL().sql;
+    const result = await db.transaction(async (trx) => {
+      const favorite_stops_query = await trx
+        .select({
+          id: stops.id,
+          name: stops.name,
+          type: stops.type,
+          locationType: stops.locationType,
+          direction: stops.direction
+        })
+        .from(stops)
+        .innerJoin(favoriteStops, eq(stops.id, favoriteStops.stopId))
+        .where(eq(favoriteStops.userId, userId))
+        .execute();
 
-    const result = await sql.transaction([sql`select 1 as num`, sql`select 2 as num`]);
+      const routes_query = await trx
+        .select({
+          id: routes.id,
+          shortName: routes.shortName,
+          style: routes.style
+        })
+        .from(routes)
+        .innerJoin(stopsRoutes, eq(stopsRoutes.routeId, routes.id))
+        .innerJoin(favoriteStops, eq(stopsRoutes.stopId, favoriteStops.stopId))
+        .where(eq(favoriteStops.userId, userId))
+        .execute();
+      return { favorite_stops_query, routes_query };
+    });
 
     console.log(result);
 
@@ -53,7 +48,10 @@ export async function load({ fetch, url }) {
     return {
       searchData: {
         data: {
-          list: []
+          list: result.favorite_stops_query,
+          references: {
+            routes: {}
+          }
         }
       } as components['schemas']['StopsForLocationResponse'],
       query

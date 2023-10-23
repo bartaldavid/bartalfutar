@@ -2,13 +2,9 @@
   import FavoriteOutlineIcon from '~icons/material-symbols/favorite-outline';
   import FavoriteIcon from '~icons/material-symbols/favorite';
   import { enhance } from '$app/forms';
-  import { getContext } from 'svelte';
-  import type { Writable } from 'svelte/store';
 
   export let stopId: string;
-
-  const favorite_stops_ids = getContext<Writable<string[]>>('favoriteStops');
-  $: saved = $favorite_stops_ids.includes(stopId);
+  let saved = false;
 </script>
 
 <form action="/stops" use:enhance method="post">

@@ -1,9 +1,10 @@
-import { neon, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-http';
- 
-neonConfig.fetchConnectionCache = true;
+import { PLANETSCALE_URL } from '$env/static/private';
+import { connect } from '@planetscale/database';
+import { drizzle } from 'drizzle-orm/planetscale-serverless';
+import * as schema from './schema';
 
-// TODO add neon string
-const sql = neon("");
-export const db = drizzle(sql);
- 
+const connection = connect({
+  url: PLANETSCALE_URL
+});
+
+export const db = drizzle(connection, { schema });

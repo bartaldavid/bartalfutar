@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+// import { redirect } from '@sveltejs/kit';
 
 export const actions = {
   default: async ({ request, fetch }) => {
@@ -6,20 +6,21 @@ export const actions = {
     const stopId = data.get('stopId');
     const saved = data.get('saved') === 'true';
 
+    console.log({ stopId, saved });
+
     if (saved) {
-      const response = await fetch(`/api/stops/`, {
+      await fetch(`/api/stops`, {
         method: 'DELETE',
         body: JSON.stringify({ stopId })
       });
-      console.log(await response.json());
     } else {
-      const response = await fetch(`/api/stops/`, {
+      console.log('saving');
+      await fetch('/api/stops', {
         method: 'POST',
         body: JSON.stringify({ stopId })
       });
-      console.log(await response.json());
     }
 
-    throw redirect(303, `/stops/${stopId}`);
+    // throw redirect(303, `/stops/${stopId}`);
   }
 };

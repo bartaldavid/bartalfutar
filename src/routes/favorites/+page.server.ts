@@ -1,26 +1,26 @@
-import { favoriteStopsTable, transitStopsTable } from '$lib/schemas/user-data.js';
 import { db } from '$lib/server/db.js';
+import { favoriteStops, stops } from '$lib/server/schema';
 import { eq } from 'drizzle-orm';
 
-export async function load({ parent }) {
-  const { session } = await parent();
+export async function load({ locals }) {
+  const session = await locals.getSession();
   const userId = session?.user.id;
 
   if (!userId) {
-    return { stops: [] };
+    return { stops: [], session: null };
   }
 
   const result = await db
     .select({
-      id: transitStopsTable.id,
-      type: transitStopsTable.type,
-      name: transitStopsTable.name,
-      locationType: transitStopsTable.locationType
+      id: stops.id,
+      type: stops.type,
+      name: stops.name,
+      locationType: stops.locationType
     })
-    .from(transitStopsTable)
-    .innerJoin(favoriteStopsTable, eq(transitStopsTable.id, favoriteStopsTable.stopId))
-    .where(eq(favoriteStopsTable.userId, userId))
+    .from(stops)
+    .innerJoin(favoriteStops, eq(stops.id, favoriteStops.stopId))
+    .where(eq(favoriteStops.userId, userId))
     .execute();
 
-  return { stops: result };
+  return { stops: result, session };
 }
