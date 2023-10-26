@@ -5,16 +5,14 @@
   import { safeFetch } from '$lib/safeFetch';
   import { stopsForLocationUrl } from '../../lib/data/api-links';
   import type { components } from '../../lib/data/bkk-openapi';
-  import type { savedStop } from '$lib/stores/favorite-stops';
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
 
-  // export let form;
   export let data;
 
   let searchQuery = data?.query?.toString() ?? '';
   let timer: NodeJS.Timeout;
-  let stopsToDisplay: savedStop[] = [];
+  let stopsToDisplay: components['schemas']['TransitStop'][] = [];
   let inputElement: HTMLInputElement;
 
   const searchData = createQuery({
@@ -44,7 +42,7 @@
 
   $: isServerDataUpToDate = data?.query === searchQuery;
 
-  // FIXME refractor this
+  // FIXME refractor this, not only ugly but it isn't working properly
   $: stopsToDisplay =
     (searchQuery.length <= searchQueryMinimumLength
       ? isServerDataUpToDate
@@ -56,13 +54,11 @@
     isServerDataUpToDate && data?.searchData?.data?.references
       ? data.searchData.data.references
       : $searchData.data?.data?.references ?? {};
-
-  $: console.log(stopsToDisplay, references);
 </script>
 
 <div class="m-1 mt-4 flex w-full flex-col sm:w-72">
   <form
-    class="mb-2 flex flex-row rounded bg-slate-200 p-2 dark:bg-slate-700"
+    class="mb-2 flex flex-row rounded bg-slate-200 p-3 dark:bg-slate-700"
     data-sveltekit-keepfocus
   >
     <input
@@ -84,7 +80,7 @@
   {#if stopsToDisplay}
     <div class="flex flex-col gap-1">
       {#each stopsToDisplay as stop}
-        <Stop {references} {stop} />
+        <Stop {references} {stop} saved={!!stop.id && data.favorites_ids?.includes(stop.id)} />
       {/each}
     </div>
   {/if}

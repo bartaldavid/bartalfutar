@@ -11,22 +11,25 @@
   import ArrowUpward from '~icons/material-symbols/arrow-upward';
   import MultipleStop from '~icons/material-symbols/zoom-out-map';
 
-  import type { savedStop } from '$lib/stores/favorite-stops';
   import { page } from '$app/stores';
   import FavoriteToggle from './FavoriteToggle.svelte';
+  import { getContext } from 'svelte';
 
   export let references: components['schemas']['TransitReferences'] = {};
-  export let stop: savedStop = {};
+  export let stop: components['schemas']['TransitStop'] = {};
+  export let saved = false;
   let expanded = false;
 
   const departuresFromStop = createQuery({
-    queryKey: ['stop', stop.id!],
+    queryKey: ['stop', stop.id!, 3],
     queryFn: async () =>
       await safeFetch<components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse']>(
         arrivalsAndDeparturesForStopUrl({ stopId: [stop.id!], limit: 3 })
       ),
     enabled: false
   });
+
+  const favorites_ids = getContext<string[]>('favorite_stop_ids');
 </script>
 
 <div class="flex flex-row rounded border p-1 dark:border-none dark:bg-slate-800 dark:p-2">
@@ -54,7 +57,7 @@
       {/if}
 
       {#each stop?.routeIds ?? [] as routeid}
-        {@const routeRef = stop?.routeRef?.[routeid] ?? references?.routes?.[routeid]}
+        {@const routeRef = references?.routes?.[routeid]}
         <span
           class="rounded p-1 text-xs"
           style:color={'#' + routeRef?.style?.icon?.textColor}
@@ -75,7 +78,7 @@
   </div>
   {#if stop.id}
     <div class="flex w-8 flex-col self-center p-1">
-      <FavoriteToggle stopId={stop.id} />
+      <FavoriteToggle stopId={stop.id} {saved} />
     </div>
   {/if}
 </div>

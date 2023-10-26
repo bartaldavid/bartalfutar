@@ -38,12 +38,12 @@
 <PageLayout pageTitle={stopName ?? 'Loading...'}>
   <svelte:fragment slot="header">
     <div class="flex gap-1 dark:text-slate-100">
-      <FavoriteToggle stopId={data.stopId} />
+      <FavoriteToggle stopId={data.stopId} saved={data.saved} />
       <RefreshButton
         isFetching={$stopData.isFetching}
         on:refresh={async () => await $stopData.refetch()}
       />
-      <a href={parent ?? '/'} class="p-1"><Close /></a>
+      <a href={parent ?? '/'} class="p-2"><Close /></a>
     </div>
   </svelte:fragment>
   <svelte:fragment slot="content">
@@ -58,15 +58,5 @@
         <div class="text-red-500">{$stopData.error}</div>
       {/if}
     </div>
-    <FavoriteToggle stopId={data.stopId} />
-    <button
-      on:click={async () => {
-        const response = await fetch('/api/stops', {
-          method: 'POST',
-          body: JSON.stringify({ stopId: data.stopId })
-        });
-        console.log(response.json());
-      }}>Save!</button
-    >
   </svelte:fragment>
 </PageLayout>

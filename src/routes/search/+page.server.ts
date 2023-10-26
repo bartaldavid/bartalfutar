@@ -3,7 +3,8 @@ import type { components } from '$lib/data/bkk-openapi';
 
 import { db } from '$lib/server/db.js';
 import { favoriteStops, routes, stops, stopsRoutes } from '$lib/server/schema.js';
-import { eq } from 'drizzle-orm';
+import { removeStopFromDb, saveStopToDb } from '$lib/server/utils';
+import { eq, sql } from 'drizzle-orm';
 
 export async function load({ fetch, url, locals }) {
   const query = url.searchParams.get('q')?.toString();
@@ -19,12 +20,14 @@ export async function load({ fetch, url, locals }) {
           name: stops.name,
           type: stops.type,
           locationType: stops.locationType,
-          direction: stops.direction
+          direction: stops.direction,
+          routeIds: sql<string[]>`json_arrayagg(${stopsRoutes.routeId})`
         })
         .from(stops)
         .innerJoin(favoriteStops, eq(stops.id, favoriteStops.stopId))
+        .innerJoin(stopsRoutes, eq(stopsRoutes.stopId, stops.id))
         .where(eq(favoriteStops.userId, userId))
-        .execute();
+        .groupBy(stops.id, stops.name, stops.type, stops.locationType, stops.direction);
 
       const routes_query = await trx
         .select({
@@ -35,8 +38,7 @@ export async function load({ fetch, url, locals }) {
         .from(routes)
         .innerJoin(stopsRoutes, eq(stopsRoutes.routeId, routes.id))
         .innerJoin(favoriteStops, eq(stopsRoutes.stopId, favoriteStops.stopId))
-        .where(eq(favoriteStops.userId, userId))
-        .execute();
+        .where(eq(favoriteStops.userId, userId));
       return { favorite_stops_query, routes_query };
     });
 
@@ -50,11 +52,12 @@ export async function load({ fetch, url, locals }) {
         data: {
           list: result.favorite_stops_query,
           references: {
-            routes: {}
+            routes: result.routes_query.reduce((acc, route) => ({ [route.id]: route, ...acc }), {})
           }
         }
       } as components['schemas']['StopsForLocationResponse'],
-      query
+      query,
+      favorites_ids: result.favorite_stops_query.map((stop) => stop.id)
     };
   }
 
@@ -67,3 +70,23 @@ export async function load({ fetch, url, locals }) {
     query
   };
 }
+
+export const actions = {
+  default: async ({ request, fetch, locals }) => {
+    const session = await locals.getSession();
+    const data = await request.formData();
+    const stopId = data.get('stopId');
+
+    if (!session || typeof stopId !== 'string') {
+      return null;
+    }
+
+    const saved = data.get('saved') === 'true';
+
+    if (!saved) {
+      return await saveStopToDb({ stopId, session, fetch });
+    }
+
+    return await removeStopFromDb({ stopId, session });
+  }
+};

@@ -6,7 +6,7 @@ export default {
   schema: './src/lib/server/schema.ts',
   driver: 'mysql2',
   dbCredentials: {
-    connectionString: process.env.PLANETSCALE_URL!
+    connectionString: process.env.PLANETSCALE_URL as string
   },
   out: './drizzle-orm/'
 } satisfies Config;

@@ -2,12 +2,11 @@
   import type { components } from '../lib/data/bkk-openapi';
 
   import SavedStopGroup from './SavedStopGroup.svelte';
-  import type { savedStop } from '$lib/stores/favorite-stops';
 
-  export let stops: savedStop[] = [];
+  export let stops: components['schemas']['TransitStop'][] = [];
 
   type savedStopGroup = {
-    [key in components['schemas']['TransitStop']['type'] as string]: savedStop[];
+    [key in components['schemas']['TransitStop']['type'] as string]: components['schemas']['TransitStop'][];
   };
 
   let savedStopGroups: savedStopGroup = {};

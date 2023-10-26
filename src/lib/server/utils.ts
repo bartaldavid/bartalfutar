@@ -1,24 +1,20 @@
-import { PUBLIC_BKK_API_KEY } from '$env/static/public';
-import type { components } from '$lib/data/bkk-openapi.js';
-import { favoriteStops, routes, stops, stopsRoutes } from '$lib/server/schema.js';
-import { db } from '$lib/server/db.js';
-import { json } from '@sveltejs/kit';
+import type { components } from '$lib/data/bkk-openapi';
+import type { Session } from '@auth/core/types';
+import { db } from './db';
+import { favoriteStops, routes, stops, stopsRoutes } from './schema';
 import { and, eq, sql } from 'drizzle-orm';
+import { PUBLIC_BKK_API_KEY } from '$env/static/public';
 
-export async function POST({ request, fetch, locals }) {
-  const userId = (await locals.getSession())?.user.id;
-
-  if (!userId) {
-    // TODO maybe do anonymous login here
-    return json({ error: 'Not logged in' }, { status: 401 });
-  }
-
-  const { stopId } = await request.json();
-
-  if (!stopId || typeof stopId !== 'string')
-    return json({ error: 'Invalid stopId' }, { status: 400 });
-
-  const now = performance.now();
+export async function saveStopToDb({
+  stopId,
+  session,
+  fetch
+}: {
+  stopId: string;
+  session: Session;
+  fetch: typeof window.fetch;
+}) {
+  const userId = session.user.id;
 
   const { data }: { data: components['schemas']['ReferencesMethodResponse'] } = await (
     await fetch(
@@ -30,7 +26,7 @@ export async function POST({ request, fetch, locals }) {
   const routeRefs = data.references?.routes;
 
   if (!data.references || !stopRef || !routeRefs || !stopRef.id) {
-    return json({ error: 'Invalid API response' }, { status: 400 });
+    return { error: 'Invalid API response', success: false, stopId };
   }
 
   // FIXME refractor this
@@ -43,6 +39,7 @@ export async function POST({ request, fetch, locals }) {
   }));
   const stopRoutesRows = stopRef?.routeIds?.map((routeId) => ({ stopId, routeId })) ?? [];
 
+  const now = performance.now();
   // TODO replace with CTE?
   await db.transaction(async (tx) => {
     await tx
@@ -66,28 +63,14 @@ export async function POST({ request, fetch, locals }) {
   const end = performance.now();
   console.log(`Transaction took ${end - now}ms`);
 
-  // FIXME return SUCCESS here if the transaction was successful or error if it wasnt
-  return json({
-    stopId
-  });
+  return { success: true, stopId, error: null };
 }
 
-export async function DELETE({ request, locals }) {
-  const session = await locals.getSession();
-  const userId = session?.user.id;
-
-  if (!userId) {
-    return json({ success: false, error: 'Not logged in' }, { status: 401 });
-  }
-
-  const { stopId } = await request.json();
-
-  if (!stopId || typeof stopId !== 'string')
-    return json({ success: false, error: 'Invalid stopId' }, { status: 400 });
+// TODO error handling?
+export async function removeStopFromDb({ stopId, session }: { stopId: string; session: Session }) {
+  const userId = session.user.id;
 
   await db
     .delete(favoriteStops)
     .where(and(eq(favoriteStops.stopId, stopId), eq(favoriteStops.userId, userId)));
-
-  return json({ success: true, error: null }, { status: 200 });
 }

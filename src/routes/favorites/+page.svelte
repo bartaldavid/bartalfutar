@@ -9,27 +9,33 @@
 
 <PageLayout pageTitle="Favorites">
   <svelte:fragment slot="header">
-    {#if data.session?.user?.image}
-      <img
-        src={data.session?.user?.image}
-        alt="Profile"
-        height="30"
-        width="30"
-        class="m-1 aspect-square rounded-full"
-        loading="lazy"
-      />
-    {/if}
+    <div class="flex items-center">
+      {#if data.session?.user?.image}
+        <img
+          src={data.session?.user?.image}
+          alt="Profile"
+          height="30"
+          width="30"
+          class="m-1 aspect-square rounded-full"
+          loading="lazy"
+        />
+      {/if}
+      {#if data.session}
+        <a href="/auth/signout" data-sveltekit-preload-data="off">Sign Out</a>
+      {:else}
+        <a href="/auth/signin" data-sveltekit-preload-data="off">Sign In</a>
+      {/if}
+    </div>
   </svelte:fragment>
+
   <svelte:fragment slot="content">
     {#if stops.length}
       <StopsView {stops} />
     {:else}
       <div class="text-center dark:text-slate-200">Add stops to get started</div>
     {/if}
-    <button class="rounded bg-slate-700 p-2 text-white" on:click={() => console.log(data.session)}
+    <!-- <button class="rounded bg-slate-700 p-2 text-white" on:click={() => console.log(data.session)}
       >Get user</button
-    >
-    <a href="/auth/signin" data-sveltekit-preload-data="off">Sign In</a>
-    <a href="/auth/signout" data-sveltekit-preload-data="off">Sign Out</a>
+    > -->
   </svelte:fragment>
 </PageLayout>
