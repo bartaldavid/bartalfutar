@@ -28,7 +28,6 @@
 
   // TODO extract this to a global store maybe?
   $: parent = $page.url.searchParams.get('from');
-  $: console.log(isOpen);
 </script>
 
 <svelte:head>

@@ -4,6 +4,7 @@ import type { components } from '$lib/data/bkk-openapi';
 import { db } from '$lib/server/db.js';
 import { favoriteStops, routes, stops, stopsRoutes } from '$lib/server/schema.js';
 import { removeStopFromDb, saveStopToDb } from '$lib/server/utils';
+import { fail } from '@sveltejs/kit';
 import { eq, sql } from 'drizzle-orm';
 
 export async function load({ fetch, url, locals }) {
@@ -20,19 +21,19 @@ export async function load({ fetch, url, locals }) {
       query
     };
   } else if (userId) {
-    const result = await fetchFavoritesAndRoutes(userId);
+    const { routes, favorite_stops } = await fetchFavoritesAndRoutes(userId);
 
     return {
       searchData: {
         data: {
-          list: result.favorite_stops_query,
+          list: favorite_stops,
           references: {
-            routes: result.routes_query.reduce((acc, route) => ({ [route.id]: route, ...acc }), {})
+            routes: routes.reduce((acc, route) => ({ [route.id]: route, ...acc }), {})
           }
         }
       } as components['schemas']['StopsForLocationResponse'],
       query: '',
-      favorites_ids: result.favorite_stops_query.map((stop) => stop.id)
+      favorites_ids: favorite_stops.map((stop) => stop.id)
     };
   } else {
     return {
@@ -49,13 +50,17 @@ export const actions = {
     const stopId = data.get('stopId');
 
     if (!session || typeof stopId !== 'string') {
-      return null;
+      return fail(400);
     }
 
     const saved = data.get('saved') === 'true';
 
     if (!saved) {
-      return await saveStopToDb({ stopId, session, fetch });
+      const result = await saveStopToDb({ stopId, session, fetch });
+      if (result.error) {
+        return fail(404, { message: result.error });
+      }
+      return result;
     }
 
     return await removeStopFromDb({ stopId, session });
@@ -90,7 +95,7 @@ async function fetchFavoritesAndRoutes(userId: string) {
       .innerJoin(stopsRoutes, eq(stopsRoutes.routeId, routes.id))
       .innerJoin(favoriteStops, eq(stopsRoutes.stopId, favoriteStops.stopId))
       .where(eq(favoriteStops.userId, userId));
-    return { favorite_stops_query, routes_query };
+    return { favorite_stops: favorite_stops_query, routes: routes_query };
   });
   const end = performance.now();
   console.log(`Query took ${end - now}ms`);
