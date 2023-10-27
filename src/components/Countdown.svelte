@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { now } from '$lib/stores/now';
+  // import { now } from '$lib/stores/now';
+  import { onMount } from 'svelte';
 
   export let countDownToDate: Date;
   export let showApostrophe = false;
 
-  function countdown(date: Date, now: Date) {
-    const distance = date.getTime() - now.getTime();
+  function countdown(date: Date, now: number) {
+    const distance = date.getTime() - now;
 
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -19,6 +20,12 @@
       useGrouping: false
     })}`;
   }
+
+  let coundownString = countdown(countDownToDate, Date.now());
+
+  setInterval(() => {
+    coundownString = countdown(countDownToDate, Date.now());
+  }, 1000);
 </script>
 
-<span>{countdown(countDownToDate, $now)}</span>
+<span>{coundownString}</span>
