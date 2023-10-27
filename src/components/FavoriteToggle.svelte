@@ -25,7 +25,11 @@
 >
   <input type="hidden" value={stopId} name="stopId" />
   <input type="hidden" value={saved} name="saved" />
-  <button type="submit" class="p-2 dark:text-slate-100" disabled={loading}>
+  <button
+    type="submit"
+    class="rounded p-2 hover:text-slate-50 dark:text-slate-200"
+    disabled={loading}
+  >
     {#if saved}<FavoriteIcon />{:else}<FavoriteOutlineIcon />
     {/if}
   </button>

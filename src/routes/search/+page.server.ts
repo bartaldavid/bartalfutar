@@ -10,42 +10,17 @@ export async function load({ fetch, url, locals }) {
   const query = url.searchParams.get('q')?.toString();
   const userId = (await locals.getSession())?.user.id;
 
-  if ((!query || query.length < 3) && userId) {
-    const now = performance.now();
+  if (query && query !== '') {
+    const data: components['schemas']['StopsForLocationResponse'] = await fetch(
+      stopsForLocationUrl({ query })
+    ).then((res) => res.json());
 
-    const result = await db.transaction(async (trx) => {
-      const favorite_stops_query = await trx
-        .select({
-          id: stops.id,
-          name: stops.name,
-          type: stops.type,
-          locationType: stops.locationType,
-          direction: stops.direction,
-          routeIds: sql<string[]>`json_arrayagg(${stopsRoutes.routeId})`
-        })
-        .from(stops)
-        .innerJoin(favoriteStops, eq(stops.id, favoriteStops.stopId))
-        .innerJoin(stopsRoutes, eq(stopsRoutes.stopId, stops.id))
-        .where(eq(favoriteStops.userId, userId))
-        .groupBy(stops.id, stops.name, stops.type, stops.locationType, stops.direction);
-
-      const routes_query = await trx
-        .select({
-          id: routes.id,
-          shortName: routes.shortName,
-          style: routes.style
-        })
-        .from(routes)
-        .innerJoin(stopsRoutes, eq(stopsRoutes.routeId, routes.id))
-        .innerJoin(favoriteStops, eq(stopsRoutes.stopId, favoriteStops.stopId))
-        .where(eq(favoriteStops.userId, userId));
-      return { favorite_stops_query, routes_query };
-    });
-
-    console.log(result);
-
-    const end = performance.now();
-    console.log(`Query took ${end - now}ms`);
+    return {
+      searchData: data,
+      query
+    };
+  } else if (userId) {
+    const result = await fetchFavoritesAndRoutes(userId);
 
     return {
       searchData: {
@@ -56,19 +31,15 @@ export async function load({ fetch, url, locals }) {
           }
         }
       } as components['schemas']['StopsForLocationResponse'],
-      query,
+      query: '',
       favorites_ids: result.favorite_stops_query.map((stop) => stop.id)
     };
+  } else {
+    return {
+      searchData: null,
+      query: ''
+    };
   }
-
-  const data: components['schemas']['StopsForLocationResponse'] = await fetch(
-    stopsForLocationUrl({ query })
-  ).then((res) => res.json());
-
-  return {
-    searchData: data,
-    query
-  };
 }
 
 export const actions = {
@@ -90,3 +61,38 @@ export const actions = {
     return await removeStopFromDb({ stopId, session });
   }
 };
+
+async function fetchFavoritesAndRoutes(userId: string) {
+  const now = performance.now();
+  const result = await db.transaction(async (trx) => {
+    const favorite_stops_query = await trx
+      .select({
+        id: stops.id,
+        name: stops.name,
+        type: stops.type,
+        locationType: stops.locationType,
+        direction: stops.direction,
+        routeIds: sql<string[]>`json_arrayagg(${stopsRoutes.routeId})`
+      })
+      .from(stops)
+      .innerJoin(favoriteStops, eq(stops.id, favoriteStops.stopId))
+      .innerJoin(stopsRoutes, eq(stopsRoutes.stopId, stops.id))
+      .where(eq(favoriteStops.userId, userId))
+      .groupBy(stops.id, stops.name, stops.type, stops.locationType, stops.direction);
+
+    const routes_query = await trx
+      .select({
+        id: routes.id,
+        shortName: routes.shortName,
+        style: routes.style
+      })
+      .from(routes)
+      .innerJoin(stopsRoutes, eq(stopsRoutes.routeId, routes.id))
+      .innerJoin(favoriteStops, eq(stopsRoutes.stopId, favoriteStops.stopId))
+      .where(eq(favoriteStops.userId, userId));
+    return { favorite_stops_query, routes_query };
+  });
+  const end = performance.now();
+  console.log(`Query took ${end - now}ms`);
+  return result;
+}

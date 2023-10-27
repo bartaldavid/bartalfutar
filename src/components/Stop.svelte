@@ -24,7 +24,7 @@
     queryKey: ['stop', stop.id!, 3],
     queryFn: async () =>
       await safeFetch<components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse']>(
-        arrivalsAndDeparturesForStopUrl({ stopId: [stop.id!], limit: 3 })
+        arrivalsAndDeparturesForStopUrl({ stopId: [stop.id!], limit: 3, minutesBefore: 0 })
       ),
     enabled: false
   });

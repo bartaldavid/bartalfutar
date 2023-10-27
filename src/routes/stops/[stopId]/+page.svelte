@@ -37,13 +37,13 @@
 
 <PageLayout pageTitle={stopName ?? 'Loading...'}>
   <svelte:fragment slot="header">
-    <div class="flex gap-1 dark:text-slate-100">
+    <div class="flex gap-1 dark:text-slate-200">
       <FavoriteToggle stopId={data.stopId} saved={data.saved} />
       <RefreshButton
         isFetching={$stopData.isFetching}
         on:refresh={async () => await $stopData.refetch()}
       />
-      <a href={parent ?? '/'} class="p-2"><Close /></a>
+      <a href={parent ?? '/'} class="p-2 hover:text-slate-50"><Close /></a>
     </div>
   </svelte:fragment>
   <svelte:fragment slot="content">

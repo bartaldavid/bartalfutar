@@ -10,9 +10,12 @@
 
   export let data;
 
+  $: favorite_ids = data?.favorites_ids ?? [];
+
   let searchQuery = data?.query?.toString() ?? '';
   let timer: NodeJS.Timeout;
   let stopsToDisplay: components['schemas']['TransitStop'][] = [];
+  let references: components['schemas']['TransitReferences'] = {};
   let inputElement: HTMLInputElement;
 
   const searchData = createQuery({
@@ -40,20 +43,13 @@
     inputElement.focus();
   });
 
-  $: isServerDataUpToDate = data?.query === searchQuery;
-
-  // FIXME refractor this, not only ugly but it isn't working properly
-  $: stopsToDisplay =
-    (searchQuery.length <= searchQueryMinimumLength
-      ? isServerDataUpToDate
-        ? data.searchData?.data?.list
-        : $searchData.data?.data?.list
-      : $searchData.data?.data?.list) ?? [];
-
-  $: references =
-    isServerDataUpToDate && data?.searchData?.data?.references
-      ? data.searchData.data.references
-      : $searchData.data?.data?.references ?? {};
+  $: if (data?.query === searchQuery && data.searchData) {
+    stopsToDisplay = data?.searchData.data?.list ?? [];
+    references = data?.searchData.data?.references ?? {};
+  } else {
+    stopsToDisplay = $searchData.data?.data?.list ?? [];
+    references = $searchData.data?.data?.references ?? {};
+  }
 </script>
 
 <div class="m-1 mt-4 flex w-full flex-col sm:w-72">
@@ -80,7 +76,7 @@
   {#if stopsToDisplay}
     <div class="flex flex-col gap-1">
       {#each stopsToDisplay as stop}
-        <Stop {references} {stop} saved={!!stop.id && data.favorites_ids?.includes(stop.id)} />
+        <Stop {references} {stop} saved={!!stop.id && favorite_ids.includes(stop.id)} />
       {/each}
     </div>
   {/if}
