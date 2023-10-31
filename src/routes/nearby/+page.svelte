@@ -11,11 +11,12 @@
   import LocationSearchingIcon from '~icons/material-symbols/location-searching';
   import MyLocationIcon from '~icons/material-symbols/my-location';
   import LocationDisabledIcon from '~icons/material-symbols/location-disabled';
-  import { error } from '@sveltejs/kit';
   import RefreshButton from '../../components/RefreshButton.svelte';
   import LoadingCards from '../../components/LoadingCards.svelte';
-  import Countdown from '../../components/Countdown.svelte';
-  import { geolocationPermissionState, listenForPermissionChange } from '$lib/stores/geolocation-permission';
+  import {
+    geolocationPermissionState,
+    listenForPermissionChange
+  } from '$lib/stores/geolocation-permission';
 
   $: nearbyDepartures = createQuery({
     queryKey: ['departuresForLocation', $location.position?.coords],
@@ -34,13 +35,14 @@
         })
       ),
     refetchInterval: REFETCH_INTERVAL_MS,
-    enabled: $location.isLoaded,
+    enabled: $location.isLoaded
   });
-  
-  onMount(async () => {
-    $geolocationPermissionState = (await navigator.permissions.query({ name: "geolocation" })).state;
 
-    if ($geolocationPermissionState === "granted") loadLocation()
+  onMount(async () => {
+    $geolocationPermissionState = (await navigator.permissions.query({ name: 'geolocation' }))
+      .state;
+
+    if ($geolocationPermissionState === 'granted') loadLocation();
     listenForPermissionChange();
   });
 </script>
@@ -59,10 +61,7 @@
       >
         {#if $location.isLoaded}
           <MyLocationIcon />
-          <!-- <span class="text-xs">
-            {$location.position?.coords.accuracy.toFixed(0)}m
-          </span> -->
-        {:else if $location.error || $geolocationPermissionState === "denied"}
+        {:else if $location.error || $geolocationPermissionState === 'denied'}
           <LocationDisabledIcon />
         {:else}
           <LocationSearchingIcon />
@@ -72,7 +71,7 @@
   </svelte:fragment>
   <svelte:fragment slot="content">
     <div class="flex flex-col gap-2">
-      {#if $nearbyDepartures.isInitialLoading}
+      {#if $nearbyDepartures.isLoading}
         <LoadingCards numberOfItems={2} />
       {:else if $nearbyDepartures.isError}
         <div class="text-red-500">{$nearbyDepartures.error}</div>
@@ -83,16 +82,34 @@
           <div class="text-gray-500 text-center">No departures found</div>
         {/each}
       {/if}
-      
-      {#if $geolocationPermissionState === "prompt"}
-        <div class="bg-slate-50 dark:bg-slate-800 p-2 justify-center flex flex-col gap-2">
-          <div class="text-slate-700">Please allow us to access your location to show departures around you.</div>
-          <button on:click={() => loadLocation()} class="hover:bg-slate-300 bg-slate-200 dark:bg-slate-700 p-2 rounded text-blue-600">Allow</button>
+
+      {#if $geolocationPermissionState !== 'granted'}
+        <div class="flex flex-col items-center gap-2 rounded bg-slate-50 p-3 dark:bg-slate-800">
+          <svelte:component
+            this={$geolocationPermissionState === 'prompt'
+              ? LocationSearchingIcon
+              : LocationDisabledIcon}
+            class="mt-4 text-4xl dark:text-slate-50"
+          />
+          <span class="pb-5 text-center text-2xl font-bold dark:text-slate-50">
+            {$geolocationPermissionState === 'prompt'
+              ? 'Allow location access'
+              : 'Location access denied'}
+          </span>
+          <p class="  text-slate-700 dark:text-slate-200">
+            {$geolocationPermissionState === 'prompt'
+              ? 'Please allow us to access your location to show departures around you.'
+              : 'You denied us access to your location. Please allow us to access your location to show departures around you.'}
+          </p>
+          {#if $geolocationPermissionState === 'prompt'}
+            <button
+              on:click={() => loadLocation()}
+              class="rounded bg-slate-300 p-2 px-8 text-blue-600 hover:bg-slate-200 dark:bg-slate-600 dark:text-blue-300 hover:dark:bg-slate-500"
+              >Allow</button
+            >
+          {/if}
         </div>
-      {:else if $geolocationPermissionState === "denied"}
-        <span class="text-red-600 text-sm">You didn't allow us to see where you are. That's understandable, but we cannot help in this case.</span>
       {/if}
     </div>
-
   </svelte:fragment>
 </PageLayout>
