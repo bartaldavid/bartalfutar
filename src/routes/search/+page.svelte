@@ -22,7 +22,7 @@
     queryKey: ['search', searchQuery],
     queryFn: async () =>
       await safeFetch<components['schemas']['StopsForLocationResponse']>(
-        stopsForLocationUrl({ query: searchQuery })
+        stopsForLocationUrl({ query: searchQuery, includeReferences: ['compact'] })
       ),
     enabled: false,
     initialData: data?.searchData

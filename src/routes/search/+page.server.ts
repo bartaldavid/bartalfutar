@@ -13,7 +13,7 @@ export async function load({ fetch, url, locals }) {
 
   if (query && query !== '') {
     const data: components['schemas']['StopsForLocationResponse'] = await fetch(
-      stopsForLocationUrl({ query })
+      stopsForLocationUrl({ query, includeReferences: ['compact'] })
     ).then((res) => res.json());
 
     return {
