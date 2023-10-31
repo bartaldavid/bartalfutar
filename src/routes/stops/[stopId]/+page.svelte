@@ -20,7 +20,10 @@
     refetchInterval: REFETCH_INTERVAL_MS,
     queryFn: async () =>
       await safeFetch<components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse']>(
-        arrivalsAndDeparturesForStopUrl({ stopId: [data.stopId] })
+        arrivalsAndDeparturesForStopUrl({
+          stopId: [data.stopId],
+          includeReferences: ['routes', 'stops']
+        })
       )
   });
 

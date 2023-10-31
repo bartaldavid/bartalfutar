@@ -4,6 +4,7 @@
   import { safeFetch } from '$lib/safeFetch';
   import { tripDetailsUrl } from '../lib/data/api-links';
   import type { components } from '../lib/data/bkk-openapi';
+  import { get } from 'svelte/store';
 
   export let tripId: string;
 
@@ -20,7 +21,7 @@
   <div class="mt-2 flex flex-col text-sm">
     {#each $tripData.data?.data?.entry?.stopTimes as stopTime}
       {@const { isDeparted, relevantDate } = useTransitStopTime(stopTime)}
-      <div class="flex flex-row gap-2" class:text-gray-500={isDeparted}>
+      <div class="flex flex-row gap-2" class:text-gray-500={get(isDeparted)}>
         <span>
           {displayDate(relevantDate)}
         </span>

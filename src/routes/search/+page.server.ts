@@ -7,11 +7,12 @@ import { removeStopFromDb, saveStopToDb } from '$lib/server/utils';
 import { fail } from '@sveltejs/kit';
 import { eq, sql } from 'drizzle-orm';
 
+// TODO stream references?
 export async function load({ fetch, url, locals }) {
-  const query = url.searchParams.get('q')?.toString();
+  const query = url.searchParams.get('q')?.toString() ?? '';
   const userId = (await locals.getSession())?.user.id;
 
-  if (query && query !== '') {
+  if (query !== '') {
     const data: components['schemas']['StopsForLocationResponse'] = await fetch(
       stopsForLocationUrl({ query, includeReferences: ['compact'] })
     ).then((res) => res.json());

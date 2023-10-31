@@ -1,25 +1,12 @@
-import { db } from '$lib/server/db';
-import { favoriteStops } from '$lib/server/schema.js';
 import { removeStopFromDb, saveStopToDb } from '$lib/server/utils';
 import { error } from '@sveltejs/kit';
-import { and, eq } from 'drizzle-orm';
 
-export async function load({ params, locals }) {
-  const session = await locals.getSession();
-
-  if (!session) {
-    return { stopId: params.stopId, saved: false };
-  }
-
-  const response = await db
-    .select({ id: favoriteStops.stopId })
-    .from(favoriteStops)
-    .where(and(eq(favoriteStops.userId, session.user.id), eq(favoriteStops.stopId, params.stopId)))
-    .execute();
+export async function load({ params, parent }) {
+  const { favorite_stops } = await parent();
 
   return {
     stopId: params.stopId,
-    saved: response.length > 0
+    saved: favorite_stops.includes(params.stopId)
   };
 }
 

@@ -37,7 +37,7 @@
 </script>
 
 <div
-  class="flex w-full flex-col rounded bg-slate-100 p-4 hover:cursor-pointer dark:bg-slate-800 dark:text-slate-50 {isDeparted &&
+  class="flex w-full flex-col rounded bg-slate-100 p-4 hover:cursor-pointer dark:bg-slate-800 dark:text-slate-50 {$isDeparted &&
     'text-xs opacity-70'}"
   on:click={() => expandable && toggleDetails()}
   on:keypress={() => {}}
@@ -46,7 +46,7 @@
 >
   <div class="flex justify-between gap-6">
     <div>
-      {#if !isDeparted}
+      {#if !$isDeparted}
         {#if isDelayed || !isRealtime}
           <span class="">{displayDate(departureDate)}</span>
         {/if}
@@ -85,7 +85,9 @@
     {#if relevantDate}
       <div class="flex flex-col justify-center text-center">
         <Countdown countDownToDate={relevantDate} />
-        <span class="text-xs text-slate-700 dark:text-slate-100">perc múlva</span>
+        {#if !$isDeparted}
+          <span class="text-xs text-slate-700 dark:text-slate-100">perc múlva</span>
+        {/if}
       </div>
     {/if}
 
