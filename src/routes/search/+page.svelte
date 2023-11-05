@@ -52,7 +52,7 @@
   }
 </script>
 
-<div class="m-1 mt-4 flex w-full flex-col sm:w-72">
+<div class="m-1 mt-4 flex w-full flex-col sm:w-72 md:mt-12">
   <form
     class="mb-2 flex flex-row rounded bg-slate-200 p-3 dark:bg-slate-700"
     data-sveltekit-keepfocus

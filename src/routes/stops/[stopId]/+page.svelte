@@ -13,7 +13,6 @@
   import FavoriteToggle from '../../../components/FavoriteToggle.svelte';
 
   export let data: PageData;
-  let isOpen = false;
 
   $: stopData = createQuery({
     queryKey: ['stop', data.stopId],
@@ -22,11 +21,12 @@
       await safeFetch<components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse']>(
         arrivalsAndDeparturesForStopUrl({
           stopId: [data.stopId],
-          includeReferences: ['routes', 'stops']
+          includeReferences: ['compact']
         })
       )
   });
 
+  $: console.log($stopData);
   $: stopName = $stopData.data?.data?.references?.stops?.[data.stopId]?.name;
 
   // TODO extract this to a global store maybe?

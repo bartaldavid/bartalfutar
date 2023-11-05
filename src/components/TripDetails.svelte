@@ -21,6 +21,7 @@
   <div class="mt-2 flex flex-col text-sm">
     {#each $tripData.data?.data?.entry?.stopTimes as stopTime}
       {@const { isDeparted, relevantDate } = useTransitStopTime(stopTime)}
+      <!-- FIXME this is currently a hacky way to retrieve the isDeparted store -->
       <div class="flex flex-row gap-2" class:text-gray-500={get(isDeparted)}>
         <span>
           {displayDate(relevantDate)}

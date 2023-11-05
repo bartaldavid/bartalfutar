@@ -24,12 +24,17 @@
     queryKey: ['stop', stop.id!, 3],
     queryFn: async () =>
       await safeFetch<components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse']>(
-        arrivalsAndDeparturesForStopUrl({ stopId: [stop.id!], limit: 3, minutesBefore: 0 })
+        arrivalsAndDeparturesForStopUrl({
+          stopId: [stop.id!],
+          limit: 3,
+          minutesBefore: 0,
+          includeReferences: ['compact'],
+          minutesAfter: 20,
+          version: '4'
+        })
       ),
     enabled: false
   });
-
-  const favorites_ids = getContext<string[]>('favorite_stop_ids');
 </script>
 
 <div class="flex flex-row rounded border p-1 dark:border-none dark:bg-slate-800 dark:p-2">
@@ -82,6 +87,10 @@
     </div>
   {/if}
 </div>
+<!-- TODO loading indicator -->
+<!-- {#if $departuresFromStop.isLoading}
+  <div class="text-white">Loading...</div>
+{/if} -->
 
 {#if $departuresFromStop.isFetched && expanded}
   <div class="flex flex-col gap-1 rounded bg-none p-1 dark:bg-slate-700">
