@@ -1,13 +1,13 @@
 <script lang="ts">
-  import type { components } from '../lib/data/bkk-openapi';
+  import type { RouteIcon } from '$lib/types';
 
-  export let routeData: components['schemas']['TransitRoute'] = {};
+  export let icon: RouteIcon = {};
 </script>
 
 <span
-  style:color={'#' + routeData?.style?.icon?.textColor}
-  style:background-color={'#' + routeData?.style?.color}
+  style:color={'#' + icon.textColor}
+  style:background-color={'#' + icon.color}
   class="rounded p-1"
 >
-  {routeData?.shortName}
+  {icon.text}
 </span>

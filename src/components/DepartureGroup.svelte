@@ -1,15 +1,11 @@
 <script lang="ts">
-  import type { components } from '../lib/data/bkk-openapi';
-  import { displayDate, useTransitStopTime } from '../lib/util/date';
+  import type { DepartureGroup } from '$lib/types';
+  import { useTransitStopTime } from '../lib/util/date';
   import Countdown from './Countdown.svelte';
   import RouteIcon from './RouteIcon.svelte';
   import TripDetails from './TripDetails.svelte';
-  import VehicleIcons from './VehicleIcons.svelte';
 
-  export let departureGroup: components['schemas']['TransitDepartureGroup'] = {};
-  export let references: components['schemas']['OTPTransitReferences'] = {};
-
-  $: routeData = references?.routes?.[departureGroup?.routeId ?? ''];
+  export let departureGroup: DepartureGroup;
 
   let expanded = false;
 </script>
@@ -21,13 +17,13 @@
   }}
 >
   <div class="my-1 flex flex-row items-center gap-1 text-sm">
-    <VehicleIcons vehicleType={routeData?.type ?? ''} class="self-center text-lg" />
-    <RouteIcon {routeData} />
-    <span>{departureGroup.headsign}</span>
+    <!-- <VehicleIcons vehicleType={departureGroup. ?? ''} class="self-center text-lg" /> -->
+    <RouteIcon icon={departureGroup.icon} />
+    <span>{departureGroup.headSign}</span>
   </div>
   <div class="flex gap-2">
-    {#each departureGroup.stopTimes ?? [] as stopTime}
-      {@const { relevantDate } = useTransitStopTime(stopTime)}
+    {#each departureGroup.departures ?? [] as departure}
+      {@const { relevantDate } = useTransitStopTime(departure)}
       {#if relevantDate}
         <Countdown countDownToDate={relevantDate} showApostrophe />
       {/if}
@@ -35,7 +31,7 @@
       <span class="text-slate-200">No departure in the next 90 minutes</span>
     {/each}
   </div>
-  {#if expanded && departureGroup.stopTimes?.[0].tripId}
-    <TripDetails tripId={departureGroup.stopTimes[0].tripId} />
+  {#if expanded && departureGroup.departures?.[0].id}
+    <TripDetails tripId={departureGroup.departures[0].id} />
   {/if}
 </button>

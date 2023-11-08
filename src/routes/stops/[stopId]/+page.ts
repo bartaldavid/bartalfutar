@@ -9,8 +9,7 @@ export const load = async ({ parent, fetch, params, data }) => {
   >({
     queryKey: ['stop', params.stopId],
     queryFn: async () =>
-      (await fetch(arrivalsAndDeparturesForStopUrl({ stopId: [params.stopId] }))).json(),
-    structuralSharing: false
+      (await fetch(arrivalsAndDeparturesForStopUrl({ stopId: [params.stopId] }))).json()
   });
 
   return data;
