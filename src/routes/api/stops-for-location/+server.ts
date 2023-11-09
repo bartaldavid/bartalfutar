@@ -1,5 +1,5 @@
 import { futarClient } from '$lib/server/futar.js';
-import type { Stop } from '$lib/types';
+import type { TStop } from '$lib/types';
 import { typed_json, type TypedResponse } from '$lib/util/fetch.js';
 import { z } from 'zod';
 
@@ -10,25 +10,37 @@ export const _params = z.object({
   radius: z.number().optional()
 });
 
-export async function GET({ url, fetch }): Promise<TypedResponse<Stop[]>> {
+export async function GET({ url, fetch }): Promise<TypedResponse<TStop[]>> {
   const api = futarClient(fetch);
 
   const query = _params.parse({
-    q: url.searchParams.get('q')?.toString() ?? '',
-    lat: Number(url.searchParams.get('lat')) ?? undefined,
-    lon: Number(url.searchParams.get('lon')) ?? undefined,
-    radius: Number(url.searchParams.get('radius')) ?? undefined
+    q: url.searchParams.get('q')?.toString()
+    // lat: Number(url.searchParams.get('lat')) ?? undefined,
+    // lon: Number(url.searchParams.get('lon')) ?? undefined,
+    // radius: Number(url.searchParams.get('radius')) ?? undefined
   });
 
-  const { data } = await api.get('/{dialect}/api/where/stops-for-location', { query });
+  if (query.q === '' || query.q.length < 4) return typed_json([]);
 
-  const stops: Stop[] =
+  console.log(query);
+
+  // const data = [];
+
+  const { data } = await api.get('/{dialect}/api/where/stops-for-location', {
+    query: {
+      query: query.q
+    }
+  });
+
+  console.log(data?.references);
+
+  const stops: TStop[] =
     data?.list?.map((stop) => ({
       id: stop.id ?? 'No stop id',
       name: stop.name ?? 'No stop name',
       direction: stop.direction,
       routes: stop.routeIds?.map((routeId) => ({
-        shortName: data.references?.routes?.[routeId]?.shortName,
+        text: data.references?.routes?.[routeId]?.shortName,
         color: data.references?.routes?.[routeId]?.color,
         textColor: data.references?.routes?.[routeId]?.textColor
       })),

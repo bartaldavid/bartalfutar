@@ -1,11 +1,6 @@
 <script lang="ts">
-  import type { components } from '../lib/data/bkk-openapi';
-
   import { createQuery } from '@tanstack/svelte-query';
   import DeparturesList from './DeparturesList.svelte';
-
-  import { safeFetch } from '$lib/safeFetch';
-  import { arrivalsAndDeparturesForStopUrl } from '../lib/data/api-links';
 
   import ChevronRight from '~icons/material-symbols/chevron-right';
   import ArrowUpward from '~icons/material-symbols/arrow-upward';
@@ -13,26 +8,17 @@
 
   import { page } from '$app/stores';
   import FavoriteToggle from './FavoriteToggle.svelte';
-  import { getContext } from 'svelte';
+  import { typed_fetch } from '../routes/api/endpoint-types';
+  import type { TStop } from '$lib/types';
+  import RouteIcon from './RouteIcon.svelte';
 
-  export let references: components['schemas']['TransitReferences'] = {};
-  export let stop: components['schemas']['TransitStop'] = {};
+  export let stop: TStop;
   export let saved = false;
   let expanded = false;
 
   const departuresFromStop = createQuery({
     queryKey: ['stop', stop.id!, 3],
-    queryFn: async () =>
-      await safeFetch<components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse']>(
-        arrivalsAndDeparturesForStopUrl({
-          stopId: [stop.id!],
-          limit: 3,
-          minutesBefore: 0,
-          includeReferences: ['compact'],
-          minutesAfter: 20,
-          version: '4'
-        })
-      ),
+    queryFn: async () => await typed_fetch('/api/departures-for-stop', { stopId: [stop.id!] }),
     enabled: false
   });
 </script>
@@ -55,20 +41,8 @@
       <div class="mb-1 dark:text-slate-50">{stop.name}</div>
     </div>
     <div class="flex flex-row flex-wrap gap-1">
-      {#if stop.locationType === 1}
-        <div class="flex items-center gap-1 text-sm dark:text-slate-300">
-          <MultipleStop />
-        </div>
-      {/if}
-
-      {#each stop?.routeIds ?? [] as routeid}
-        {@const routeRef = references?.routes?.[routeid]}
-        <span
-          class="rounded p-1 text-xs"
-          style:color={'#' + routeRef?.style?.icon?.textColor}
-          style:background-color={'#' + routeRef?.style?.color}
-          >{routeRef?.shortName ?? ''}
-        </span>
+      {#each stop?.routes ?? [] as route}
+        <RouteIcon icon={route} />
       {/each}
 
       {#if stop.direction}
@@ -79,6 +53,9 @@
           /></span
         >
       {/if}
+      {#if stop.locationType === 1}
+        <MultipleStop class="inline-flex p-1 dark:text-white" />
+      {/if}
     </div>
   </div>
   {#if stop.id}
@@ -87,18 +64,12 @@
     </div>
   {/if}
 </div>
+
 <!-- TODO loading indicator -->
-<!-- {#if $departuresFromStop.isLoading}
-  <div class="text-white">Loading...</div>
-{/if} -->
 
 {#if $departuresFromStop.isFetched && expanded}
   <div class="flex flex-col gap-1 rounded bg-none p-1 dark:bg-slate-700">
-    <DeparturesList
-      references={$departuresFromStop?.data?.data?.references}
-      departures={$departuresFromStop?.data?.data?.entry?.stopTimes}
-      expandable={false}
-    />
+    <DeparturesList departures={$departuresFromStop?.data?.departures} expandable={false} />
     <a
       class="flex items-center justify-center p-2 dark:text-slate-50"
       href={`/stops/${stop.id}?from=${encodeURIComponent($page.url.pathname)}`}

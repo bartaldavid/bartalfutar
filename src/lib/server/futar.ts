@@ -1269,7 +1269,7 @@ export namespace Endpoints {
         includeReferences: Array<Schemas.ReferencesSchema>;
       }>;
       path?: { dialect: 'otp' | 'mobile' };
-      header: Partial<{ 'If-Modified-Since': string }>;
+      header?: Partial<{ 'If-Modified-Since': string }>;
     };
     response: Schemas.TripDetailsOTPMethodResponse;
   };
@@ -1469,6 +1469,7 @@ export function futarClient(fetcher: typeof window.fetch) {
   return createApiClient(async (method, url, params) => {
     // FIXME this can be dynamic
     const newUrl = url.replace('{dialect}', 'otp');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const searchParams = new URLSearchParams(params?.query as any);
     searchParams.set('key', PUBLIC_BKK_API_KEY);
     const response = await fetcher(newUrl + '?' + searchParams.toString(), { method });

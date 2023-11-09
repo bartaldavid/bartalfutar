@@ -1,5 +1,5 @@
 import { futarClient } from '$lib/server/futar.js';
-import type { Departure } from '$lib/types.js';
+import type { DepartureType } from '$lib/types.js';
 import { typed_json, type TypedResponse } from '$lib/util/fetch.js';
 import { z } from 'zod';
 
@@ -13,7 +13,9 @@ export const _params = z.object({
 export async function GET({
   fetch,
   url
-}): Promise<TypedResponse<{ departures: Departure[]; stops: { id: string; name?: string }[] }>> {
+}): Promise<
+  TypedResponse<{ departures: DepartureType[]; stops: { id: string; name?: string }[] }>
+> {
   const query = _params.parse({
     stopId: url.searchParams.get('stopId')?.split(',') ?? []
     // limit: Number(url.searchParams.get('limit')) ?? undefined,
@@ -27,7 +29,7 @@ export async function GET({
     query
   });
 
-  const departures: Departure[] =
+  const departures: DepartureType[] =
     data?.entry?.stopTimes?.map((departure) => {
       // FIXME these early returns are kind of vulnerable
       if (!departure.tripId) return { id: '' };

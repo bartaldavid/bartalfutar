@@ -1,21 +1,16 @@
 <script lang="ts">
-  import type { components } from '../lib/data/bkk-openapi';
-
   import Countdown from './Countdown.svelte';
   import TripDetails from './TripDetails.svelte';
   import { displayDate, useTransitStopTime } from '../lib/util/date';
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
   import RouteIcon from './RouteIcon.svelte';
+  import type { DepartureType } from '$lib/types';
 
-  export let departure: components['schemas']['TransitScheduleStopTime'] = {};
-  export let references: components['schemas']['OTPTransitReferences'] = {};
+  export let departure: DepartureType;
   export let expandedTripId: string;
   export let expandable: boolean;
 
   const dispatch = createEventDispatcher();
-
-  const routeId = references?.trips?.[departure?.tripId!]?.routeId;
-  const routeData = references?.routes?.[routeId!];
 
   $: ({
     departureDate,
@@ -28,8 +23,8 @@
   } = useTransitStopTime(departure));
 
   async function toggleDetails() {
-    if (departure.tripId && expandedTripId !== departure.tripId + departure.stopId) {
-      dispatch('expand', { id: departure.tripId + departure.stopId });
+    if (departure.id && expandedTripId !== departure.id) {
+      dispatch('expand', { id: departure.id });
     } else {
       dispatch('collapse');
     }
@@ -66,17 +61,17 @@
         {/if}
       {/if}
 
-      {#if routeData}
+      {#if departure.icon}
         <div class="my-1 text-sm">
-          <RouteIcon {routeData} />
-          <span>{departure.stopHeadsign}</span>
+          <RouteIcon icon={departure.icon} />
+          <span>{departure.headSign}</span>
         </div>
       {/if}
 
-      {#if departure.alertIds && !isDeparted}
-        {#each departure.alertIds as alertId}
-          <div class="mt-2 text-xs text-red-500 dark:text-red-400">
-            {references?.alerts?.[alertId]?.header?.someTranslation}
+      {#if departure.alerts?.length && !$isDeparted}
+        {#each departure.alerts ?? [] as alert}
+          <div class="text-sm text-red-400">
+            {@html alert}
           </div>
         {/each}
       {/if}
@@ -94,7 +89,7 @@
     <!-- TODO show icon to indicate expandable behaviour -->
   </div>
 
-  {#if departure.tripId && expandedTripId === departure.tripId + departure.stopId}
-    <TripDetails tripId={departure.tripId} />
+  {#if departure.id && expandedTripId === departure.id}
+    <TripDetails tripId={departure.id} />
   {/if}
 </div>

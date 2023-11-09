@@ -1,19 +1,8 @@
 import { removeStopFromDb, saveStopToDb } from '$lib/server/utils';
 import { error } from '@sveltejs/kit';
-import { typed_fetch } from '../../api/endpoint-types.js';
 
-export async function load({ params, parent, fetch }) {
+export async function load({ params, parent }) {
   const { favorite_stops } = await parent();
-
-  const departures = await typed_fetch(
-    '/api/departures-for-stop',
-    {
-      stopId: [params.stopId]
-    },
-    fetch
-  );
-
-  console.log(departures);
 
   return {
     stopId: params.stopId,

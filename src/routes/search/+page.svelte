@@ -2,11 +2,10 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { debounceIntervalMs, searchQueryMinimumLength } from '../../lib/data/constants';
   import Stop from '../../components/Stop.svelte';
-  import { safeFetch } from '$lib/safeFetch';
-  import { stopsForLocationUrl } from '../../lib/data/api-links';
-  import type { components } from '../../lib/data/bkk-openapi';
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
+  import { typed_fetch } from '../api/endpoint-types';
+  import type { TStop } from '$lib/types';
 
   export let data;
 
@@ -14,16 +13,12 @@
 
   let searchQuery = data?.query?.toString() ?? '';
   let timer: NodeJS.Timeout;
-  let stopsToDisplay: components['schemas']['TransitStop'][] = [];
-  let references: components['schemas']['TransitReferences'] = {};
+  let stopsToDisplay: TStop[];
   let inputElement: HTMLInputElement;
 
   const searchData = createQuery({
     queryKey: ['search', searchQuery],
-    queryFn: async () =>
-      await safeFetch<components['schemas']['StopsForLocationResponse']>(
-        stopsForLocationUrl({ query: searchQuery, includeReferences: ['compact'] })
-      ),
+    queryFn: async () => typed_fetch('/api/stops-for-location', { q: searchQuery }),
     enabled: false,
     initialData: data?.searchData
   });
@@ -44,11 +39,9 @@
   });
 
   $: if (data?.query === searchQuery && data.searchData) {
-    stopsToDisplay = data?.searchData.data?.list ?? [];
-    references = data?.searchData.data?.references ?? {};
+    stopsToDisplay = data?.searchData ?? [];
   } else {
-    stopsToDisplay = $searchData.data?.data?.list ?? [];
-    references = $searchData.data?.data?.references ?? {};
+    stopsToDisplay = $searchData.data ?? [];
   }
 </script>
 
@@ -76,7 +69,7 @@
   {#if stopsToDisplay}
     <div class="flex flex-col gap-1">
       {#each stopsToDisplay as stop}
-        <Stop {references} {stop} saved={!!stop.id && favorite_ids.includes(stop.id)} />
+        <Stop {stop} saved={!!stop.id && favorite_ids.includes(stop.id)} />
       {/each}
     </div>
   {/if}

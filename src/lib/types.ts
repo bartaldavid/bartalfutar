@@ -4,7 +4,7 @@ export type RouteIcon = {
   textColor?: string;
 };
 
-export type Stop = {
+export type TStop = {
   id: string;
   name: string;
   routes?: RouteIcon[];
@@ -12,7 +12,7 @@ export type Stop = {
   locationType?: number;
 };
 
-export type Departure = {
+export type DepartureType = {
   id: string;
   icon?: RouteIcon;
   // FIXME do these need null

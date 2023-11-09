@@ -11,26 +11,20 @@
   import { page } from '$app/stores';
   import RefreshButton from '../../../components/RefreshButton.svelte';
   import FavoriteToggle from '../../../components/FavoriteToggle.svelte';
+  import { typed_fetch } from '../../api/endpoint-types';
 
   export let data: PageData;
 
   $: stopData = createQuery({
     queryKey: ['stop', data.stopId],
     refetchInterval: REFETCH_INTERVAL_MS,
-    queryFn: async () =>
-      await safeFetch<components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse']>(
-        arrivalsAndDeparturesForStopUrl({
-          stopId: [data.stopId],
-          includeReferences: ['compact']
-        })
-      )
+    queryFn: async () => await typed_fetch('/api/departures-for-stop', { stopId: [data.stopId] })
   });
-
-  $: console.log($stopData);
-  $: stopName = $stopData.data?.data?.references?.stops?.[data.stopId]?.name;
 
   // TODO extract this to a global store maybe?
   $: parent = $page.url.searchParams.get('from');
+
+  $: stopName = $stopData.data?.stops?.find((stop) => stop.id === data.stopId)?.name;
 </script>
 
 <svelte:head>
@@ -51,11 +45,7 @@
   <svelte:fragment slot="content">
     <div class="flex flex-col gap-2">
       {#if !$stopData.isLoading && $stopData.isFetched}
-        <DeparturesList
-          departures={$stopData.data?.data?.entry?.stopTimes}
-          references={$stopData.data?.data?.references}
-          expandable={true}
-        />
+        <DeparturesList departures={$stopData.data?.departures} expandable={true} />
       {:else if $stopData.isError}
         <div class="text-red-500">{$stopData.error}</div>
       {/if}

@@ -1,11 +1,10 @@
-import { stopsForLocationUrl } from '$lib/data/api-links.js';
-import type { components } from '$lib/data/bkk-openapi';
-
 import { db } from '$lib/server/db.js';
 import { favoriteStops, routes, stops, stopsRoutes } from '$lib/server/schema.js';
 import { removeStopFromDb, saveStopToDb } from '$lib/server/utils';
 import { fail } from '@sveltejs/kit';
 import { eq, sql } from 'drizzle-orm';
+import { typed_fetch } from '../api/endpoint-types.js';
+import type { TStop } from '$lib/types.js';
 
 // TODO stream references?
 export async function load({ fetch, url, locals }) {
@@ -13,9 +12,8 @@ export async function load({ fetch, url, locals }) {
   const userId = (await locals.getSession())?.user.id;
 
   if (query !== '') {
-    const data: components['schemas']['StopsForLocationResponse'] = await fetch(
-      stopsForLocationUrl({ query, includeReferences: ['compact'] })
-    ).then((res) => res.json());
+    const data = await typed_fetch('/api/stops-for-location', { q: query }, fetch);
+    console.log(data);
 
     return {
       searchData: data,
@@ -25,14 +23,20 @@ export async function load({ fetch, url, locals }) {
     const { routes, favorite_stops } = await fetchFavoritesAndRoutes(userId);
 
     return {
-      searchData: {
-        data: {
-          list: favorite_stops,
-          references: {
-            routes: routes.reduce((acc, route) => ({ [route.id]: route, ...acc }), {})
-          }
-        }
-      } as components['schemas']['StopsForLocationResponse'],
+      searchData: favorite_stops.map(
+        (stop) =>
+          ({
+            id: stop.id,
+            name: stop.name ?? 'No stop name',
+            direction: stop.direction,
+            routes: stop.routeIds?.map((routeId) => ({
+              text: routes.find((route) => route.id === routeId)?.shortName,
+              color: routes.find((route) => route.id === routeId)?.style?.color,
+              textColor: routes.find((route) => route.id === routeId)?.style?.icon?.textColor
+            })),
+            locationType: stop.locationType
+          }) as TStop
+      ),
       query: '',
       favorites_ids: favorite_stops.map((stop) => stop.id)
     };

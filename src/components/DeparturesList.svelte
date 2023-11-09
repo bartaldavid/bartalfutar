@@ -1,21 +1,17 @@
 <script lang="ts">
-  import type { components } from '../lib/data/bkk-openapi';
+  import type { DepartureType } from '$lib/types';
   import { defaultStopParams } from '../lib/data/defaultParams';
   import Departure from './Departure.svelte';
 
-  export let departures: components['schemas']['TransitScheduleStopTime'][] = [];
-  export let references: components['schemas']['OTPTransitReferences'] = {};
+  export let departures: DepartureType[] = [];
   export let expandable = false;
 
   let expandedTripId = '';
-
-  // TODO move fetching/refetching here to separate logic
 </script>
 
-{#each departures as departure ((departure?.tripId ?? '') + (departure?.stopId ?? crypto.randomUUID()))}
+{#each departures as departure}
   <Departure
     {departure}
-    {references}
     {expandedTripId}
     {expandable}
     on:collapse={() => {

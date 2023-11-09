@@ -7,7 +7,7 @@
 <span
   style:color={'#' + icon.textColor}
   style:background-color={'#' + icon.color}
-  class="rounded p-1"
+  class="rounded p-1 text-sm"
 >
   {icon.text}
 </span>
