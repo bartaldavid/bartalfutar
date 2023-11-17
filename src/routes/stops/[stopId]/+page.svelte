@@ -3,9 +3,6 @@
   import DeparturesList from '../../../components/DeparturesList.svelte';
   import type { PageData, PageServerData } from './$types';
   import { REFETCH_INTERVAL_MS } from '../../../lib/data/constants';
-  import { safeFetch } from '$lib/safeFetch';
-  import { arrivalsAndDeparturesForStopUrl } from '$lib/data/api-links';
-  import type { components } from '$lib/data/bkk-openapi';
   import Close from '~icons/material-symbols/close';
   import PageLayout from '../../../components/PageLayout.svelte';
   import { page } from '$app/stores';
@@ -18,7 +15,12 @@
   $: stopData = createQuery({
     queryKey: ['stop', data.stopId],
     refetchInterval: REFETCH_INTERVAL_MS,
-    queryFn: async () => await typed_fetch('/api/departures-for-stop', { stopId: [data.stopId] })
+    queryFn: async () =>
+      await typed_fetch('/api/departures-for-stop', {
+        stopId: [data.stopId],
+        minutesAfter: 90,
+        limit: 30
+      })
   });
 
   // TODO extract this to a global store maybe?
@@ -49,6 +51,10 @@
       {:else if $stopData.isError}
         <div class="text-red-500">{$stopData.error}</div>
       {/if}
+
+      <button on:click={async () => await fetch(`/api/mav?stationId=${data.stopId}`)}
+        >Fetch máv</button
+      >
     </div>
   </svelte:fragment>
 </PageLayout>

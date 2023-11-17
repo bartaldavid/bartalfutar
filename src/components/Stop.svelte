@@ -11,6 +11,7 @@
   import { typed_fetch } from '../routes/api/endpoint-types';
   import type { TStop } from '$lib/types';
   import RouteIcon from './RouteIcon.svelte';
+  import { REFETCH_INTERVAL_MS } from '$lib/data/constants';
 
   export let stop: TStop;
   export let saved = false;
@@ -18,8 +19,14 @@
 
   const departuresFromStop = createQuery({
     queryKey: ['stop', stop.id!, 3],
-    queryFn: async () => await typed_fetch('/api/departures-for-stop', { stopId: [stop.id!] }),
-    enabled: false
+    queryFn: async () =>
+      await typed_fetch('/api/departures-for-stop', {
+        stopId: [stop.id!],
+        limit: 3,
+        minutesBefore: 0
+      }),
+    enabled: false,
+    refetchInterval: REFETCH_INTERVAL_MS
   });
 </script>
 
