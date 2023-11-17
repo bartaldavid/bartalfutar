@@ -18,6 +18,9 @@ const config = {
       $components: './src/components',
       $lib: './src/lib'
     }
+  },
+  vitePlugin: {
+    inspector: true
   }
 };
 
