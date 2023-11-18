@@ -2,18 +2,18 @@ import { futarClient } from '$lib/server/futar.js';
 import type { TripDetails } from '$lib/types.js';
 import { typed_json, type TypedResponse } from '$lib/util/fetch.js';
 import { z } from 'zod';
+import { getQueryFromParams } from '../endpoint-types.js';
 
 export const _params = z.object({
-  tripId: z.string().optional()
+  tripId: z.string()
 });
 
 export async function GET({ fetch, url }): Promise<TypedResponse<TripDetails>> {
-  const query = _params.parse({
-    tripId: url.searchParams.get('tripId')
-  });
+  const query = _params.parse(getQueryFromParams(url.searchParams));
 
   const api = futarClient(fetch);
 
+  // FIXME this is not working
   const { data } = await api.get('/{dialect}/api/where/trip-details', {
     query
   });

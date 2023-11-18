@@ -2,15 +2,14 @@ import { futarClient } from '$lib/server/futar.js';
 import type { DepartureType } from '$lib/types.js';
 import { typed_json, type TypedResponse } from '$lib/util/fetch.js';
 import { z } from 'zod';
+import { getQueryFromParams } from '../endpoint-types.js';
 
-export const _params = z
-  .object({
-    stopId: z.string(),
-    limit: z.number().optional(),
-    minutesBefore: z.number().optional(),
-    minutesAfter: z.number().optional()
-  })
-  .transform((value) => ({ ...value, stopId: value.stopId.split(',') }));
+export const _params = z.object({
+  stopId: z.array(z.string()),
+  limit: z.number().optional(),
+  minutesBefore: z.number().optional(),
+  minutesAfter: z.number().optional()
+});
 
 export async function GET({
   fetch,
@@ -18,21 +17,7 @@ export async function GET({
 }): Promise<
   TypedResponse<{ departures: DepartureType[]; stops: { id: string; name?: string }[] }>
 > {
-  const params = {
-    stopId: url.searchParams.get('stopId'),
-    limit: url.searchParams.get('limit'),
-    minutesBefore: url.searchParams.get('minutesBefore'),
-    minutesAfter: url.searchParams.get('minutesAfter')
-  };
-
-  const query = _params.parse({
-    stopId: params.stopId,
-    ...(params.limit && { limit: +params.limit }),
-    ...(params.minutesBefore && { minutesBefore: +params.minutesBefore }),
-    ...(params.minutesAfter && { minutesAfter: +params.minutesAfter })
-  });
-
-  console.log(query);
+  const query = _params.parse(getQueryFromParams(url.searchParams));
 
   const api = futarClient(fetch);
 

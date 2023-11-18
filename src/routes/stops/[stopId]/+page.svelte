@@ -11,16 +11,19 @@
   import { typed_fetch } from '../../api/endpoint-types';
 
   export let data: PageData;
+  let fetchFromMav = false;
 
   $: stopData = createQuery({
     queryKey: ['stop', data.stopId],
     refetchInterval: REFETCH_INTERVAL_MS,
-    queryFn: async () =>
-      await typed_fetch('/api/departures-for-stop', {
-        stopId: [data.stopId],
-        minutesAfter: 90,
-        limit: 30
-      })
+    queryFn: fetchFromMav
+      ? async () => await typed_fetch('/api/mav', { stationId: data.stopId, limit: 20 })
+      : async () =>
+          await typed_fetch('/api/departures-for-stop', {
+            stopId: [data.stopId],
+            minutesAfter: 90,
+            limit: 30
+          })
   });
 
   // TODO extract this to a global store maybe?
@@ -46,15 +49,17 @@
   </svelte:fragment>
   <svelte:fragment slot="content">
     <div class="flex flex-col gap-2">
+      {#if data.stopId.endsWith('_0')}
+        <div class="flex gap-1">
+          <input type="checkbox" name="mav" id="mav" bind:value={fetchFromMav} />
+          <label for="mav">MÁV</label>
+        </div>
+      {/if}
       {#if !$stopData.isLoading && $stopData.isFetched}
         <DeparturesList departures={$stopData.data?.departures} expandable={true} />
       {:else if $stopData.isError}
         <div class="text-red-500">{$stopData.error}</div>
       {/if}
-
-      <button on:click={async () => await fetch(`/api/mav?stationId=${data.stopId}`)}
-        >Fetch máv</button
-      >
     </div>
   </svelte:fragment>
 </PageLayout>

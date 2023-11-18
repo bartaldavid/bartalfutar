@@ -2,6 +2,7 @@ import { futarClient } from '$lib/server/futar.js';
 import type { TStop } from '$lib/types';
 import { typed_json, type TypedResponse } from '$lib/util/fetch.js';
 import { z } from 'zod';
+import { getQueryFromParams } from '../endpoint-types.js';
 
 export const _params = z.object({
   q: z.string(),
@@ -11,21 +12,11 @@ export const _params = z.object({
 });
 
 export async function GET({ url, fetch }): Promise<TypedResponse<TStop[]>> {
-  const api = futarClient(fetch);
-
-  const query = _params.parse({
-    q: url.searchParams.get('q')?.toString()
-    // lat: Number(url.searchParams.get('lat')) ?? undefined,
-    // lon: Number(url.searchParams.get('lon')) ?? undefined,
-    // radius: Number(url.searchParams.get('radius')) ?? undefined
-  });
+  const query = _params.parse(getQueryFromParams(url.searchParams));
 
   if (query.q === '' || query.q.length < 4) return typed_json([]);
 
-  console.log(query);
-
-  // const data = [];
-
+  const api = futarClient(fetch);
   const { data } = await api.get('/{dialect}/api/where/stops-for-location', {
     query: {
       query: query.q

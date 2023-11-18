@@ -2,6 +2,7 @@ import { futarClient } from '$lib/server/futar';
 import type { DepartureGroup } from '$lib/types.js';
 import { typed_json, type TypedResponse } from '$lib/util/fetch.js';
 import { z } from 'zod';
+import { getQueryFromParams } from '../endpoint-types.js';
 
 export const _params = z.object({
   stopIds: z.array(z.string()).optional(),
@@ -14,15 +15,7 @@ export const _params = z.object({
 });
 
 export async function GET({ url, fetch }): Promise<TypedResponse<DepartureGroup[]>> {
-  const query = _params.parse({
-    stopIds: url.searchParams.get('stopId')?.split(',') ?? [],
-    limit: Number(url.searchParams.get('limit')) ?? undefined,
-    minutesBefore: Number(url.searchParams.get('minutesBefore')) ?? undefined,
-    minutesAfter: Number(url.searchParams.get('minutesAfter')) ?? undefined,
-    lon: Number(url.searchParams.get('lon')) ?? undefined,
-    lat: Number(url.searchParams.get('lat')) ?? undefined,
-    radius: Number(url.searchParams.get('radius')) ?? undefined
-  });
+  const query = _params.parse(getQueryFromParams(url.searchParams));
 
   const api = futarClient(fetch);
 
