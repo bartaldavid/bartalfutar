@@ -23,8 +23,6 @@ export async function GET({ url, fetch }): Promise<TypedResponse<TStop[]>> {
     }
   });
 
-  console.log(data?.references);
-
   const stops: TStop[] =
     data?.list?.map((stop) => ({
       id: stop.id ?? 'No stop id',

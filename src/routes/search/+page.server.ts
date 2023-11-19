@@ -13,7 +13,6 @@ export async function load({ fetch, url, locals }) {
 
   if (query !== '') {
     const data = await typed_fetch('/api/stops-for-location', { q: query }, fetch);
-    console.log(data);
 
     return {
       searchData: data,

@@ -1,5 +1,6 @@
 import { db } from '$lib/server/db.js';
 import { favoriteStops, stops } from '$lib/server/schema';
+import type { StopGroup as StopGroups } from '$lib/types.js';
 import { eq } from 'drizzle-orm';
 
 export async function load({ locals }) {
@@ -7,7 +8,7 @@ export async function load({ locals }) {
   const userId = session?.user.id;
 
   if (!userId) {
-    return { stops: [], session: null };
+    return { stops: {} as StopGroups, session: null };
   }
 
   const result = await db
@@ -22,5 +23,20 @@ export async function load({ locals }) {
     .where(eq(favoriteStops.userId, userId))
     .execute();
 
-  return { stops: result, session };
+  const groups: StopGroups = result.reduce((result, currentStop) => {
+    if (currentStop.type) {
+      (result[currentStop.type] = result[currentStop.type] || []).push({
+        id: currentStop.id,
+        name: currentStop.name ?? ''
+      });
+    } else if (currentStop.locationType === 1) {
+      (result['MULTIPLE'] = result['MULTIPLE'] || []).push({
+        id: currentStop.id,
+        name: currentStop.name ?? ''
+      });
+    }
+    return result;
+  }, {} as StopGroups);
+
+  return { stops: groups, session };
 }

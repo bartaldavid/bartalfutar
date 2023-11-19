@@ -1,3 +1,5 @@
+import type { Schemas } from './server/futar';
+
 export type RouteIcon = {
   text?: string;
   color?: string;
@@ -12,6 +14,13 @@ export type TStop = {
   locationType?: number;
 };
 
+export type StopGroup = {
+  [key in Schemas.TransitStop['type'] | 'MULTIPLE' as string]: {
+    id: string;
+    name: string;
+  }[];
+};
+
 export type DepartureType = {
   id: string;
   icon?: RouteIcon;
@@ -22,6 +31,7 @@ export type DepartureType = {
   predictedDepartureTime?: number | null;
   headSign?: string;
   alerts?: string[];
+  platform?: string;
 };
 
 export type TripDetails = {

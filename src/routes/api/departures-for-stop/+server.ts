@@ -12,10 +12,7 @@ export const _params = z.object({
   minutesAfter: z.number().optional()
 });
 
-export async function GET({
-  fetch,
-  url
-}): Promise<
+export async function GET({ fetch, url }): Promise<
   TypedResponse<{
     departures: DepartureType[];
     stops: { id: string; name?: string }[];
@@ -39,7 +36,7 @@ export async function GET({
     const departures: DepartureType[] = data.stationSchedulerDetails.departureScheduler.map(
       (departure) => {
         return {
-          id: departure.code,
+          id: departure.trainId,
           ...(departure.actualOrEstimatedStart && {
             predictedDepartureTime: Date.parse(departure.actualOrEstimatedStart) / 1000
           }),
@@ -48,13 +45,14 @@ export async function GET({
           }),
           arrivalTime: Date.parse(departure.arrive) / 1000,
           departureTime: Date.parse(departure.start) / 1000,
-          alerts: [departure.havarianInfok.kesesiOk ?? departure.havarianInfok.kesesInfo],
+          alerts: [departure.havarianInfok.kesesiOk ?? ''],
           headSign: departure.endStation.name,
           icon: {
-            text: departure.viszonylatiJel?.jel ?? departure.fullShortType,
+            text: departure.viszonylatiJel?.jel ?? (departure.fullShortType || departure.name),
             color: departure.viszonylatiJel?.fontSzinKod,
             textColor: departure.viszonylatiJel?.hatterSzinKod
-          }
+          },
+          platform: departure.startTrack
         };
       }
     );

@@ -61,12 +61,17 @@
         {/if}
       {/if}
 
-      {#if departure.icon}
-        <div class="my-1 text-sm">
+      <div class="my-1 flex items-baseline gap-1 text-sm">
+        {#if departure.icon}
           <RouteIcon icon={departure.icon} />
           <span>{departure.headSign}</span>
-        </div>
-      {/if}
+        {/if}
+        {#if departure.platform}
+          <span class="text-sm text-slate-700 dark:text-slate-100">
+            || {departure.platform}
+          </span>
+        {/if}
+      </div>
 
       {#if departure.alerts?.length && !$isDeparted}
         {#each departure.alerts ?? [] as alert}

@@ -1,11 +1,10 @@
 <script lang="ts">
   import type { components } from '../lib/data/bkk-openapi';
   import VehicleIcons from './VehicleIcons.svelte';
-  import { goto } from '$app/navigation';
   import { page } from '$app/stores';
 
   export let groupType: string;
-  export let groupItems: components['schemas']['TransitStop'][];
+  export let groupItems: { id: string; name: string }[];
 </script>
 
 <div class="flex flex-row rounded bg-slate-50 p-2 dark:bg-slate-800">
