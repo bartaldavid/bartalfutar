@@ -29,11 +29,7 @@
   </svelte:fragment>
 
   <svelte:fragment slot="content">
-    {#if stops.length}
       <StopsView groups={stops} />
-    {:else}
-      <div class="py-10 text-center dark:text-slate-200">Add stops to get started</div>
-    {/if}
     <!-- <button class="rounded bg-slate-700 p-2 text-white" on:click={() => console.log(data.session)}
       >Get user</button
     > -->
