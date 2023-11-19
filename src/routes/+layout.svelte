@@ -3,8 +3,17 @@
   import '../app.css';
   import type { LayoutData } from './$types';
   import NavBar from '../components/NavBar.svelte';
+  import { onMount } from 'svelte';
 
   export let data: LayoutData;
+
+  onMount(() => {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js', { scope: '/' });
+      });
+    }
+  });
 </script>
 
 <svelte:head>

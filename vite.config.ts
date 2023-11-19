@@ -15,22 +15,39 @@ export default defineConfig({
         theme_color: '#334155',
         icons: [
           {
-            src: 'android-chrome-192x192.png',
+            src: 'pwa-64x64.png',
+            sizes: '64x64',
+            type: 'image/png'
+          },
+          {
+            src: 'pwa-192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'android-chrome-512x512.png',
+            src: 'pwa-512x512.png',
             sizes: '512x512',
-            type: 'image/png'
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: 'maskable-icon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
           }
         ],
         display: 'standalone'
       },
       filename: 'service-worker.js',
       devOptions: {
-        enabled: true
-      }
+        enabled: true,
+        type: 'module'
+      },
+      workbox: {
+        globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,woff,woff2}']
+      },
+      injectRegister: null
     }),
     Icons({ compiler: 'svelte' })
   ]

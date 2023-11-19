@@ -17,6 +17,9 @@ const config = {
     alias: {
       $components: './src/components',
       $lib: './src/lib'
+    },
+    files: {
+      serviceWorker: 'src/service-worker.js'
     }
   },
   vitePlugin: {
