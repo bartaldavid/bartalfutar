@@ -1,15 +1,12 @@
-import { arrivalsAndDeparturesForStopUrl } from '../../../lib/data/api-links';
-import type { components } from '../../../lib/data/bkk-openapi';
+import { typed_fetch } from '../../api/endpoint-types';
 
 export const load = async ({ parent, fetch, params, data }) => {
   const { queryClient } = await parent();
 
-  await queryClient.prefetchQuery<
-    components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse']
-  >({
+  await queryClient.prefetchQuery({
     queryKey: ['stop', params.stopId],
     queryFn: async () =>
-      (await fetch(arrivalsAndDeparturesForStopUrl({ stopId: [params.stopId] }))).json()
+      await typed_fetch('/api/departures-for-stop', { stopId: [params.stopId] }, fetch)
   });
 
   return data;
