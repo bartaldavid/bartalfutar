@@ -17,7 +17,7 @@
 {/if}
 
 {#if $tripData.data?.length}
-  <div class="mt-2 grid grid-cols-[min-content_minmax(0,1fr)] gap-x-2 text-sm">
+  <div class="mt-2 grid grid-cols-[min-content_minmax(0,1fr)] gap-x-2 text-left text-sm">
     {#each $tripData.data as stopTime}
       <span
         class:opacity-60={stopTime?.relevantStopTime &&

@@ -21,7 +21,9 @@
     queryFn: async () =>
       await typed_fetch('/api/nearby-departures', {
         lat: $location.position?.coords.latitude,
-        lon: $location.position?.coords.longitude
+        lon: $location.position?.coords.longitude,
+        radius: 500,
+        minutesBefore: 0
       }),
     refetchInterval: REFETCH_INTERVAL_MS,
     enabled: $location.isLoaded
