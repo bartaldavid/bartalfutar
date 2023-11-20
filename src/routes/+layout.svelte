@@ -2,8 +2,8 @@
   import { QueryClientProvider } from '@tanstack/svelte-query';
   import '../app.css';
   import type { LayoutData } from './$types';
-  import NavBar from '../components/NavBar.svelte';
   import { onMount } from 'svelte';
+  import NavBar from '$components/NavBar.svelte';
 
   export let data: LayoutData;
 

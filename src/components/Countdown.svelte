@@ -1,7 +1,4 @@
 <script lang="ts">
-  // import { now } from '$lib/stores/now';
-  import { onMount } from 'svelte';
-
   export let countDownToDate: Date;
   export let showApostrophe = false;
 

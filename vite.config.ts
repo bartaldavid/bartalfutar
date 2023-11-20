@@ -2,6 +2,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 import Icons from 'unplugin-icons/vite';
+
 export default defineConfig({
   plugins: [
     sveltekit(),
@@ -11,7 +12,7 @@ export default defineConfig({
       manifest: {
         name: 'BartalFUTÁR',
         short_name: 'BartalFUTÁR',
-        start_url: '/',
+        start_url: '/favorites/',
         theme_color: '#334155',
         icons: [
           {
