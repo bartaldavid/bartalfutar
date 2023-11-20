@@ -1,21 +1,21 @@
 import type { operations } from './bkk-openapi';
 
 export const defaultStopParams: operations['getArrivalsAndDeparturesForStop']['parameters']['query'] =
-	{
-		version: '4',
-		onlyDepartures: true,
-		limit: 15,
-		minutesBefore: 1,
-		minutesAfter: 90
-	};
+  {
+    version: '4',
+    onlyDepartures: true,
+    limit: 30,
+    minutesBefore: 1,
+    minutesAfter: 90
+  };
 
 export const defaultTripParams: operations['getTripDetails']['parameters']['query'] = {
-	includeReferences: ['stops'],
-	version: '4'
+  includeReferences: ['stops'],
+  version: '4'
 };
 
 export const defaultStopsForLocationParams: operations['getStopsForLocation']['parameters']['query'] =
-	{
-		lon: 47.452734,
-		lat: 19.18329
-	};
+  {
+    lon: 47.452734,
+    lat: 19.18329
+  };

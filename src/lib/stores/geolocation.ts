@@ -41,7 +41,6 @@ export function loadLocation(options: PositionOptions = defaultOptions) {
 
   navigator.geolocation.getCurrentPosition(
     (pos) => {
-      console.log('accurate to ' + pos.coords.accuracy);
       location.update((state) => ({
         ...state,
         position: pos,

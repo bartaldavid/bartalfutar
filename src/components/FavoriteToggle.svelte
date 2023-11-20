@@ -1,44 +1,36 @@
 <script lang="ts">
   import FavoriteOutlineIcon from '~icons/material-symbols/favorite-outline';
   import FavoriteIcon from '~icons/material-symbols/favorite';
-  import {
-    savedStops,
-    saveStopToFirestore,
-    removeStopFromFirestore,
-    type savedStop
-  } from '$lib/stores/favorite-stops';
-  import type { components } from '../lib/data/bkk-openapi';
+  import { enhance } from '$app/forms';
 
-  export let stop: components['schemas']['TransitStop'] = {};
-  export let references: components['schemas']['TransitReferences'] = {};
-
-  $: saved = $savedStops.some((savedStop) => savedStop.id == stop.id);
-
-  function transfromStopToSavedStop(
-    stop: components['schemas']['TransitStop'],
-    references: components['schemas']['TransitReferences']
-  ): savedStop {
-    const routeRefForStop: {
-      [key: string]: components['schemas']['TransitRoute'] | undefined;
-    } = {};
-    stop.routeIds?.forEach((routeId) => {
-      routeRefForStop[routeId] = references.routes?.[routeId];
-    });
-    return { ...stop, routeRef: routeRefForStop };
-  }
+  export let stopId: string;
+  export let saved = false;
+  let loading = false;
 </script>
 
-<button
-  on:click={() => {
-    saved
-      ? stop.id && removeStopFromFirestore(stop.id)
-      : saveStopToFirestore(transfromStopToSavedStop(stop, references));
+<form
+  use:enhance={() => {
+    loading = true;
+    const prevState = saved;
+    saved = !saved;
+
+    return async ({ result }) => {
+      loading = false;
+      if (result.type !== 'success') {
+        saved = prevState;
+      }
+    };
   }}
-  class="p-1 dark:text-slate-100"
+  method="post"
 >
-  {#if saved}
-    <FavoriteIcon />
-  {:else}
-    <FavoriteOutlineIcon />
-  {/if}
-</button>
+  <input type="hidden" value={stopId} name="stopId" />
+  <input type="hidden" value={saved} name="saved" />
+  <button
+    type="submit"
+    class="rounded p-2 hover:text-slate-50 dark:text-slate-200"
+    disabled={loading}
+  >
+    {#if saved}<FavoriteIcon />{:else}<FavoriteOutlineIcon />
+    {/if}
+  </button>
+</form>

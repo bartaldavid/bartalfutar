@@ -1,9 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import PageLayout from '../../components/PageLayout.svelte';
-  import { nearbyDeparturesUrl } from '../../lib/data/api-links';
-  import { safeFetch } from '$lib/safeFetch';
-  import type { components } from '../../lib/data/bkk-openapi';
   import { createQuery } from '@tanstack/svelte-query';
   import DepartureGroup from '../../components/DepartureGroup.svelte';
   import { loadLocation, location } from '$lib/stores/geolocation';
@@ -17,23 +14,17 @@
     geolocationPermissionState,
     listenForPermissionChange
   } from '$lib/stores/geolocation-permission';
+  import { typed_fetch } from '../api/endpoint-types';
 
   $: nearbyDepartures = createQuery({
     queryKey: ['departuresForLocation', $location.position?.coords],
     queryFn: async () =>
-      safeFetch<components['schemas']['ArrivalsAndDeparturesForLocationOTPMethodResponse']>(
-        nearbyDeparturesUrl({
-          lon: $location.position?.coords.longitude,
-          lat: $location.position?.coords.latitude,
-          radius: 400,
-          minutesBefore: 0,
-          minutesAfter: 180,
-          onlyDepartures: true,
-          limit: 50,
-          minResult: 5,
-          version: '4'
-        })
-      ),
+      await typed_fetch('/api/nearby-departures', {
+        lat: $location.position?.coords.latitude,
+        lon: $location.position?.coords.longitude,
+        radius: 500,
+        minutesBefore: 0
+      }),
     refetchInterval: REFETCH_INTERVAL_MS,
     enabled: $location.isLoaded
   });
@@ -76,8 +67,8 @@
       {:else if $nearbyDepartures.isError}
         <div class="text-red-500">{$nearbyDepartures.error}</div>
       {:else if $nearbyDepartures.isFetched}
-        {#each $nearbyDepartures.data?.data?.list ?? [] as departureGroup ((departureGroup.routeId ?? '') + departureGroup.headsign)}
-          <DepartureGroup {departureGroup} references={$nearbyDepartures.data?.data?.references} />
+        {#each $nearbyDepartures.data ?? [] as departureGroup (departureGroup.id + departureGroup.headSign)}
+          <DepartureGroup {departureGroup} />
         {:else}
           <div class="text-gray-500 text-center">No departures found</div>
         {/each}

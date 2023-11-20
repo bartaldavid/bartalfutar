@@ -1,7 +1,9 @@
 import { redirect } from '@sveltejs/kit';
 
-export function load({ locals }) {
-  if (locals.userId) {
+export async function load({ locals }) {
+  const session = await locals.getSession();
+
+  if (session) {
     throw redirect(303, '/favorites');
   } else {
     throw redirect(303, '/nearby');

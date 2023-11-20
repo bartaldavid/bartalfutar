@@ -7,7 +7,7 @@
   const dispatch = createEventDispatcher();
 </script>
 
-<button class="p-1" on:click={() => dispatch('refresh')}>
+<button class="p-2 hover:text-slate-50" on:click={() => dispatch('refresh')}>
   {#if isFetching}
     <Autorenew />
   {:else}

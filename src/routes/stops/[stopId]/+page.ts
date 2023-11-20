@@ -1,20 +1,13 @@
-import { arrivalsAndDeparturesForStopUrl } from '../../../lib/data/api-links';
-import type { components } from '../../../lib/data/bkk-openapi';
-import type { PageLoad } from './$types';
+import { typed_fetch } from '../../api/endpoint-types';
 
-export const load: PageLoad = async ({ parent, fetch, params }) => {
+export const load = async ({ parent, fetch, params, data }) => {
   const { queryClient } = await parent();
 
-  // You need to use the SvelteKit fetch function here
-  await queryClient.prefetchQuery<
-    components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse']
-  >({
+  await queryClient.prefetchQuery({
     queryKey: ['stop', params.stopId],
     queryFn: async () =>
-      (await fetch(arrivalsAndDeparturesForStopUrl({ stopId: [params.stopId] }))).json(),
-    cacheTime: 0,
-    structuralSharing: false
+      await typed_fetch('/api/departures-for-stop', { stopId: [params.stopId] }, fetch)
   });
 
-  return { stopId: params.stopId };
+  return data;
 };

@@ -4,68 +4,68 @@
  */
 
 export interface paths {
-  "/{dialect}/api/where/alert-search": {
-    get: operations["searchAlerts"];
+  '/{dialect}/api/where/alert-search': {
+    get: operations['searchAlerts'];
   };
-  "/{dialect}/api/where/arrivals-and-departures-for-location": {
-    get: operations["getArrivalsAndDeparturesForLocation"];
+  '/{dialect}/api/where/arrivals-and-departures-for-location': {
+    get: operations['getArrivalsAndDeparturesForLocation'];
   };
-  "/{dialect}/api/where/arrivals-and-departures-for-stop": {
-    get: operations["getArrivalsAndDeparturesForStop"];
+  '/{dialect}/api/where/arrivals-and-departures-for-stop': {
+    get: operations['getArrivalsAndDeparturesForStop'];
   };
-  "/{dialect}/api/where/bicycle-rental": {
-    get: operations["getBicycleRentalStations"];
+  '/{dialect}/api/where/bicycle-rental': {
+    get: operations['getBicycleRentalStations'];
   };
-  "/{dialect}/api/where/metadata": {
-    get: operations["getMetadata"];
+  '/{dialect}/api/where/metadata': {
+    get: operations['getMetadata'];
   };
-  "/{dialect}/api/where/multi-route-details": {
-    get: operations["getMultiRouteDetails"];
+  '/{dialect}/api/where/multi-route-details': {
+    get: operations['getMultiRouteDetails'];
   };
-  "/{dialect}/api/where/plan-trip": {
-    get: operations["plan"];
+  '/{dialect}/api/where/plan-trip': {
+    get: operations['plan'];
   };
-  "/{dialect}/api/where/plan-access": {
-    get: operations["planAccess"];
+  '/{dialect}/api/where/plan-access': {
+    get: operations['planAccess'];
   };
-  "/{dialect}/api/where/references": {
-    get: operations["getReferences"];
+  '/{dialect}/api/where/references': {
+    get: operations['getReferences'];
   };
-  "/{dialect}/api/where/route-details-for-stop": {
-    get: operations["getRouteDetailsForStop"];
+  '/{dialect}/api/where/route-details-for-stop': {
+    get: operations['getRouteDetailsForStop'];
   };
-  "/{dialect}/api/where/route-details": {
-    get: operations["getRouteDetails"];
+  '/{dialect}/api/where/route-details': {
+    get: operations['getRouteDetails'];
   };
-  "/{dialect}/api/where/schedule-for-stop": {
-    get: operations["getScheduleForStop"];
+  '/{dialect}/api/where/schedule-for-stop': {
+    get: operations['getScheduleForStop'];
   };
-  "/{dialect}/api/where/search": {
-    get: operations["search"];
+  '/{dialect}/api/where/search': {
+    get: operations['search'];
   };
-  "/{dialect}/api/where/statistics": {
-    get: operations["getStatistics"];
+  '/{dialect}/api/where/statistics': {
+    get: operations['getStatistics'];
   };
-  "/{dialect}/api/where/stops-for-location": {
-    get: operations["getStopsForLocation"];
+  '/{dialect}/api/where/stops-for-location': {
+    get: operations['getStopsForLocation'];
   };
-  "/{dialect}/api/where/ticketing-locations": {
-    get: operations["getTicketingData"];
+  '/{dialect}/api/where/ticketing-locations': {
+    get: operations['getTicketingData'];
   };
-  "/{dialect}/api/where/trip-details": {
-    get: operations["getTripDetails"];
+  '/{dialect}/api/where/trip-details': {
+    get: operations['getTripDetails'];
   };
-  "/{dialect}/api/where/vehicle-for-trip": {
-    get: operations["getVehicleForTrip"];
+  '/{dialect}/api/where/vehicle-for-trip': {
+    get: operations['getVehicleForTrip'];
   };
-  "/{dialect}/api/where/vehicles-for-location": {
-    get: operations["getVehiclesForLocation"];
+  '/{dialect}/api/where/vehicles-for-location': {
+    get: operations['getVehiclesForLocation'];
   };
-  "/{dialect}/api/where/vehicles-for-route": {
-    get: operations["getVehiclesForRoute"];
+  '/{dialect}/api/where/vehicles-for-route': {
+    get: operations['getVehiclesForRoute'];
   };
-  "/{dialect}/api/where/vehicles-for-stop": {
-    get: operations["getVehiclesForStop"];
+  '/{dialect}/api/where/vehicles-for-stop': {
+    get: operations['getVehiclesForStop'];
   };
 }
 
@@ -77,23 +77,23 @@ export interface components {
      * @default 2
      * @enum {string}
      */
-    ApiVersion: "2" | "3" | "4";
+    ApiVersion: '2' | '3' | '4';
     /** @enum {string} */
-    Dialect: "otp" | "mobile";
+    Dialect: 'otp' | 'mobile';
     /**
      * @default true
      * @enum {string}
      */
     ReferencesSchema:
-      | "true"
-      | "false"
-      | "compact"
-      | "agencies"
-      | "routes"
-      | "trips"
-      | "stops"
-      | "alerts"
-      | "stations";
+      | 'true'
+      | 'false'
+      | 'compact'
+      | 'agencies'
+      | 'routes'
+      | 'trips'
+      | 'stops'
+      | 'alerts'
+      | 'stations';
     AlertSearchMethodResponse: {
       /**
        * Format: int64
@@ -107,7 +107,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -119,40 +119,40 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitEntryWithReferencesTransitSearch"];
+      data?: components['schemas']['TransitEntryWithReferencesTransitSearch'];
     };
     MobileTransitReferences: {
       /** @description Szolgáltatók referenciáinak listája. */
-      agencies?: components["schemas"]["TransitAgency"][];
+      agencies?: components['schemas']['TransitAgency'][];
       /** @description Járatok referenciáinak listája. */
-      routes?: components["schemas"]["TransitRoute"][];
+      routes?: components['schemas']['TransitRoute'][];
       /** @description Megállók referenciáinak listája. */
-      stops?: components["schemas"]["TransitStop"][];
+      stops?: components['schemas']['TransitStop'][];
       /** @description Menetek referenciáinak listája. */
-      trips?: components["schemas"]["TransitTrip"][];
+      trips?: components['schemas']['TransitTrip'][];
       /** @description Zavarok referenciáinak listája. */
       // alerts?: components["schemas"]["TransitAlert"][];
     };
     OTPTransitReferences: {
       /** @description Szolgáltatók referenciáinak listája. */
       agencies?: {
-        [key: string]: components["schemas"]["TransitAgency"] | undefined;
+        [key: string]: components['schemas']['TransitAgency'] | undefined;
       };
       /** @description Járatok referenciáinak listája. */
       routes?: {
-        [key: string]: components["schemas"]["TransitRoute"] | undefined;
+        [key: string]: components['schemas']['TransitRoute'] | undefined;
       };
       /** @description Megállók referenciáinak listája. */
       stops?: {
-        [key: string]: components["schemas"]["TransitStop"] | undefined;
+        [key: string]: components['schemas']['TransitStop'] | undefined;
       };
       /** @description Menetek referenciáinak listája. */
       trips?: {
-        [key: string]: components["schemas"]["TransitTrip"] | undefined;
+        [key: string]: components['schemas']['TransitTrip'] | undefined;
       };
       /** @description Zavarok referenciáinak listája. */
       alerts?: {
-        [key: string]: components["schemas"]["TransitAlert"] | undefined;
+        [key: string]: components['schemas']['TransitAlert'] | undefined;
       };
     };
     /**
@@ -161,26 +161,26 @@ export interface components {
      * @enum {string}
      */
     Status:
-      | "NOT_MODIFIED"
-      | "OK"
-      | "UNKNOWN_ERROR"
-      | "NOT_FOUND"
-      | "INVALID_VALUE"
-      | "NOT_OPERATING"
-      | "OUTSIDE_BOUNDS"
-      | "PATH_NOT_FOUND"
-      | "NO_TRANSIT_TIMES"
-      | "REQUEST_TIMEOUT"
-      | "BOGUS_PARAMETER"
-      | "TOO_CLOSE"
-      | "LOCATION_NOT_ACCESSIBLE"
-      | "MISSING_MODE"
-      | "ERROR_NO_GRAPH"
-      | "PLANNER_SERVICE_UNAVAILABLE"
-      | "ERROR_VEHICLE_LOCATION_SERVICE"
-      | "ERROR_BIKE_RENTAL_SERVICE"
-      | "ERROR_TICKETING_SERVICE"
-      | "ERROR_TRANSIT_INDEX_SERVICE";
+      | 'NOT_MODIFIED'
+      | 'OK'
+      | 'UNKNOWN_ERROR'
+      | 'NOT_FOUND'
+      | 'INVALID_VALUE'
+      | 'NOT_OPERATING'
+      | 'OUTSIDE_BOUNDS'
+      | 'PATH_NOT_FOUND'
+      | 'NO_TRANSIT_TIMES'
+      | 'REQUEST_TIMEOUT'
+      | 'BOGUS_PARAMETER'
+      | 'TOO_CLOSE'
+      | 'LOCATION_NOT_ACCESSIBLE'
+      | 'MISSING_MODE'
+      | 'ERROR_NO_GRAPH'
+      | 'PLANNER_SERVICE_UNAVAILABLE'
+      | 'ERROR_VEHICLE_LOCATION_SERVICE'
+      | 'ERROR_BIKE_RENTAL_SERVICE'
+      | 'ERROR_TICKETING_SERVICE'
+      | 'ERROR_TRANSIT_INDEX_SERVICE';
     /** @description Szolgáltatók referenciáinak listája. */
     TransitAgency: {
       /**
@@ -262,15 +262,15 @@ export interface components {
        * ]
        */
       routeIds?: string[];
-      url?: components["schemas"]["TranslatedString"];
-      header?: components["schemas"]["TranslatedString"];
-      description?: components["schemas"]["TranslatedString"];
+      url?: components['schemas']['TranslatedString'];
+      header?: components['schemas']['TranslatedString'];
+      description?: components['schemas']['TranslatedString'];
       /** @description A zavar hatására használhatatlan lesz-e az alkalmazás. */
       disableApp?: boolean | null;
-      startText?: components["schemas"]["TranslatedString"];
-      endText?: components["schemas"]["TranslatedString"];
+      startText?: components['schemas']['TranslatedString'];
+      endText?: components['schemas']['TranslatedString'];
       /** @description A zavar által érintett járatok listája. */
-      routes?: components["schemas"]["TransitAlertRoute"][];
+      routes?: components['schemas']['TransitAlertRoute'][];
     };
     /** @description A zavar által érintett járatok listája. */
     TransitAlertRoute: {
@@ -295,8 +295,8 @@ export interface components {
        * @example false
        */
       limitExceeded?: boolean;
-      entry?: components["schemas"]["TransitSearch"];
-      references?: components["schemas"]["TransitReferences"];
+      entry?: components['schemas']['TransitSearch'];
+      references?: components['schemas']['TransitReferences'];
       /**
        * @description Az adat típusa. Egy entitás esetén "entryWithReferences".
        * @example entryWithReferences
@@ -304,7 +304,7 @@ export interface components {
       class?: string;
     };
     /** @description A válaszhoz tartozó referenciák. */
-    TransitReferences: components["schemas"]["OTPTransitReferences"];
+    TransitReferences: components['schemas']['OTPTransitReferences'];
     // | components["schemas"]["MobileTransitReferences"];
     /** @description Járatok referenciáinak listája. */
     TransitRoute: {
@@ -331,25 +331,25 @@ export interface components {
        * @enum {string}
        */
       type?:
-        | "WALK"
-        | "BICYCLE"
-        | "CAR"
-        | "TRAM"
-        | "SUBWAY"
-        | "SUBURBAN_RAILWAY"
-        | "RAIL"
-        | "COACH"
-        | "BUS"
-        | "TROLLEYBUS"
-        | "FERRY"
-        | "CABLE_CAR"
-        | "GONDOLA"
-        | "FUNICULAR"
-        | "TRANSIT"
-        | "TRAINISH"
-        | "BUSISH"
-        | "LEG_SWITCH"
-        | "CUSTOM_MOTOR_VEHICLE";
+        | 'WALK'
+        | 'BICYCLE'
+        | 'CAR'
+        | 'TRAM'
+        | 'SUBWAY'
+        | 'SUBURBAN_RAILWAY'
+        | 'RAIL'
+        | 'COACH'
+        | 'BUS'
+        | 'TROLLEYBUS'
+        | 'FERRY'
+        | 'CABLE_CAR'
+        | 'GONDOLA'
+        | 'FUNICULAR'
+        | 'TRANSIT'
+        | 'TRAINISH'
+        | 'BUSISH'
+        | 'LEG_SWITCH'
+        | 'CUSTOM_MOTOR_VEHICLE';
       /** @description A járat linkje. */
       url?: string | null;
       /**
@@ -386,7 +386,7 @@ export interface components {
        * @example false
        */
       bikesAllowed?: boolean;
-      style?: components["schemas"]["TransitRouteStyle"];
+      style?: components['schemas']['TransitRouteStyle'];
       /**
        * Format: int32
        * @description A járat rendezési sorszáma a többi járathoz viszonyítva.
@@ -401,9 +401,9 @@ export interface components {
        * @example 009FE3
        */
       color?: string;
-      stop?: components["schemas"]["TransitStopStyle"];
-      icon?: components["schemas"]["TransitRouteStyleIcon"];
-      vehicleIcon?: components["schemas"]["TransitVehicleStyleIcon"];
+      stop?: components['schemas']['TransitStopStyle'];
+      icon?: components['schemas']['TransitRouteStyleIcon'];
+      vehicleIcon?: components['schemas']['TransitVehicleStyleIcon'];
     };
     /** @description A járathoz tartozó ikon stílusa. */
     TransitRouteStyleIcon: {
@@ -412,7 +412,7 @@ export interface components {
        * @example BOX
        * @enum {string}
        */
-      type?: "BOX" | "CIRCLE";
+      type?: 'BOX' | 'CIRCLE';
       /**
        * @description Az ikon felirata.
        * @example 5
@@ -525,25 +525,25 @@ export interface components {
        * @enum {string|null}
        */
       type?:
-        | "WALK"
-        | "BICYCLE"
-        | "CAR"
-        | "TRAM"
-        | "SUBWAY"
-        | "SUBURBAN_RAILWAY"
-        | "RAIL"
-        | "COACH"
-        | "BUS"
-        | "TROLLEYBUS"
-        | "FERRY"
-        | "CABLE_CAR"
-        | "GONDOLA"
-        | "FUNICULAR"
-        | "TRANSIT"
-        | "TRAINISH"
-        | "BUSISH"
-        | "LEG_SWITCH"
-        | "CUSTOM_MOTOR_VEHICLE"
+        | 'WALK'
+        | 'BICYCLE'
+        | 'CAR'
+        | 'TRAM'
+        | 'SUBWAY'
+        | 'SUBURBAN_RAILWAY'
+        | 'RAIL'
+        | 'COACH'
+        | 'BUS'
+        | 'TROLLEYBUS'
+        | 'FERRY'
+        | 'CABLE_CAR'
+        | 'GONDOLA'
+        | 'FUNICULAR'
+        | 'TRANSIT'
+        | 'TRAINISH'
+        | 'BUSISH'
+        | 'LEG_SWITCH'
+        | 'CUSTOM_MOTOR_VEHICLE'
         | null;
       /**
        * @description Akadálymentesített-e a megálló.
@@ -570,7 +570,7 @@ export interface components {
        * ]
        */
       alertIds?: (string | null)[] | null;
-      style?: components["schemas"]["TransitStopStyle"];
+      style?: components['schemas']['TransitStopStyle'];
     };
     /** @description A megálló stílusa. */
     TransitStopStyle: {
@@ -586,7 +586,7 @@ export interface components {
        * @example PRIORITY
        * @enum {string|null}
        */
-      type?: "PRIORITY" | null;
+      type?: 'PRIORITY' | null;
       /**
        * @description A megálló stílus képe.
        * @example route-icon-M4
@@ -685,7 +685,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -697,7 +697,7 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitListEntryWithReferencesTransitDepartureGroup"];
+      data?: components['schemas']['TransitListEntryWithReferencesTransitDepartureGroup'];
     };
     /** @description A lekért adatok listája. */
     TransitDepartureGroup: {
@@ -712,12 +712,12 @@ export interface components {
        */
       headsign?: string;
       /** @description A csoport menetrendi bejegyzései. */
-      stopTimes?: components["schemas"]["TransitScheduleStopTime"][];
+      stopTimes?: components['schemas']['TransitScheduleStopTime'][];
     };
     /** @description A válasz adat. */
     TransitListEntryWithReferencesTransitDepartureGroup: {
       /** @description A lekért adatok listája. */
-      list?: components["schemas"]["TransitDepartureGroup"][];
+      list?: components['schemas']['TransitDepartureGroup'][];
       /** @description Az értéke mindig `false`. */
       outOfRange?: boolean;
       /**
@@ -725,7 +725,7 @@ export interface components {
        * @example false
        */
       limitExceeded?: boolean;
-      references?: components["schemas"]["TransitReferences"];
+      references?: components['schemas']['TransitReferences'];
       /**
        * @description Az adat típusa. Lista esetén "listWithReferences".
        * @example listWithReferences
@@ -817,7 +817,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -829,7 +829,7 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitEntryWithReferencesTransitArrivalsAndDepartures"];
+      data?: components['schemas']['TransitEntryWithReferencesTransitArrivalsAndDepartures'];
     };
     /** @description A lekért adat. */
     TransitArrivalsAndDepartures: {
@@ -862,7 +862,7 @@ export interface components {
        */
       nearbyStopIds?: string[];
       /** @description A megállóhoz tartozó menetrendi bejegyzések. */
-      stopTimes?: components["schemas"]["TransitScheduleStopTime"][];
+      stopTimes?: components['schemas']['TransitScheduleStopTime'][];
     };
     /** @description A válasz adat. */
     TransitEntryWithReferencesTransitArrivalsAndDepartures: {
@@ -871,8 +871,8 @@ export interface components {
        * @example false
        */
       limitExceeded?: boolean;
-      entry?: components["schemas"]["TransitArrivalsAndDepartures"];
-      references?: components["schemas"]["TransitReferences"];
+      entry?: components['schemas']['TransitArrivalsAndDepartures'];
+      references?: components['schemas']['TransitReferences'];
       /**
        * @description Az adat típusa. Egy entitás esetén "entryWithReferences".
        * @example entryWithReferences
@@ -892,7 +892,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -904,7 +904,7 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitListEntryWithReferencesTransitBikeRentalStation"];
+      data?: components['schemas']['TransitListEntryWithReferencesTransitBikeRentalStation'];
     };
     /** @description A lekért adatok listája. */
     TransitBikeRentalStation: {
@@ -956,7 +956,7 @@ export interface components {
     /** @description A válasz adat. */
     TransitListEntryWithReferencesTransitBikeRentalStation: {
       /** @description A lekért adatok listája. */
-      list?: components["schemas"]["TransitBikeRentalStation"][];
+      list?: components['schemas']['TransitBikeRentalStation'][];
       /** @description Az értéke mindig `false`. */
       outOfRange?: boolean;
       /**
@@ -964,7 +964,7 @@ export interface components {
        * @example false
        */
       limitExceeded?: boolean;
-      references?: components["schemas"]["TransitReferences"];
+      references?: components['schemas']['TransitReferences'];
       /**
        * @description Az adat típusa. Lista esetén "listWithReferences".
        * @example listWithReferences
@@ -984,7 +984,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -996,7 +996,7 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitEntryWithReferencesTransitMetadata"];
+      data?: components['schemas']['TransitEntryWithReferencesTransitMetadata'];
     };
     /** @description A válasz adat. */
     TransitEntryWithReferencesTransitMetadata: {
@@ -1005,8 +1005,8 @@ export interface components {
        * @example false
        */
       limitExceeded?: boolean;
-      entry?: components["schemas"]["TransitMetadata"];
-      references?: components["schemas"]["TransitReferences"];
+      entry?: components['schemas']['TransitMetadata'];
+      references?: components['schemas']['TransitReferences'];
       /**
        * @description Az adat típusa. Egy entitás esetén "entryWithReferences".
        * @example entryWithReferences
@@ -1117,7 +1117,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -1129,12 +1129,12 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitListEntryWithReferencesTransitRouteDetails"];
+      data?: components['schemas']['TransitListEntryWithReferencesTransitRouteDetails'];
     };
     /** @description A válasz adat. */
     TransitListEntryWithReferencesTransitRouteDetails: {
       /** @description A lekért adatok listája. */
-      list?: components["schemas"]["TransitRouteDetails"][];
+      list?: components['schemas']['TransitRouteDetails'][];
       /** @description Az értéke mindig `false`. */
       outOfRange?: boolean;
       /**
@@ -1142,7 +1142,7 @@ export interface components {
        * @example false
        */
       limitExceeded?: boolean;
-      references?: components["schemas"]["TransitReferences"];
+      references?: components['schemas']['TransitReferences'];
       /**
        * @description Az adat típusa. Lista esetén "listWithReferences".
        * @example listWithReferences
@@ -1190,25 +1190,25 @@ export interface components {
        * @enum {string}
        */
       type?:
-        | "WALK"
-        | "BICYCLE"
-        | "CAR"
-        | "TRAM"
-        | "SUBWAY"
-        | "SUBURBAN_RAILWAY"
-        | "RAIL"
-        | "COACH"
-        | "BUS"
-        | "TROLLEYBUS"
-        | "FERRY"
-        | "CABLE_CAR"
-        | "GONDOLA"
-        | "FUNICULAR"
-        | "TRANSIT"
-        | "TRAINISH"
-        | "BUSISH"
-        | "LEG_SWITCH"
-        | "CUSTOM_MOTOR_VEHICLE";
+        | 'WALK'
+        | 'BICYCLE'
+        | 'CAR'
+        | 'TRAM'
+        | 'SUBWAY'
+        | 'SUBURBAN_RAILWAY'
+        | 'RAIL'
+        | 'COACH'
+        | 'BUS'
+        | 'TROLLEYBUS'
+        | 'FERRY'
+        | 'CABLE_CAR'
+        | 'GONDOLA'
+        | 'FUNICULAR'
+        | 'TRANSIT'
+        | 'TRAINISH'
+        | 'BUSISH'
+        | 'LEG_SWITCH'
+        | 'CUSTOM_MOTOR_VEHICLE';
       /** @description A járat linkje. */
       url?: string | null;
       /**
@@ -1245,7 +1245,7 @@ export interface components {
        * @example false
        */
       bikesAllowed?: boolean;
-      style?: components["schemas"]["TransitRouteStyle"];
+      style?: components['schemas']['TransitRouteStyle'];
       /**
        * Format: int32
        * @description A járat rendezési sorszáma a többi járathoz viszonyítva.
@@ -1253,7 +1253,7 @@ export interface components {
        */
       sortOrder?: number;
       /** @description A járathoz tartozó járat variánsok listája. */
-      variants?: components["schemas"]["TransitRouteVariant"][];
+      variants?: components['schemas']['TransitRouteVariant'][];
       /**
        * @description A járaton található aktív zavarok azonosítóinak listája.
        * @example [
@@ -1287,7 +1287,7 @@ export interface components {
        * @example Újbuda-központ M
        */
       headsign?: string;
-      polyline?: components["schemas"]["TransitPolyline"];
+      polyline?: components['schemas']['TransitPolyline'];
       /**
        * @description A járat variánshoz tartozó járat azonosítója. Akkor van kitöltve, ha különbözik az eredetitől.
        * @example BKK_3040
@@ -1301,27 +1301,27 @@ export interface components {
     };
     /** @enum {string} */
     TraverseMode:
-      | "WALK"
-      | "BICYCLE"
-      | "CAR"
-      | "SUBURBAN_RAILWAY"
-      | "COACH"
-      | "TRAM"
-      | "SUBWAY"
-      | "RAIL"
-      | "BUS"
-      | "TROLLEYBUS"
-      | "FERRY"
-      | "CABLE_CAR"
-      | "GONDOLA"
-      | "FUNICULAR"
-      | "TRANSIT"
-      | "AIRPLANE";
+      | 'WALK'
+      | 'BICYCLE'
+      | 'CAR'
+      | 'SUBURBAN_RAILWAY'
+      | 'COACH'
+      | 'TRAM'
+      | 'SUBWAY'
+      | 'RAIL'
+      | 'BUS'
+      | 'TROLLEYBUS'
+      | 'FERRY'
+      | 'CABLE_CAR'
+      | 'GONDOLA'
+      | 'FUNICULAR'
+      | 'TRANSIT'
+      | 'AIRPLANE';
     /**
      * @default MID
      * @enum {string}
      */
-    WalkProfile: "SLOW" | "MID" | "FAST";
+    WalkProfile: 'SLOW' | 'MID' | 'FAST';
     /** @description A tervezés metaadatai. Tartalmazza a következő és az előző tervezési időablakot a lapozás megvalósításához ezred másodpercben. */
     ApiTripSearchMetadata: {
       /** Format: int32 */
@@ -1466,18 +1466,18 @@ export interface components {
        */
       waitTimeAdjustedGeneralizedCost?: number;
       /** @description Az útiterv lábai (részei). */
-      legs?: components["schemas"]["Leg"][];
+      legs?: components['schemas']['Leg'][];
       /** @description Az útiterv kivonatos megjelenítéséhez használható  lábak és adatok. */
-      displayedLegs?: components["schemas"]["DisplayedLeg"][];
+      displayedLegs?: components['schemas']['DisplayedLeg'][];
       /**
        * @description Jelzi, ha az útvonal meredekebb, mint a paraméterekben kért.
        * @example false
        */
       tooSloped?: boolean;
       /** @description Útitervminták engedélyezése esetén a mintába tartozó útitervek. */
-      patternItineraries?: components["schemas"]["Itinerary"][];
-      patternFrequency?: components["schemas"]["PatternStatistics"];
-      patternDuration?: components["schemas"]["PatternStatistics"];
+      patternItineraries?: components['schemas']['Itinerary'][];
+      patternFrequency?: components['schemas']['PatternStatistics'];
+      patternDuration?: components['schemas']['PatternStatistics'];
       /**
        * @description Jelzi, ha az útvonalhoz kell termékajánlást mutatni.
        * @example true
@@ -1590,9 +1590,9 @@ export interface components {
        * @example 20210709
        */
       serviceDate?: string | null;
-      from?: components["schemas"]["Place"];
-      to?: components["schemas"]["Place"];
-      legGeometry?: components["schemas"]["EncodedPolylineBean"];
+      from?: components['schemas']['Place'];
+      to?: components['schemas']['Place'];
+      legGeometry?: components['schemas']['EncodedPolylineBean'];
       /**
        * @description A lábhoz tartozó aktív zavarok azonosítói.
        * @example [
@@ -1635,7 +1635,7 @@ export interface components {
        * @example SHORT
        * @enum {string|null}
        */
-      wait?: "SHORT" | "LONG" | null;
+      wait?: 'SHORT' | 'LONG' | null;
       /**
        * @description Útiterv minták esetén, a lábnak a mintában megfelelő, más lábakon használt járatok azonosítóinak listája.
        * @example [
@@ -1674,9 +1674,9 @@ export interface components {
       };
       transitLeg?: boolean;
       /** @description Tranzit láb esetén a köztes megállók a láb kezdete és végződése között. */
-      intermediateStops?: components["schemas"]["Place"][] | null;
+      intermediateStops?: components['schemas']['Place'][] | null;
       /** @description Az útvonal lépései gyalogos, kerékpáros vagy autós láb lesetén. */
-      steps?: components["schemas"]["WalkStep"][] | null;
+      steps?: components['schemas']['WalkStep'][] | null;
     };
     /**
      * @description A lépéshez tartozó magassági adatok. Mindig üres, mert a rendszer még nem kezeli.
@@ -1715,7 +1715,7 @@ export interface components {
        * @example realCity ITS Kft.
        */
       name?: string;
-      ticketingLocation?: components["schemas"]["TicketingLocation"];
+      ticketingLocation?: components['schemas']['TicketingLocation'];
       /**
        * @description A megálló azonosítója, ha a hely egy megálló.
        * @example BKK_110452
@@ -1784,7 +1784,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -1796,7 +1796,7 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitEntryWithReferencesResponse"];
+      data?: components['schemas']['TransitEntryWithReferencesResponse'];
     };
     /** @description A hibát tartalmazza, ha nem sikerült a tervezés. */
     PlannerError: {
@@ -1812,28 +1812,28 @@ export interface components {
        * @enum {string}
        */
       message?:
-        | "PLAN_OK"
-        | "SYSTEM_ERROR"
-        | "GRAPH_UNAVAILABLE"
-        | "PLANNER_SERVICE_UNAVAILABLE"
-        | "OUTSIDE_BOUNDS"
-        | "PATH_NOT_FOUND"
-        | "NO_TRANSIT_TIMES"
-        | "REQUEST_TIMEOUT"
-        | "BOGUS_PARAMETER"
-        | "GEOCODE_FROM_NOT_FOUND"
-        | "GEOCODE_TO_NOT_FOUND"
-        | "GEOCODE_FROM_TO_NOT_FOUND"
-        | "TOO_CLOSE"
-        | "LOCATION_NOT_ACCESSIBLE"
-        | "MISSING_MODE"
-        | "GEOCODE_FROM_AMBIGUOUS"
-        | "GEOCODE_TO_AMBIGUOUS"
-        | "GEOCODE_FROM_TO_AMBIGUOUS"
-        | "UNDERSPECIFIED_TRIANGLE"
-        | "TRIANGLE_NOT_AFFINE"
-        | "TRIANGLE_OPTIMIZE_TYPE_NOT_SET"
-        | "TRIANGLE_VALUES_NOT_SET";
+        | 'PLAN_OK'
+        | 'SYSTEM_ERROR'
+        | 'GRAPH_UNAVAILABLE'
+        | 'PLANNER_SERVICE_UNAVAILABLE'
+        | 'OUTSIDE_BOUNDS'
+        | 'PATH_NOT_FOUND'
+        | 'NO_TRANSIT_TIMES'
+        | 'REQUEST_TIMEOUT'
+        | 'BOGUS_PARAMETER'
+        | 'GEOCODE_FROM_NOT_FOUND'
+        | 'GEOCODE_TO_NOT_FOUND'
+        | 'GEOCODE_FROM_TO_NOT_FOUND'
+        | 'TOO_CLOSE'
+        | 'LOCATION_NOT_ACCESSIBLE'
+        | 'MISSING_MODE'
+        | 'GEOCODE_FROM_AMBIGUOUS'
+        | 'GEOCODE_TO_AMBIGUOUS'
+        | 'GEOCODE_FROM_TO_AMBIGUOUS'
+        | 'UNDERSPECIFIED_TRIANGLE'
+        | 'TRIANGLE_NOT_AFFINE'
+        | 'TRIANGLE_OPTIMIZE_TYPE_NOT_SET'
+        | 'TRIANGLE_VALUES_NOT_SET';
       /**
        * @description A rossz paraméterek listája.
        * @example [
@@ -1848,28 +1848,28 @@ export interface components {
       noPath?: boolean;
       /** @enum {string} */
       msgFromMessage?:
-        | "PLAN_OK"
-        | "SYSTEM_ERROR"
-        | "GRAPH_UNAVAILABLE"
-        | "PLANNER_SERVICE_UNAVAILABLE"
-        | "OUTSIDE_BOUNDS"
-        | "PATH_NOT_FOUND"
-        | "NO_TRANSIT_TIMES"
-        | "REQUEST_TIMEOUT"
-        | "BOGUS_PARAMETER"
-        | "GEOCODE_FROM_NOT_FOUND"
-        | "GEOCODE_TO_NOT_FOUND"
-        | "GEOCODE_FROM_TO_NOT_FOUND"
-        | "TOO_CLOSE"
-        | "LOCATION_NOT_ACCESSIBLE"
-        | "MISSING_MODE"
-        | "GEOCODE_FROM_AMBIGUOUS"
-        | "GEOCODE_TO_AMBIGUOUS"
-        | "GEOCODE_FROM_TO_AMBIGUOUS"
-        | "UNDERSPECIFIED_TRIANGLE"
-        | "TRIANGLE_NOT_AFFINE"
-        | "TRIANGLE_OPTIMIZE_TYPE_NOT_SET"
-        | "TRIANGLE_VALUES_NOT_SET";
+        | 'PLAN_OK'
+        | 'SYSTEM_ERROR'
+        | 'GRAPH_UNAVAILABLE'
+        | 'PLANNER_SERVICE_UNAVAILABLE'
+        | 'OUTSIDE_BOUNDS'
+        | 'PATH_NOT_FOUND'
+        | 'NO_TRANSIT_TIMES'
+        | 'REQUEST_TIMEOUT'
+        | 'BOGUS_PARAMETER'
+        | 'GEOCODE_FROM_NOT_FOUND'
+        | 'GEOCODE_TO_NOT_FOUND'
+        | 'GEOCODE_FROM_TO_NOT_FOUND'
+        | 'TOO_CLOSE'
+        | 'LOCATION_NOT_ACCESSIBLE'
+        | 'MISSING_MODE'
+        | 'GEOCODE_FROM_AMBIGUOUS'
+        | 'GEOCODE_TO_AMBIGUOUS'
+        | 'GEOCODE_FROM_TO_AMBIGUOUS'
+        | 'UNDERSPECIFIED_TRIANGLE'
+        | 'TRIANGLE_NOT_AFFINE'
+        | 'TRIANGLE_OPTIMIZE_TYPE_NOT_SET'
+        | 'TRIANGLE_VALUES_NOT_SET';
     } | null;
     /** @description A lekért adat. */
     Response: {
@@ -1877,9 +1877,9 @@ export interface components {
       requestParameters?: {
         [key: string]: string | undefined;
       };
-      plan?: components["schemas"]["TripPlan"];
-      metadata?: components["schemas"]["ApiTripSearchMetadata"];
-      error?: components["schemas"]["PlannerError"];
+      plan?: components['schemas']['TripPlan'];
+      metadata?: components['schemas']['ApiTripSearchMetadata'];
+      error?: components['schemas']['PlannerError'];
     };
     /** @description A jegyértékesítési pontok listája. */
     TicketingLocation: {
@@ -1893,13 +1893,13 @@ export interface components {
        * @example RESELLER
        * @enum {string}
        */
-      type?: "CUSTOMER_CENTER" | "CASHIER" | "VENDING_MACHINE" | "RESELLER";
+      type?: 'CUSTOMER_CENTER' | 'CASHIER' | 'VENDING_MACHINE' | 'RESELLER';
       /**
        * @description A jegyértékesítési hely állapota.
        * @example OPERATIONAL
        * @enum {string}
        */
-      state?: "PLANNED" | "OPERATIONAL" | "INOPERATIVE";
+      state?: 'PLANNED' | 'OPERATIONAL' | 'INOPERATIVE';
       /**
        * @description Ha `false`, akkor hibás az adat, így a felületen elrejtésre kerül.
        * @example true
@@ -1958,7 +1958,7 @@ export interface components {
        */
       ticketPassExchange?: boolean;
       /** @description A jegyértékesítési hely nyitvatartása. */
-      openingPeriods?: components["schemas"]["TicketingPeriod"][];
+      openingPeriods?: components['schemas']['TicketingPeriod'][];
       /** @description Az árusított termékek azonosítói. */
       products?: string[];
       /**
@@ -1974,16 +1974,7 @@ export interface components {
        * @example TUE
        * @enum {string}
        */
-      dayOfWeek?:
-        | "MON"
-        | "TUE"
-        | "WED"
-        | "THU"
-        | "FRI"
-        | "SAT"
-        | "SUN"
-        | "HOL"
-        | "O247";
+      dayOfWeek?: 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT' | 'SUN' | 'HOL' | 'O247';
       /**
        * @description Nyitási idő HH:mm formátumban.
        * @example 00:00
@@ -2014,8 +2005,8 @@ export interface components {
        * @example false
        */
       limitExceeded?: boolean;
-      entry?: components["schemas"]["Response"];
-      references?: components["schemas"]["TransitReferences"];
+      entry?: components['schemas']['Response'];
+      references?: components['schemas']['TransitReferences'];
       /**
        * @description Az adat típusa. Egy entitás esetén "entryWithReferences".
        * @example entryWithReferences
@@ -2029,10 +2020,10 @@ export interface components {
        * @description Az útvonal kezdete ezredmásodpercben.
        */
       date?: string;
-      from?: components["schemas"]["Place"];
-      to?: components["schemas"]["Place"];
+      from?: components['schemas']['Place'];
+      to?: components['schemas']['Place'];
       /** @description A talált útvonalak listája. */
-      itineraries?: components["schemas"]["Itinerary"][];
+      itineraries?: components['schemas']['Itinerary'][];
     };
     /** @description Az útvonal lépései gyalogos, kerékpáros vagy autós láb lesetén. */
     WalkStep: {
@@ -2048,19 +2039,19 @@ export interface components {
        * @enum {string}
        */
       relativeDirection?:
-        | "DEPART"
-        | "HARD_LEFT"
-        | "LEFT"
-        | "SLIGHTLY_LEFT"
-        | "CONTINUE"
-        | "SLIGHTLY_RIGHT"
-        | "RIGHT"
-        | "HARD_RIGHT"
-        | "CIRCLE_CLOCKWISE"
-        | "CIRCLE_COUNTERCLOCKWISE"
-        | "ELEVATOR"
-        | "UTURN_LEFT"
-        | "UTURN_RIGHT";
+        | 'DEPART'
+        | 'HARD_LEFT'
+        | 'LEFT'
+        | 'SLIGHTLY_LEFT'
+        | 'CONTINUE'
+        | 'SLIGHTLY_RIGHT'
+        | 'RIGHT'
+        | 'HARD_RIGHT'
+        | 'CIRCLE_CLOCKWISE'
+        | 'CIRCLE_COUNTERCLOCKWISE'
+        | 'ELEVATOR'
+        | 'UTURN_LEFT'
+        | 'UTURN_RIGHT';
       /**
        * @description Az utca neve, amin a lépés halad.
        * @example Lehel tér M
@@ -2072,14 +2063,14 @@ export interface components {
        * @enum {string}
        */
       absoluteDirection?:
-        | "NORTH"
-        | "NORTHEAST"
-        | "EAST"
-        | "SOUTHEAST"
-        | "SOUTH"
-        | "SOUTHWEST"
-        | "WEST"
-        | "NORTHWEST";
+        | 'NORTH'
+        | 'NORTHEAST'
+        | 'EAST'
+        | 'SOUTHEAST'
+        | 'SOUTH'
+        | 'SOUTHWEST'
+        | 'WEST'
+        | 'NORTHWEST';
       /**
        * @description Jelzi, hogy az utca irányt vált egy kereszteződésben.
        * @example true
@@ -2111,7 +2102,7 @@ export interface components {
        * @description A lépéshez tartozó magassági adatok. Mindig üres, mert a rendszer még nem kezeli.
        * @example []
        */
-      elevation?: components["schemas"]["P2Double"][];
+      elevation?: components['schemas']['P2Double'][];
     } | null;
     ReferencesMethodResponse: {
       /**
@@ -2121,7 +2112,7 @@ export interface components {
       limitExceeded?: boolean;
       /** @description A lekért adat. */
       entry?: Record<string, never>;
-      references?: components["schemas"]["TransitReferences"];
+      references?: components['schemas']['TransitReferences'];
       /**
        * @description Az adat típusa. Egy entitás esetén "entryWithReferences"
        * @example entryWithReferences
@@ -2141,7 +2132,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -2153,12 +2144,12 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitListEntryWithReferencesTransitRoute"];
+      data?: components['schemas']['TransitListEntryWithReferencesTransitRoute'];
     };
     /** @description A válasz adat. */
     TransitListEntryWithReferencesTransitRoute: {
       /** @description A lekért adatok listája. */
-      list?: components["schemas"]["TransitRoute"][];
+      list?: components['schemas']['TransitRoute'][];
       /** @description Az értéke mindig `false`. */
       outOfRange?: boolean;
       /**
@@ -2166,7 +2157,7 @@ export interface components {
        * @example false
        */
       limitExceeded?: boolean;
-      references?: components["schemas"]["TransitReferences"];
+      references?: components['schemas']['TransitReferences'];
       /**
        * @description Az adat típusa. Lista esetén "listWithReferences".
        * @example listWithReferences
@@ -2186,7 +2177,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -2198,7 +2189,7 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitEntryWithReferencesTransitRouteDetails"];
+      data?: components['schemas']['TransitEntryWithReferencesTransitRouteDetails'];
     };
     /** @description A válasz adat. */
     TransitEntryWithReferencesTransitRouteDetails: {
@@ -2207,8 +2198,8 @@ export interface components {
        * @example false
        */
       limitExceeded?: boolean;
-      entry?: components["schemas"]["TransitRouteDetails"];
-      references?: components["schemas"]["TransitReferences"];
+      entry?: components['schemas']['TransitRouteDetails'];
+      references?: components['schemas']['TransitReferences'];
       /**
        * @description Az adat típusa. Egy entitás esetén "entryWithReferences".
        * @example entryWithReferences
@@ -2228,7 +2219,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -2240,7 +2231,7 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitEntryWithReferencesTransitSchedule"];
+      data?: components['schemas']['TransitEntryWithReferencesTransitSchedule'];
     };
     /** @description A válasz adat. */
     TransitEntryWithReferencesTransitSchedule: {
@@ -2249,8 +2240,8 @@ export interface components {
        * @example false
        */
       limitExceeded?: boolean;
-      entry?: components["schemas"]["TransitSchedule"];
-      references?: components["schemas"]["TransitReferences"];
+      entry?: components['schemas']['TransitSchedule'];
+      references?: components['schemas']['TransitReferences'];
       /**
        * @description Az adat típusa. Egy entitás esetén "entryWithReferences".
        * @example entryWithReferences
@@ -2272,7 +2263,7 @@ export interface components {
        */
       alertIds?: string[];
       /** @description A menetrendi adatok irány szerint csoportosítva. */
-      directions?: components["schemas"]["TransitRouteScheduleForDirection"][];
+      directions?: components['schemas']['TransitRouteScheduleForDirection'][];
     };
     /** @description A menetrendi adatok irány szerint csoportosítva. */
     TransitRouteScheduleForDirection: {
@@ -2283,12 +2274,10 @@ export interface components {
       directionId?: string;
       /** @description Célmegálló és a hozzá tartozó menetrendi adatok összerendelése. */
       groups?: {
-        [key: string]:
-          | components["schemas"]["TransitScheduleGroup"]
-          | undefined;
+        [key: string]: components['schemas']['TransitScheduleGroup'] | undefined;
       };
       /** @description Az irányhoz tartozó menetrendi bejegyzések. */
-      stopTimes?: components["schemas"]["TransitScheduleStopTime"][];
+      stopTimes?: components['schemas']['TransitScheduleStopTime'][];
     };
     /** @description A lekért adat. */
     TransitSchedule: {
@@ -2332,7 +2321,7 @@ export interface components {
        */
       alertIds?: string[];
       /** @description A megállóhoz tartozó menetrend. */
-      schedules?: components["schemas"]["TransitRouteSchedule"][];
+      schedules?: components['schemas']['TransitRouteSchedule'][];
     };
     /** @description Célmegálló és a hozzá tartozó menetrendi adatok összerendelése. */
     TransitScheduleGroup: {
@@ -2365,7 +2354,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -2377,7 +2366,7 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitEntryWithReferencesTransitSearch"];
+      data?: components['schemas']['TransitEntryWithReferencesTransitSearch'];
     };
     StatisticsResponse: {
       /**
@@ -2399,7 +2388,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -2411,12 +2400,12 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitListEntryWithReferencesTransitStop"];
+      data?: components['schemas']['TransitListEntryWithReferencesTransitStop'];
     };
     /** @description A válasz adat. */
     TransitListEntryWithReferencesTransitStop: {
       /** @description A lekért adatok listája. */
-      list?: components["schemas"]["TransitStop"][];
+      list?: components['schemas']['TransitStop'][];
       /** @description Az értéke mindig `false`. */
       outOfRange?: boolean;
       /**
@@ -2424,7 +2413,7 @@ export interface components {
        * @example false
        */
       limitExceeded?: boolean;
-      references?: components["schemas"]["TransitReferences"];
+      references?: components['schemas']['TransitReferences'];
       /**
        * @description Az adat típusa. Lista esetén "listWithReferences".
        * @example listWithReferences
@@ -2444,7 +2433,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -2456,7 +2445,7 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitEntryWithReferencesTransitTicketing"];
+      data?: components['schemas']['TransitEntryWithReferencesTransitTicketing'];
     };
     /** @description A termékek listája. */
     TicketingProduct: {
@@ -2508,8 +2497,8 @@ export interface components {
        * @example false
        */
       limitExceeded?: boolean;
-      entry?: components["schemas"]["TransitTicketing"];
-      references?: components["schemas"]["TransitReferences"];
+      entry?: components['schemas']['TransitTicketing'];
+      references?: components['schemas']['TransitReferences'];
       /**
        * @description Az adat típusa. Egy entitás esetén "entryWithReferences".
        * @example entryWithReferences
@@ -2531,9 +2520,9 @@ export interface components {
        */
       oldestModifiedTime?: number;
       /** @description A jegyértékesítési pontok listája. */
-      locations?: components["schemas"]["TicketingLocation"][];
+      locations?: components['schemas']['TicketingLocation'][];
       /** @description A termékek listája. */
-      products?: components["schemas"]["TicketingProduct"][];
+      products?: components['schemas']['TicketingProduct'][];
     };
     /** @description A jármű pozíciója. */
     TransitCoordinatePoint: {
@@ -2557,8 +2546,8 @@ export interface components {
        * @example false
        */
       limitExceeded?: boolean;
-      entry?: components["schemas"]["TransitTripDetailsOTP"];
-      references?: components["schemas"]["TransitReferences"];
+      entry?: components['schemas']['TransitTripDetailsOTP'];
+      references?: components['schemas']['TransitReferences'];
       /**
        * @description Az adat típusa. Egy entitás esetén "entryWithReferences".
        * @example entryWithReferences
@@ -2619,8 +2608,8 @@ export interface components {
        * @example 20210708
        */
       serviceDate?: string;
-      vehicle?: components["schemas"]["TransitVehicle"];
-      polyline?: components["schemas"]["TransitPolyline"];
+      vehicle?: components['schemas']['TransitVehicle'];
+      polyline?: components['schemas']['TransitPolyline'];
       /**
        * @description Aktív zavarok a meneten.
        * @example [
@@ -2629,7 +2618,7 @@ export interface components {
        */
       alertIds?: string[];
       /** @description Menetrendi bejegyzések a meneten. */
-      stopTimes?: components["schemas"]["TransitStopTime"][];
+      stopTimes?: components['schemas']['TransitStopTime'][];
       /**
        * @description A következő menet azonosítója a csoportban, ha a menet hurokjárat.
        * @example BKK_C3204650
@@ -2665,7 +2654,7 @@ export interface components {
        * @example 97
        */
       bearing?: number;
-      location?: components["schemas"]["TransitCoordinatePoint"];
+      location?: components['schemas']['TransitCoordinatePoint'];
       /**
        * @description A jármű által teljesített menet menetrendi napja.
        * @example 20210707
@@ -2707,13 +2696,13 @@ export interface components {
        * @example IN_TRANSIT_TO
        * @enum {string}
        */
-      status?: "INCOMING_AT" | "STOPPED_AT" | "IN_TRANSIT_TO";
+      status?: 'INCOMING_AT' | 'STOPPED_AT' | 'IN_TRANSIT_TO';
       /**
        * @description A járműhöz tartozó torlódási állapot.
        * @example CONGESTION
        * @enum {string|null}
        */
-      congestionLevel?: "UNKNOWN" | "CONGESTION" | null;
+      congestionLevel?: 'UNKNOWN' | 'CONGESTION' | null;
       /**
        * @deprecated
        * @description A jármű fajtája. Deprecated: használjuk a `style` attribútumot.
@@ -2721,25 +2710,25 @@ export interface components {
        * @enum {string}
        */
       vehicleRouteType?:
-        | "WALK"
-        | "BICYCLE"
-        | "CAR"
-        | "TRAM"
-        | "SUBWAY"
-        | "SUBURBAN_RAILWAY"
-        | "RAIL"
-        | "COACH"
-        | "BUS"
-        | "TROLLEYBUS"
-        | "FERRY"
-        | "CABLE_CAR"
-        | "GONDOLA"
-        | "FUNICULAR"
-        | "TRANSIT"
-        | "TRAINISH"
-        | "BUSISH"
-        | "LEG_SWITCH"
-        | "CUSTOM_MOTOR_VEHICLE";
+        | 'WALK'
+        | 'BICYCLE'
+        | 'CAR'
+        | 'TRAM'
+        | 'SUBWAY'
+        | 'SUBURBAN_RAILWAY'
+        | 'RAIL'
+        | 'COACH'
+        | 'BUS'
+        | 'TROLLEYBUS'
+        | 'FERRY'
+        | 'CABLE_CAR'
+        | 'GONDOLA'
+        | 'FUNICULAR'
+        | 'TRANSIT'
+        | 'TRAINISH'
+        | 'BUSISH'
+        | 'LEG_SWITCH'
+        | 'CUSTOM_MOTOR_VEHICLE';
       /**
        * Format: int32
        * @description Hol tart a jármű a két megálló közti szakaszon, százalékban.
@@ -2751,14 +2740,14 @@ export interface components {
        * @example true
        */
       wheelchairAccessible?: boolean;
-      occupancy?: components["schemas"]["TransitVehicleOccupancy"];
-      capacity?: components["schemas"]["TransitVehicleOccupancy"];
+      occupancy?: components['schemas']['TransitVehicleOccupancy'];
+      capacity?: components['schemas']['TransitVehicleOccupancy'];
       /**
        * @description A járműhöz tartozó menet azonosítója.
        * @example BKK_C3135012112
        */
       tripId?: string | null;
-      style?: components["schemas"]["TransitVehicleStyle"];
+      style?: components['schemas']['TransitVehicleStyle'];
     };
     /** @description A jármű kapacitása. */
     TransitVehicleOccupancy: {
@@ -2795,7 +2784,7 @@ export interface components {
     } | null;
     /** @description A járműhöz tartozó stílus. */
     TransitVehicleStyle: {
-      icon?: components["schemas"]["TransitVehicleStyleIcon"];
+      icon?: components['schemas']['TransitVehicleStyleIcon'];
     } | null;
     TripDetailsOTPMethodResponse: {
       /**
@@ -2810,7 +2799,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -2822,12 +2811,12 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitEntryWithReferencesTransitTripDetailsOTP"];
+      data?: components['schemas']['TransitEntryWithReferencesTransitTripDetailsOTP'];
     };
     /** @description A válasz adat. */
     TransitListEntryWithReferencesTransitVehicle: {
       /** @description A lekért adatok listája. */
-      list?: components["schemas"]["TransitVehicle"][];
+      list?: components['schemas']['TransitVehicle'][];
       /** @description Az értéke mindig `false`. */
       outOfRange?: boolean;
       /**
@@ -2835,7 +2824,7 @@ export interface components {
        * @example false
        */
       limitExceeded?: boolean;
-      references?: components["schemas"]["TransitReferences"];
+      references?: components['schemas']['TransitReferences'];
       /**
        * @description Az adat típusa. Lista esetén "listWithReferences".
        * @example listWithReferences
@@ -2855,7 +2844,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -2867,7 +2856,7 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitListEntryWithReferencesTransitVehicle"];
+      data?: components['schemas']['TransitListEntryWithReferencesTransitVehicle'];
     };
     VehiclesForLocationMethodResponse: {
       /**
@@ -2882,7 +2871,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -2894,7 +2883,7 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitListEntryWithReferencesTransitVehicle"];
+      data?: components['schemas']['TransitListEntryWithReferencesTransitVehicle'];
     };
     VehiclesForRouteMethodResponse: {
       /**
@@ -2909,7 +2898,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -2921,7 +2910,7 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitListEntryWithReferencesTransitVehicle"];
+      data?: components['schemas']['TransitListEntryWithReferencesTransitVehicle'];
     };
     VehiclesForStopMethodResponse: {
       /**
@@ -2936,7 +2925,7 @@ export interface components {
        * @example 3
        */
       version?: number;
-      status?: components["schemas"]["Status"];
+      status?: components['schemas']['Status'];
       /**
        * Format: int32
        * @description A válasz státusz kódja.
@@ -2948,7 +2937,7 @@ export interface components {
        * @example OK
        */
       text?: string;
-      data?: components["schemas"]["TransitListEntryWithReferencesTransitVehicle"];
+      data?: components['schemas']['TransitListEntryWithReferencesTransitVehicle'];
     };
   };
   responses: never;
@@ -2994,22 +2983,22 @@ export interface operations {
         end?: number;
         minResult?: number;
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description Visszatér a `query` paraméterben megadott keresési feltételnek megfelelő zavarokkal, amik aktívak a megadott időintervallumnban. */
       200: {
         content: {
-          "application/json": components["schemas"]["AlertSearchMethodResponse"];
+          'application/json': components['schemas']['AlertSearchMethodResponse'];
         };
       };
     };
@@ -3109,22 +3098,22 @@ export interface operations {
         query?: string;
         minResult?: number;
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description Visszaadja egy területhez tartozó érkezési és indulási időket járatazonosítók és célállomások szerint csoportosítva. */
       200: {
         content: {
-          "application/json": components["schemas"]["ArrivalsAndDeparturesForLocationOTPMethodResponse"];
+          'application/json': components['schemas']['ArrivalsAndDeparturesForLocationOTPMethodResponse'];
         };
       };
     };
@@ -3209,22 +3198,22 @@ export interface operations {
         query?: string;
         minResult?: number;
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description Lekéri a megállóhoz tartozó érkezési és indulási időket. */
       200: {
         content: {
-          "application/json": components["schemas"]["ArrivalsAndDeparturesForStopOTPMethodResponse"];
+          'application/json': components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse'];
         };
       };
     };
@@ -3242,22 +3231,22 @@ export interface operations {
       /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query?: {
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description Visszatér az összes kerékpárkölcsönző állomással. */
       200: {
         content: {
-          "application/json": components["schemas"]["BicycleRentalMethodResponse"];
+          'application/json': components['schemas']['BicycleRentalMethodResponse'];
         };
       };
     };
@@ -3280,22 +3269,22 @@ export interface operations {
       query?: {
         time?: number;
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description A szerver metaadataival tér vissza. */
       200: {
         content: {
-          "application/json": components["schemas"]["MetadataResponse"];
+          'application/json': components['schemas']['MetadataResponse'];
         };
       };
     };
@@ -3328,22 +3317,22 @@ export interface operations {
         date?: string;
         related?: boolean;
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description Az összes járatot visszaadja a megadott azonosítókhoz. */
       200: {
         content: {
-          "application/json": components["schemas"]["MultiRouteDetailsMethodResponse"];
+          'application/json': components['schemas']['MultiRouteDetailsMethodResponse'];
         };
       };
       /** @description A `date` paramétert nem sikerült beolvasni. */
@@ -3424,14 +3413,14 @@ export interface operations {
        * @example 5
        */
       query: {
-        version?: components["schemas"]["ApiVersion"];
+        version?: components['schemas']['ApiVersion'];
         appVersion?: string;
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
         date?: string;
         time?: string;
         fromPlace: string;
         toPlace: string;
-        mode: components["schemas"]["TraverseMode"][];
+        mode: components['schemas']['TraverseMode'][];
         shouldBuyTickets?: boolean;
         showIntermediateStops?: boolean;
         arriveBy?: boolean;
@@ -3439,8 +3428,8 @@ export interface operations {
         triangleSafetyFactor?: number;
         triangleSlopeFactor?: number;
         triangleTimeFactor?: number;
-        optimize?: "BEST" | "WALK" | "TRANSFERS";
-        walkProfile?: components["schemas"]["WalkProfile"];
+        optimize?: 'BEST' | 'WALK' | 'TRANSFERS';
+        walkProfile?: components['schemas']['WalkProfile'];
         numItineraries?: number;
       };
       /**
@@ -3448,14 +3437,14 @@ export interface operations {
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description A megadott paraméterekkel tervez útvonalat. */
       200: {
         content: {
-          "application/json": components["schemas"]["PlanTripResponse"];
+          'application/json': components['schemas']['PlanTripResponse'];
         };
       };
     };
@@ -3532,14 +3521,14 @@ export interface operations {
        * @example 5
        */
       query: {
-        version?: components["schemas"]["ApiVersion"];
+        version?: components['schemas']['ApiVersion'];
         appVersion?: string;
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
         date?: string;
         time?: string;
         fromPlace: string;
         toPlace: string;
-        mode: components["schemas"]["TraverseMode"][];
+        mode: components['schemas']['TraverseMode'][];
         shouldBuyTickets?: boolean;
         showIntermediateStops?: boolean;
         arriveBy?: boolean;
@@ -3547,8 +3536,8 @@ export interface operations {
         triangleSafetyFactor?: number;
         triangleSlopeFactor?: number;
         triangleTimeFactor?: number;
-        optimize?: "BEST" | "WALK" | "TRANSFERS";
-        walkProfile?: components["schemas"]["WalkProfile"];
+        optimize?: 'BEST' | 'WALK' | 'TRANSFERS';
+        walkProfile?: components['schemas']['WalkProfile'];
         numItineraries?: number;
       };
       /**
@@ -3556,14 +3545,14 @@ export interface operations {
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description A megadott paraméterekkel tervez útvonalat. */
       200: {
         content: {
-          "application/json": components["schemas"]["PlanTripResponse"];
+          'application/json': components['schemas']['PlanTripResponse'];
         };
       };
     };
@@ -3601,22 +3590,22 @@ export interface operations {
         routeId?: string[];
         stopId?: string[];
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description ID alapú referencia lekérdezés. */
       200: {
         content: {
-          "application/json": components["schemas"]["ReferencesMethodResponse"];
+          'application/json': components['schemas']['ReferencesMethodResponse'];
         };
       };
     };
@@ -3639,22 +3628,22 @@ export interface operations {
       query?: {
         stopId?: string;
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description A megállóhoz és a testvérmegállóihoz tartozó összes járattal tér vissza. */
       200: {
         content: {
-          "application/json": components["schemas"]["RouteDetailsForStopMethodResponse"];
+          'application/json': components['schemas']['RouteDetailsForStopMethodResponse'];
         };
       };
       /** @description Ismeretlen megálló azonosító. */
@@ -3689,22 +3678,22 @@ export interface operations {
         date?: string;
         related?: boolean;
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description Visszaadja a megadott ID-val rendelkező járatot. */
       200: {
         content: {
-          "application/json": components["schemas"]["RouteDetailsMethodResponse"];
+          'application/json': components['schemas']['RouteDetailsMethodResponse'];
         };
       };
       /** @description Rossz formátumú a `date` paraméter. */
@@ -3741,22 +3730,22 @@ export interface operations {
         date?: string;
         onlyDepartures?: boolean;
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description Visszaadja a menetrendet az adott megállóhoz. */
       200: {
         content: {
-          "application/json": components["schemas"]["ScheduleForStopOTPMethodResponse"];
+          'application/json': components['schemas']['ScheduleForStopOTPMethodResponse'];
         };
       };
       /** @description Nem sikerült beolvasni a dátumot. */
@@ -3799,22 +3788,22 @@ export interface operations {
          * @example 2
          */
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description Visszaadja az olyan zavarokat, megállókat és járatokat, amelyek tulajdonságai illeszkednek a megadott szűrőrfeltételre. */
       200: {
         content: {
-          "application/json": components["schemas"]["SearchMethodResponse"];
+          'application/json': components['schemas']['SearchMethodResponse'];
         };
       };
     };
@@ -3826,14 +3815,14 @@ export interface operations {
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description Egyszerű végpont hibakereséshez, ami egy "OK" választ ad vissza. */
       200: {
         content: {
-          "application/json": components["schemas"]["StatisticsResponse"];
+          'application/json': components['schemas']['StatisticsResponse'];
         };
       };
     };
@@ -3883,22 +3872,22 @@ export interface operations {
         query?: string;
         minResult?: number;
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description Egy megállólistát ad vissza az adott helyhez. Ha a lat vagy a lon null, akkor az összes megálló bekerül a válaszba. */
       200: {
         content: {
-          "application/json": components["schemas"]["StopsForLocationResponse"];
+          'application/json': components['schemas']['StopsForLocationResponse'];
         };
       };
     };
@@ -3921,22 +3910,22 @@ export interface operations {
       query?: {
         ifModifiedSince?: number;
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description Visszaadja az összes jegyértékesítő helyet és jegytípust. */
       200: {
         content: {
-          "application/json": components["schemas"]["TicketingMethodResponse"];
+          'application/json': components['schemas']['TicketingMethodResponse'];
         };
       };
       /** @description Nem változott az adat az `ifModifiedSince` paraméterben megadott időpont óta. */
@@ -3976,22 +3965,22 @@ export interface operations {
         date?: string;
         ifModifiedSince?: number;
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description Visszaadja a részletes információit egy menetnek, ami az azonosítója és a dátum alapján, vagy az azt teljesítő jármű azonosítója alapján lett lekérve. */
       200: {
         content: {
-          "application/json": components["schemas"]["TripDetailsOTPMethodResponse"];
+          'application/json': components['schemas']['TripDetailsOTPMethodResponse'];
         };
       };
       /** @description Nem változott az adat az `ifModifiedSince` paraméterben megadott időpont óta. */
@@ -4030,22 +4019,22 @@ export interface operations {
         date?: string[];
         ifModifiedSince?: number;
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description Visszatér a megadott menetekhez és menetrendi napokhoz tartozó járművekkel. */
       200: {
         content: {
-          "application/json": components["schemas"]["VehicleForTripMethodResponse"];
+          'application/json': components['schemas']['VehicleForTripMethodResponse'];
         };
       };
       /** @description Nem változott az adat az `ifModifiedSince` paraméterben megadott időpont óta. */
@@ -4104,22 +4093,22 @@ export interface operations {
         radius?: number;
         ifModifiedSince?: number;
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description Visszatér az adott területen található összes járművel. Ha a `lat` vagy a `lon` null, az összes jármű benne lesz a válaszban. */
       200: {
         content: {
-          "application/json": components["schemas"]["VehiclesForLocationMethodResponse"];
+          'application/json': components['schemas']['VehiclesForLocationMethodResponse'];
         };
       };
       /** @description Nem változott az adat az `ifModifiedSince` paraméterben megadott időpont óta. */
@@ -4154,22 +4143,22 @@ export interface operations {
         related?: boolean;
         ifModifiedSince?: number;
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description A megadott járat azonosítókhoz tartozó járművekkel tér vissza. */
       200: {
         content: {
-          "application/json": components["schemas"]["VehiclesForRouteMethodResponse"];
+          'application/json': components['schemas']['VehiclesForRouteMethodResponse'];
         };
       };
       /** @description Nem változott az adat az `ifModifiedSince` paraméterben megadott időpont óta. */
@@ -4201,22 +4190,22 @@ export interface operations {
         stopId: string;
         ifModifiedSince?: number;
         appVersion?: string;
-        version?: components["schemas"]["ApiVersion"];
-        includeReferences?: components["schemas"]["ReferencesSchema"][];
+        version?: components['schemas']['ApiVersion'];
+        includeReferences?: components['schemas']['ReferencesSchema'][];
       };
       /**
        * @description Az API referenciáinak dialektusa.
        * @example otp
        */
       path: {
-        dialect: components["schemas"]["Dialect"];
+        dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
       /** @description Visszaadja az összes járművet, ami olyan menetet teljesít, ami tartalmazza a megadott megállót. */
       200: {
         content: {
-          "application/json": components["schemas"]["VehiclesForStopMethodResponse"];
+          'application/json': components['schemas']['VehiclesForStopMethodResponse'];
         };
       };
       /** @description Nem változott az adat az `ifModifiedSince` paraméterben megadott időpont óta. */

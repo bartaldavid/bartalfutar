@@ -3,14 +3,12 @@
   import DeparturesList from '../../../components/DeparturesList.svelte';
   import type { PageData, PageServerData } from './$types';
   import { REFETCH_INTERVAL_MS } from '../../../lib/data/constants';
-  import { safeFetch } from '$lib/safeFetch';
-  import { arrivalsAndDeparturesForStopUrl } from '$lib/data/api-links';
-  import type { components } from '$lib/data/bkk-openapi';
   import Close from '~icons/material-symbols/close';
   import PageLayout from '../../../components/PageLayout.svelte';
   import { page } from '$app/stores';
   import RefreshButton from '../../../components/RefreshButton.svelte';
   import FavoriteToggle from '../../../components/FavoriteToggle.svelte';
+  import { typed_fetch } from '../../api/endpoint-types';
 
   export let data: PageData;
 
@@ -18,15 +16,17 @@
     queryKey: ['stop', data.stopId],
     refetchInterval: REFETCH_INTERVAL_MS,
     queryFn: async () =>
-      await safeFetch<components['schemas']['ArrivalsAndDeparturesForStopOTPMethodResponse']>(
-        arrivalsAndDeparturesForStopUrl({ stopId: [data.stopId] })
-      )
+      await typed_fetch('/api/departures-for-stop', {
+        stopId: [data.stopId],
+        minutesAfter: 90,
+        limit: 30
+      })
   });
-
-  $: stopName = $stopData.data?.data?.references?.stops?.[data.stopId]?.name;
 
   // TODO extract this to a global store maybe?
   $: parent = $page.url.searchParams.get('from');
+
+  $: stopName = $stopData.data?.stops?.find((stop) => stop.id === data.stopId)?.name;
 </script>
 
 <svelte:head>
@@ -35,26 +35,19 @@
 
 <PageLayout pageTitle={stopName ?? 'Loading...'}>
   <svelte:fragment slot="header">
-    <div class="flex gap-1 dark:text-slate-100">
-      <FavoriteToggle
-        stop={$stopData.data?.data?.references?.stops?.[data.stopId]}
-        references={$stopData.data?.data?.references}
-      />
+    <div class="flex gap-1 dark:text-slate-200">
+      <FavoriteToggle stopId={data.stopId} saved={data.saved} />
       <RefreshButton
         isFetching={$stopData.isFetching}
         on:refresh={async () => await $stopData.refetch()}
       />
-      <a href={parent ?? '/'} class="p-1"><Close /></a>
+      <a href={parent ?? '/'} class="p-2 hover:text-slate-50"><Close /></a>
     </div>
   </svelte:fragment>
   <svelte:fragment slot="content">
     <div class="flex flex-col gap-2">
       {#if !$stopData.isLoading && $stopData.isFetched}
-        <DeparturesList
-          departures={$stopData.data?.data?.entry?.stopTimes}
-          references={$stopData.data?.data?.references}
-          expandable={true}
-        />
+        <DeparturesList departures={$stopData.data?.departures} expandable={true} />
       {:else if $stopData.isError}
         <div class="text-red-500">{$stopData.error}</div>
       {/if}

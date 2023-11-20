@@ -16,3 +16,5 @@ vite.config.ts.timestamp-*
 *.log
 
 bkk-svelte-firebase-adminsdk*.json
+.vercel
+.env*.local

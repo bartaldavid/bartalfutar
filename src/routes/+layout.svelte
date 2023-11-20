@@ -1,23 +1,19 @@
 <script lang="ts">
-  import { QueryClientProvider, QueryClient } from '@tanstack/svelte-query';
+  import { QueryClientProvider } from '@tanstack/svelte-query';
   import '../app.css';
   import type { LayoutData } from './$types';
-  import { onMount, setContext } from 'svelte';
-  import NavBar from '../components/NavBar.svelte';
-  import { browser } from '$app/environment';
-  import { setToken, user } from '$lib/firebase';
+  import { onMount } from 'svelte';
+  import NavBar from '$components/NavBar.svelte';
 
   export let data: LayoutData;
-  setContext('serverdata', data);
 
-  $: if (browser && !data.user && $user) {
-    resetToken();
-  }
-
-  async function resetToken() {
-    if (!$user) return;
-    await setToken(await $user.getIdToken());
-  }
+  onMount(() => {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js', { scope: '/' });
+      });
+    }
+  });
 </script>
 
 <svelte:head>

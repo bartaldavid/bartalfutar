@@ -1,16 +1,42 @@
-import { adminDB } from '$lib/server/firebase-admin';
-import type { savedStop } from '$lib/stores/favorite-stops';
-import type { PageServerLoad } from './$types';
+import { db } from '$lib/server/db.js';
+import { favoriteStops, stops } from '$lib/server/schema';
+import type { StopGroup as StopGroups } from '$lib/types.js';
+import { eq } from 'drizzle-orm';
 
-export const load = (async ({ locals }) => {
-  const userId = locals.userId;
+export async function load({ locals }) {
+  const session = await locals.getSession();
+  const userId = session?.user.id;
 
   if (!userId) {
-    return { stops: [] };
+    return { stops: {} as StopGroups, session: null };
   }
 
-  const querySnapshot = await adminDB.collection(`userdata/${userId}/stops`).get();
-  const stops = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as savedStop);
+  const result = await db
+    .select({
+      id: stops.id,
+      type: stops.type,
+      name: stops.name,
+      locationType: stops.locationType
+    })
+    .from(stops)
+    .innerJoin(favoriteStops, eq(stops.id, favoriteStops.stopId))
+    .where(eq(favoriteStops.userId, userId))
+    .execute();
 
-  return { stops };
-}) satisfies PageServerLoad;
+  const groups: StopGroups = result.reduce((result, currentStop) => {
+    if (currentStop.type) {
+      (result[currentStop.type] = result[currentStop.type] || []).push({
+        id: currentStop.id,
+        name: currentStop.name ?? ''
+      });
+    } else if (currentStop.locationType === 1) {
+      (result['MULTIPLE'] = result['MULTIPLE'] || []).push({
+        id: currentStop.id,
+        name: currentStop.name ?? ''
+      });
+    }
+    return result;
+  }, {} as StopGroups);
+
+  return { stops: groups, session };
+}

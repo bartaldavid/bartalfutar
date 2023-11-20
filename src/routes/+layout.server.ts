@@ -1,39 +1,19 @@
-import { serverAuth } from '../lib/server/firebase-admin';
-import type { LayoutServerLoad } from './$types';
-import type { savedStop } from '$lib/stores/favorite-stops';
-// import { goto } from '$app/navigation';
+import { db } from '$lib/server/db';
+import { favoriteStops } from '$lib/server/schema';
+import { eq } from 'drizzle-orm';
 
-export type serverData = {
-  signedIn: boolean;
-  stops?: savedStop[];
-  user?: serverUserData;
-};
+export async function load({ locals }) {
+  const session = await locals.getSession();
 
-export type serverUserData = {
-  uid?: string;
-  name?: string;
-  isAnonymous?: boolean;
-  photoUrl?: string;
-};
+  if (!session) return { favorite_stops: [] };
 
-export const load: LayoutServerLoad = async ({ locals }): Promise<serverData> => {
-  const userId = locals.userId;
-
-  if (!userId) {
-    return {signedIn: false};
-  }
-
-  // const querySnapshot = await adminDB.collection(`userdata/${userId}/stops`).get();
-  // const stops = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-  const user = await serverAuth.getUser(userId);
+  const response = await db
+    .select({ id: favoriteStops.stopId })
+    .from(favoriteStops)
+    .where(eq(favoriteStops.userId, session.user.id))
+    .execute();
 
   return {
-    signedIn: true,
-    user: {
-      uid: userId,
-      name: user.displayName,
-      isAnonymous: !user.email,
-      photoUrl: user.photoURL
-    }
+    favorite_stops: response.map((stop) => stop.id)
   };
-};
+}
