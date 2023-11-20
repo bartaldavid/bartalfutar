@@ -3,9 +3,10 @@
   import { debounceIntervalMs, searchQueryMinimumLength } from '../../lib/data/constants';
   import Stop from '../../components/Stop.svelte';
   import { onMount } from 'svelte';
-  import { page } from '$app/stores';
   import { typed_fetch } from '../api/endpoint-types';
   import type { TStop } from '$lib/types';
+  import { page } from '$app/stores';
+  import { Search } from 'lucide-svelte';
 
   export let data;
 
@@ -47,9 +48,11 @@
 
 <div class="m-1 mt-4 flex w-full flex-col sm:w-72 md:mt-12">
   <form
-    class="mb-2 flex flex-row rounded bg-slate-200 p-3 dark:bg-slate-700"
-    data-sveltekit-keepfocus
+    class="mb-2 flex flex-row items-center gap-1 rounded bg-slate-200 p-3 dark:bg-slate-700 dark:text-slate-100"
   >
+    <label for="search">
+      <Search size={16} />
+    </label>
     <input
       type="search"
       placeholder="Search for stops"
@@ -58,12 +61,10 @@
         debounceFetch();
       }}
       bind:this={inputElement}
-      class="flex-1 bg-slate-200 outline-none dark:bg-slate-700 dark:text-slate-100"
+      class="flex-1 bg-transparent outline-none"
       name="q"
+      id="search"
     />
-    <button class="dark:text-slate-100" type="submit"
-      >{$searchData.isFetching ? 'Loading...' : 'Search'}</button
-    >
   </form>
 
   {#if stopsToDisplay}

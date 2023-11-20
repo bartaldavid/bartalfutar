@@ -61,7 +61,7 @@
         {/if}
       {/if}
 
-      <div class="my-1 flex items-baseline gap-1 text-sm">
+      <div class="my-1 flex flex-row items-baseline gap-1 text-sm">
         {#if departure.icon}
           <RouteIcon icon={departure.icon} />
           <span>{departure.headSign}</span>

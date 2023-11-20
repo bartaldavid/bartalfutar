@@ -31,9 +31,9 @@
   });
 </script>
 
-<div class="flex flex-row rounded border p-1 dark:border-none dark:bg-slate-800 dark:p-2">
+<div class="flex flex-row rounded border p-2 dark:border-none dark:bg-slate-800">
   <div
-    class="flex-1 cursor-pointer focus:outline-2"
+    class="flex flex-1 cursor-pointer flex-col gap-1 focus:outline-2"
     on:click={() => {
       expanded = !expanded;
       $departuresFromStop.refetch();
@@ -45,9 +45,7 @@
       $departuresFromStop.refetch();
     }}
   >
-    <div class="flex-row">
-      <div class="mb-1 dark:text-slate-50">{stop.name}</div>
-    </div>
+    <div class="mb-1 dark:text-slate-50">{stop.name}</div>
     <div class="flex flex-row flex-wrap gap-1">
       {#each stop?.routes ?? [] as route}
         <RouteIcon icon={route} size="small" />
@@ -66,11 +64,9 @@
       {/if}
     </div>
   </div>
-  {#if stop.id}
-    <div class="flex flex-col self-center p-1">
-      <FavoriteToggle stopId={stop.id} {saved} />
-    </div>
-  {/if}
+  <div class="flex flex-col self-center">
+    <FavoriteToggle stopId={stop.id} {saved} />
+  </div>
 </div>
 
 <!-- TODO loading indicator -->

@@ -43,16 +43,16 @@ export async function GET({ fetch, url }): Promise<
           ...(departure.actualOrEstimatedArrive && {
             predictedArrivalTime: Date.parse(departure.actualOrEstimatedArrive) / 1000
           }),
-          arrivalTime: Date.parse(departure.arrive) / 1000,
-          departureTime: Date.parse(departure.start) / 1000,
+          arrivalTime: departure.arrive ? Date.parse(departure.arrive) / 1000 : Date.now() / 1000,
+          departureTime: departure.start ? Date.parse(departure.start) / 1000 : Date.now() / 1000,
           alerts: [departure.havarianInfok.kesesiOk ?? ''],
           headSign: departure.endStation.name,
           icon: {
-            text: departure.viszonylatiJel?.jel ?? (departure.fullShortType || departure.name),
+            text: departure.viszonylatiJel?.jel || departure.fullShortType || departure.name || '',
             color: departure.viszonylatiJel?.fontSzinKod,
             textColor: departure.viszonylatiJel?.hatterSzinKod
           },
-          platform: departure.startTrack
+          ...(departure.startTrack && { platform: departure.startTrack })
         };
       }
     );
