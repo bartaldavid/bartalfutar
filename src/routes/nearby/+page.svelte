@@ -46,6 +46,7 @@
         on:refresh={async () => await $nearbyDepartures.refetch()}
       />
       <button
+        class="p-2"
         on:click={() => {
           loadLocation();
         }}
