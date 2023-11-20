@@ -27,7 +27,7 @@
   <input type="hidden" value={saved} name="saved" />
   <button
     type="submit"
-    class="rounded p-2 text-slate-200 hover:dark:text-slate-50"
+    class="rounded p-2 dark:text-slate-200 hover:dark:text-slate-50"
     disabled={loading}
   >
     {#if saved}<FavoriteIcon />{:else}<FavoriteOutlineIcon />

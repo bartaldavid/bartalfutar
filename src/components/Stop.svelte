@@ -12,6 +12,7 @@
   import type { TStop } from '$lib/types';
   import RouteIcon from './RouteIcon.svelte';
   import { REFETCH_INTERVAL_MS } from '$lib/data/constants';
+  import LoadingCards from './LoadingCards.svelte';
 
   export let stop: TStop;
   export let saved = false;
@@ -49,7 +50,7 @@
     </div>
     <div class="flex flex-row flex-wrap gap-1">
       {#each stop?.routes ?? [] as route}
-        <RouteIcon icon={route} />
+        <RouteIcon icon={route} size="small" />
       {/each}
 
       {#if stop.direction}
@@ -66,7 +67,7 @@
     </div>
   </div>
   {#if stop.id}
-    <div class="flex w-8 flex-col self-center p-1">
+    <div class="flex flex-col self-center p-1">
       <FavoriteToggle stopId={stop.id} {saved} />
     </div>
   {/if}
@@ -74,9 +75,14 @@
 
 <!-- TODO loading indicator -->
 
-{#if $departuresFromStop.isFetched && expanded}
+{#if expanded}
   <div class="flex flex-col gap-1 rounded bg-none p-1 dark:bg-slate-700">
-    <DeparturesList departures={$departuresFromStop?.data?.departures} expandable={false} />
+    {#if $departuresFromStop.isPending}
+      <LoadingCards numberOfItems={3} />
+    {/if}
+    {#if $departuresFromStop.isFetched}
+      <DeparturesList departures={$departuresFromStop?.data?.departures} expandable={false} />
+    {/if}
     <a
       class="flex items-center justify-center p-2 dark:text-slate-50"
       href={`/stops/${stop.id}?from=${encodeURIComponent($page.url.pathname)}`}

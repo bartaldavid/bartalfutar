@@ -28,11 +28,18 @@ export async function GET({ url, fetch }): Promise<TypedResponse<TStop[]>> {
       id: stop.id ?? 'No stop id',
       name: stop.name ?? 'No stop name',
       direction: stop.direction,
-      routes: stop.routeIds?.map((routeId) => ({
-        text: data.references?.routes?.[routeId]?.shortName,
-        color: data.references?.routes?.[routeId]?.color,
-        textColor: data.references?.routes?.[routeId]?.textColor
-      })),
+      routes: stop.routeIds
+        // not working
+        ?.sort(
+          (a, b) =>
+            (data.references?.routes?.[b].sortOrder || 0) -
+            (data.references?.routes?.[a].sortOrder || 0)
+        )
+        .map((routeId) => ({
+          text: data.references?.routes?.[routeId]?.shortName,
+          color: data.references?.routes?.[routeId]?.color,
+          textColor: data.references?.routes?.[routeId]?.textColor
+        })),
       locationType: stop.locationType
     })) ?? [];
 

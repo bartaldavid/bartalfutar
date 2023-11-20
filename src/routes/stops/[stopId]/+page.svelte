@@ -9,6 +9,7 @@
   import RefreshButton from '../../../components/RefreshButton.svelte';
   import FavoriteToggle from '../../../components/FavoriteToggle.svelte';
   import { typed_fetch } from '../../api/endpoint-types';
+  import LoadingCards from '$components/LoadingCards.svelte';
 
   export let data: PageData;
 
@@ -46,7 +47,10 @@
   </svelte:fragment>
   <svelte:fragment slot="content">
     <div class="flex flex-col gap-2">
-      {#if !$stopData.isLoading && $stopData.isFetched}
+      {#if $stopData.isLoading}
+        <LoadingCards numberOfItems={3} />
+      {/if}
+      {#if $stopData.isFetched}
         <DeparturesList departures={$stopData.data?.departures} expandable={true} />
       {:else if $stopData.isError}
         <div class="text-red-500">{$stopData.error}</div>
