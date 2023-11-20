@@ -2,6 +2,7 @@
   import StopsView from '../../components/StopsView.svelte';
   import PageLayout from '../../components/PageLayout.svelte';
   import type { PageData } from './$types';
+  import { UserCircle } from 'lucide-svelte';
 
   export let data: PageData;
   $: stops = data.stops ?? [];
@@ -19,6 +20,8 @@
           class="m-1 aspect-square rounded-full"
           loading="lazy"
         />
+      {:else}
+        <UserCircle size="30" />
       {/if}
       {#if data.session}
         <a href="/auth/signout" data-sveltekit-preload-data="off">Sign Out</a>
@@ -29,7 +32,7 @@
   </svelte:fragment>
 
   <svelte:fragment slot="content">
-      <StopsView groups={stops} />
+    <StopsView groups={stops} />
     <!-- <button class="rounded bg-slate-700 p-2 text-white" on:click={() => console.log(data.session)}
       >Get user</button
     > -->
