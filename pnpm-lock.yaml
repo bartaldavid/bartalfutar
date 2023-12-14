@@ -41,8 +41,8 @@ dependencies:
 
 devDependencies:
   '@iconify-json/material-symbols':
-    specifier: ^1.1.64
-    version: 1.1.64
+    specifier: ^1.1.67
+    version: 1.1.67
   '@sveltejs/adapter-auto':
     specifier: ^2.1.1
     version: 2.1.1(@sveltejs/kit@1.27.6)
@@ -2305,8 +2305,8 @@ packages:
     resolution: {integrity: sha512-dvuCeX5fC9dXgJn9t+X5atfmgQAzUOWqS1254Gh0m6i8wKd10ebXkfNKiRK+1GWi/yTvvLDHpoxLr0xxxeslWw==}
     dev: true
 
-  /@iconify-json/material-symbols@1.1.64:
-    resolution: {integrity: sha512-he6VUP4mXtcS7ypTE10irRr0RbIdak0KDpPvi3ol+UKqVj+e7xBaoBqutTEBq1YjJIcccfqoIz49BHJbC2Wb6g==}
+  /@iconify-json/material-symbols@1.1.67:
+    resolution: {integrity: sha512-wGvPLGMfunJL0sGzRVjZ7TUng86d5JMKBlRnOhHU+lBYaeeJmbKWQOQ6aJPK0oxl0PJBnNctHDitXTDTobe4Ng==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true
