@@ -21,8 +21,8 @@ dependencies:
     specifier: ^3.1.0
     version: 3.1.0(@sveltejs/kit@1.27.6)
   '@tanstack/svelte-query':
-    specifier: ^5.8.7
-    version: 5.8.7(svelte@4.2.7)
+    specifier: ^5.14.6
+    version: 5.14.6(svelte@4.2.7)
   drizzle-orm:
     specifier: ^0.29.1
     version: 0.29.1(@planetscale/database@1.11.0)(mysql2@3.6.5)
@@ -2601,16 +2601,16 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@tanstack/query-core@5.8.7:
-    resolution: {integrity: sha512-58xOSkxxZK4SGQ/uzX8MDZHLGZCkxlgkPxnfhxUOL2uchnNHyay2UVcR3mQNMgaMwH1e2l+0n+zfS7+UJ/MAJw==}
+  /@tanstack/query-core@5.14.2:
+    resolution: {integrity: sha512-QmoJvC72sSWs3hgGis8JdmlDvqLfYGWUK4UG6OR9Q6t28JMN9m2FDwKPqoSJ9YVocELCSjMt/FGjEiLfk8000Q==}
     dev: false
 
-  /@tanstack/svelte-query@5.8.7(svelte@4.2.7):
-    resolution: {integrity: sha512-KzilehNQQO4wxxucEy1NJMo0q/NZ0nhrq5TX5MNzklsu0QZ5x+Hn5x7DVox4uKazkCuro1S7PhGEAwFQnHTuwQ==}
+  /@tanstack/svelte-query@5.14.6(svelte@4.2.7):
+    resolution: {integrity: sha512-aPlbyT7nsveV+CBKPnzuIG+ajyRGz4FgMLMlo8LLJAyFfSxb5oPOZ0brAHbzsDqGkc26Ye8ocT9Tu/Fl4SmjWQ==}
     peerDependencies:
-      svelte: '>=3 <5'
+      svelte: ^3.54.0 || ^4.0.0 || ^5.0.0-next.0
     dependencies:
-      '@tanstack/query-core': 5.8.7
+      '@tanstack/query-core': 5.14.2
       svelte: 4.2.7
     dev: false
 
