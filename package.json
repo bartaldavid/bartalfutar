@@ -48,7 +48,7 @@
 		"@auth/sveltekit": "^0.3.14",
 		"@planetscale/database": "^1.11.0",
 		"@sveltejs/adapter-vercel": "^3.1.0",
-		"@tanstack/svelte-query": "^5.8.7",
+		"@tanstack/svelte-query": "^5.17.0",
 		"drizzle-orm": "^0.29.1",
 		"drizzle-zod": "^0.5.1",
 		"lucide-svelte": "^0.293.0",
