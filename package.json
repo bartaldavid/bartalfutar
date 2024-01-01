@@ -18,7 +18,7 @@
 		"@sveltejs/adapter-auto": "^2.1.1",
 		"@sveltejs/kit": "^1.27.6",
 		"@typescript-eslint/eslint-plugin": "^6.13.0",
-		"@typescript-eslint/parser": "^6.13.0",
+		"@typescript-eslint/parser": "^6.16.0",
 		"@vite-pwa/assets-generator": "^0.0.11",
 		"@vite-pwa/sveltekit": "^0.2.8",
 		"autoprefixer": "^10.4.16",
