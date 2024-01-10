@@ -9,8 +9,8 @@ dependencies:
     specifier: ^0.19.0
     version: 0.19.0
   '@auth/drizzle-adapter':
-    specifier: ^0.3.12
-    version: 0.3.12
+    specifier: ^0.3.14
+    version: 0.3.14
   '@auth/sveltekit':
     specifier: ^0.5.0
     version: 0.5.0(@sveltejs/kit@2.0.6)(svelte@4.2.8)
@@ -219,10 +219,27 @@ packages:
       preact-render-to-string: 5.2.3(preact@10.11.3)
     dev: false
 
-  /@auth/drizzle-adapter@0.3.12:
-    resolution: {integrity: sha512-6+XCHrDXglKPWKRmHuUA6f27WM40v3+MQyUFf2d+JsA0tuBuwOw6IPp1ycxvOODM6milHyKcjowUfqWW9F9f9Q==}
+  /@auth/core@0.20.0:
+    resolution: {integrity: sha512-04lQH58H5d/9xQ63MOTDTOC7sXWYlr/RhJ97wfFLXzll7nYyCKbkrT3ZMdzdLC5O+qt90sQDK85TAtLlcZ2WBg==}
+    peerDependencies:
+      nodemailer: ^6.8.0
+    peerDependenciesMeta:
+      nodemailer:
+        optional: true
     dependencies:
-      '@auth/core': 0.19.0
+      '@panva/hkdf': 1.1.1
+      '@types/cookie': 0.6.0
+      cookie: 0.6.0
+      jose: 5.2.0
+      oauth4webapi: 2.4.0
+      preact: 10.11.3
+      preact-render-to-string: 5.2.3(preact@10.11.3)
+    dev: false
+
+  /@auth/drizzle-adapter@0.3.14:
+    resolution: {integrity: sha512-Ls+uC9u+ZFofBk0V2E4CWSWkkK87x9QBycUJwgiT/sYF7zo0dEZrzmnzRq7DUMp6wmUVbAp8nzL35Ha0BDV4hQ==}
+    dependencies:
+      '@auth/core': 0.20.0
     transitivePeerDependencies:
       - nodemailer
     dev: false
@@ -3836,7 +3853,7 @@ packages:
       glob: 7.2.3
       infer-owner: 1.0.4
       lru-cache: 6.0.0
-      minipass: 3.1.6
+      minipass: 3.3.6
       minipass-collect: 1.0.2
       minipass-flush: 1.0.5
       minipass-pipeline: 1.2.4
@@ -6813,21 +6830,21 @@ packages:
     resolution: {integrity: sha512-6T6lH0H8OG9kITm/Jm6tdooIbogG9e0tLgpY6mphXSm/A9u8Nq1ryBG+Qspiub9LjWlBPsPS3tWQ/Botq4FdxA==}
     engines: {node: '>= 8'}
     dependencies:
-      minipass: 3.1.6
+      minipass: 3.3.6
     dev: false
 
   /minipass-flush@1.0.5:
     resolution: {integrity: sha512-JmQSYYpPUqX5Jyn1mXaRwOda1uQ8HP5KAT/oDSLCzt1BYRhQU0/hDtsB1ufZfEEzMZ9aAVmsBw8+FWsIXlClWw==}
     engines: {node: '>= 8'}
     dependencies:
-      minipass: 3.1.6
+      minipass: 3.3.6
     dev: false
 
   /minipass-pipeline@1.2.4:
     resolution: {integrity: sha512-xuIq7cIOt09RPRJ19gdi4b+RiNvDFYe5JH+ggNvBqGqpQXcru3PcRmOZuHBKWK1Txf9+cQ+HMVN4d6z46LZP7A==}
     engines: {node: '>=8'}
     dependencies:
-      minipass: 3.1.6
+      minipass: 3.3.6
     dev: false
 
   /minipass@3.1.6:
@@ -8434,7 +8451,7 @@ packages:
     resolution: {integrity: sha512-97qShzy1AiyxvPNIkLWoGua7xoQzzPjQ0HAH4B0rWKo7SZ6USuPcrUiAFrws0UH8RrbWmgq3LMTObhPIHbbBeQ==}
     engines: {node: '>= 8'}
     dependencies:
-      minipass: 3.1.6
+      minipass: 3.3.6
     dev: false
 
   /statuses@1.5.0:
