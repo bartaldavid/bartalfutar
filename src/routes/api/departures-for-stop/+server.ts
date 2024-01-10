@@ -33,6 +33,8 @@ export async function GET({ fetch, url }): Promise<
       fetch
     );
 
+    console.log(data);
+
     const departures: DepartureType[] = data.stationSchedulerDetails.departureScheduler.map(
       (departure) => {
         return {
@@ -127,8 +129,8 @@ async function fetchMav(
       type: 'StationInfo',
       travelDate: new Date().toISOString(),
       stationNumberCode: stationId,
-      minCount,
-      maxCount
+      minCount: minCount.toString(),
+      maxCount: maxCount.toString()
     }),
     method: 'POST',
     headers: {
