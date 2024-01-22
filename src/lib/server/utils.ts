@@ -1,9 +1,8 @@
-import type { components } from '$lib/data/bkk-openapi';
 import type { Session } from '@auth/core/types';
 import { db } from './db';
 import { favoriteStops, routes, stops, stopsRoutes } from './schema';
 import { and, eq, sql } from 'drizzle-orm';
-import { PUBLIC_BKK_API_KEY } from '$env/static/public';
+import { futarClient } from './futar';
 
 export async function saveStopToDb({
   stopId,
@@ -16,11 +15,8 @@ export async function saveStopToDb({
 }) {
   const userId = session.user.id;
 
-  const { data }: { data: components['schemas']['ReferencesMethodResponse'] } = await (
-    await fetch(
-      `https://futar.bkk.hu/api/query/v1/ws/otp/api/where/references?key=${PUBLIC_BKK_API_KEY}&stopId=${stopId}&version=4`
-    )
-  ).json();
+  const api = futarClient(fetch);
+  const data = await api.get('/{dialect}/api/where/references', { query: { stopId: [stopId] } });
 
   const stopRef = data.references?.stops?.[stopId];
   const routeRefs = data.references?.routes;

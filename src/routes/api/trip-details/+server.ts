@@ -18,6 +18,8 @@ export async function GET({ fetch, url }): Promise<TypedResponse<TripDetails>> {
       fetch
     );
 
+    console.log(response);
+
     const details: TripDetails = response.trainSchedulerDetails[0].scheduler.map((stop) => {
       return {
         id: stop.station.code,
@@ -81,13 +83,14 @@ async function fetchMav(
       travelDate: new Date().toISOString(),
       trainId,
       trainNumber,
-      minCount,
-      maxCount
+      minCount: minCount.toString(),
+      maxCount: maxCount.toString()
     }),
     method: 'POST',
     headers: {
       'content-type': 'application/json; charset=UTF-8',
-      language: 'hu'
+      language: 'hu',
+      UserSessionId: crypto.randomUUID()
     }
   }).then((res) => res.json())) as MavTrainDetails;
 }

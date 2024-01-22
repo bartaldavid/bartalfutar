@@ -135,7 +135,8 @@ async function fetchMav(
     method: 'POST',
     headers: {
       'content-type': 'application/json; charset=UTF-8',
-      language: 'hu'
+      language: 'hu',
+      UserSessionId: crypto.randomUUID()
     }
   }).then((res) => res.json())) as MavRoot;
 }

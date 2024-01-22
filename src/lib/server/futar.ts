@@ -1,4 +1,4 @@
-import { PUBLIC_BKK_API_KEY } from '$env/static/public';
+import { BKK_API_KEY } from '$env/static/private';
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export namespace Schemas {
@@ -1471,7 +1471,7 @@ export function futarClient(fetcher: typeof window.fetch) {
     const newUrl = url.replace('{dialect}', 'otp');
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const searchParams = new URLSearchParams(params?.query as any);
-    searchParams.set('key', PUBLIC_BKK_API_KEY);
+    searchParams.set('key', BKK_API_KEY);
     const response = await fetcher(newUrl + '?' + searchParams.toString(), { method });
     return await response.json();
   }, 'https://futar.bkk.hu/api/query/v1/ws');
