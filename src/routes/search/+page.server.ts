@@ -61,6 +61,7 @@ export const actions = {
 
     if (!saved) {
       const result = await saveStopToDb({ stopId, session, fetch });
+      console.log(result);
       if (result.error) {
         return fail(404, { message: result.error });
       }

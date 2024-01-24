@@ -16,8 +16,10 @@ export async function saveStopToDb({
   const userId = session.user.id;
 
   const api = futarClient(fetch);
-  const data = await api.get('/{dialect}/api/where/references', { query: { stopId: [stopId] } });
-
+  // FIXME type this correctly
+  const { data } = await api.get('/{dialect}/api/where/references', {
+    query: { stopId: [stopId] }
+  });
   const stopRef = data.references?.stops?.[stopId];
   const routeRefs = data.references?.routes;
 
