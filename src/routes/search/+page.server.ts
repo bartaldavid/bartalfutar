@@ -9,7 +9,7 @@ import type { TStop } from '$lib/types.js';
 // TODO stream references?
 export async function load({ fetch, url, locals }) {
   const query = url.searchParams.get('q')?.toString() ?? '';
-  const userId = (await locals.getSession())?.user.id;
+  const userId = (await locals.auth())?.user.id;
 
   if (query !== '') {
     const data = await typed_fetch('/api/stops-for-location', { q: query }, fetch);
@@ -49,7 +49,7 @@ export async function load({ fetch, url, locals }) {
 
 export const actions = {
   default: async ({ request, fetch, locals }) => {
-    const session = await locals.getSession();
+    const session = await locals.auth();
     const data = await request.formData();
     const stopId = data.get('stopId');
 

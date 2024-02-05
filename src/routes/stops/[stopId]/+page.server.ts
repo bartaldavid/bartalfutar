@@ -12,7 +12,7 @@ export async function load({ params, parent }) {
 
 export const actions = {
   default: async ({ params, locals, fetch, request }) => {
-    const session = await locals.getSession();
+    const session = await locals.auth();
     const data = await request.formData();
     const stopId = params.stopId;
 
