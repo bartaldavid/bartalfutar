@@ -39,29 +39,31 @@
   role="button"
   tabindex="0"
 >
-  <div class="flex justify-between gap-6">
-    <div>
-      {#if !$isDeparted}
-        {#if isDelayed || !isRealtime}
-          <span class="">{displayDate(departureDate)}</span>
-        {/if}
-        {#if isRealtime}
-          <span
-            class={delayInMinutes >= 1
-              ? 'text-red-500 dark:text-red-400'
-              : 'text-green-600 dark:text-green-400'}
-          >
-            {displayDate(predictedDepartureDate)}
-          </span>
-          {#if isDelayed}
-            <span class="text-xs text-red-500 dark:text-red-400"
-              >(+{delayInMinutes.toFixed(0)})</span
+  <div class="flex justify-between gap-2">
+    <div class="flex flex-col gap-1">
+      <div>
+        {#if !$isDeparted}
+          {#if isDelayed || !isRealtime}
+            <span class="">{displayDate(departureDate)}</span>
+          {/if}
+          {#if isRealtime}
+            <span
+              class={delayInMinutes >= 1
+                ? 'text-red-500 dark:text-red-400'
+                : 'text-green-600 dark:text-green-400'}
             >
+              {displayDate(predictedDepartureDate)}
+            </span>
+            {#if isDelayed}
+              <span class="text-xs text-red-500 dark:text-red-400"
+                >(+{delayInMinutes.toFixed(0)})</span
+              >
+            {/if}
           {/if}
         {/if}
-      {/if}
+      </div>
 
-      <div class="my-1 flex flex-row items-baseline gap-1 text-sm">
+      <div class="flex flex-row items-baseline gap-1">
         {#if departure.icon}
           <RouteIcon icon={departure.icon} />
           <span>{departure.headSign}</span>
@@ -83,7 +85,7 @@
     </div>
 
     {#if relevantDate}
-      <div class="flex flex-col justify-center text-center">
+      <div class="flex shrink-0 flex-col justify-center text-center">
         <Countdown countDownToDate={relevantDate} />
         {#if !$isDeparted}
           <span class="text-xs text-slate-700 dark:text-slate-100">perc múlva</span>
