@@ -20,6 +20,7 @@ export async function saveStopToDb({
   const { data } = await api.get('/{dialect}/api/where/references', {
     query: { stopId: [stopId] }
   });
+  console.log(data);
   const stopRef = data.references?.stops?.[stopId];
   const routeRefs = data.references?.routes;
 
@@ -44,14 +45,16 @@ export async function saveStopToDb({
       .insert(stops)
       .values(stopRow)
       .onDuplicateKeyUpdate({ set: { id: sql`id` } });
-    await tx
-      .insert(routes)
-      .values(routeRows)
-      .onDuplicateKeyUpdate({ set: { id: sql`id` } });
-    await tx
-      .insert(stopsRoutes)
-      .values(stopRoutesRows)
-      .onDuplicateKeyUpdate({ set: { stopId: sql`stop_id` } });
+    if (routeRows.length) {
+      await tx
+        .insert(routes)
+        .values(routeRows)
+        .onDuplicateKeyUpdate({ set: { id: sql`id` } });
+      await tx
+        .insert(stopsRoutes)
+        .values(stopRoutesRows)
+        .onDuplicateKeyUpdate({ set: { stopId: sql`stop_id` } });
+    }
     await tx
       .insert(favoriteStops)
       .values({ stopId, userId })

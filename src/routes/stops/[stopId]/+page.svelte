@@ -27,7 +27,7 @@
   // TODO extract this to a global store maybe?
   $: parent = $page.url.searchParams.get('from');
 
-  $: stopName = $stopData.data?.stops?.find((stop) => stop.id === data.stopId)?.name;
+  $: stopName = $stopData.data?.stops[0]?.name;
 </script>
 
 <svelte:head>

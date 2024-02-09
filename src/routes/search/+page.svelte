@@ -46,7 +46,7 @@
   }
 </script>
 
-<div class="m-1 mt-4 flex w-full flex-col sm:w-72 md:mt-12">
+<div class="m-1 mt-4 flex w-full scroll-mb-80 flex-col sm:w-72 md:mt-12">
   <form
     class="mb-2 flex flex-row items-center gap-1 rounded bg-slate-200 p-3 dark:bg-slate-700 dark:text-slate-100"
   >

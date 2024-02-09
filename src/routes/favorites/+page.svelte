@@ -4,7 +4,10 @@
   import type { PageData } from './$types';
   import * as Avatar from '$lib/components/ui/avatar';
   import { UserCircle } from 'lucide-svelte';
-  import * as Popover from '$lib/components/ui/popover';
+  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import Button from '$lib/components/ui/button/button.svelte';
+  import { signOut } from '@auth/sveltekit/client';
+  // import DropdownMenuContent from '$lib/components/ui/dropdown-menu/dropdown-menu-content.svelte';
 
   export let data: PageData;
   $: stops = data.stops ?? [];
@@ -22,30 +25,32 @@
           class="m-1 aspect-square rounded-full"
           loading="lazy"
         /> -->
-      <Popover.Root>
-        <Popover.Trigger>
-          <Avatar.Root>
-            <Avatar.Image
-              src={data.session?.user?.image}
-              alt="Profile"
-              class="m-1 aspect-square rounded-full"
-              loading="lazy"
-              height="30"
-              width="30"
-            />
-            <Avatar.Fallback>
-              <UserCircle size="30" />
-            </Avatar.Fallback>
-          </Avatar.Root>
-        </Popover.Trigger>
-        <Popover.Content class="w-40">
-          {#if data.session}
-            <a href="/auth/signout" data-sveltekit-preload-data="off">Sign Out</a>
-          {:else}
-            <a href="/auth/signin" data-sveltekit-preload-data="off">Sign In</a>
-          {/if}
-        </Popover.Content>
-      </Popover.Root>
+      {#if data.session}
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Avatar.Root>
+              <Avatar.Image
+                src={data.session?.user?.image}
+                alt="Profile"
+                class="aspect-square rounded-full p-1"
+                loading="lazy"
+              />
+              <Avatar.Fallback>
+                <UserCircle size="30" />
+              </Avatar.Fallback>
+            </Avatar.Root>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content class="w-40">
+            <DropdownMenu.Label>{data.session?.user.name}</DropdownMenu.Label>
+            <DropdownMenu.Item>
+              <!-- <a href="/auth/signout" data-sveltekit-preload-data="off">Sign Out</a> -->
+              <button on:click={() => signOut()}>Sign out</button>
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      {:else}
+        <Button href="/auth/signin" data-sveltekit-preload-data="off">Sign In</Button>
+      {/if}
       <!-- {:else}
           <UserCircle size="30" />
           {/if} -->
