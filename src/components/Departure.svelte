@@ -66,12 +66,8 @@
       <div class="flex flex-row items-baseline gap-1">
         {#if departure.icon}
           <RouteIcon icon={departure.icon} />
-          <span>{departure.headSign}</span>
-        {/if}
-        {#if departure.platform}
-          <span class="text-sm text-slate-700 dark:text-slate-100">
-            || {departure.platform}
-          </span>
+          <!-- TODO improve platform display -->
+          <span>{departure.headSign} {departure.platform ? `|| ${departure.platform}` : ''}</span>
         {/if}
       </div>
 
