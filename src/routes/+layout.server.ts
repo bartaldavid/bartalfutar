@@ -3,7 +3,7 @@ import { favoriteStops } from '$lib/server/schema';
 import { eq } from 'drizzle-orm';
 
 export async function load({ locals }) {
-  const session = await locals.getSession();
+  const session = await locals.auth();
 
   if (!session) return { favorite_stops: [] };
 

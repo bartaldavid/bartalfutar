@@ -13,6 +13,7 @@
   import RouteIcon from './RouteIcon.svelte';
   import { REFETCH_INTERVAL_MS } from '$lib/data/constants';
   import LoadingCards from './LoadingCards.svelte';
+  import { Badge } from '$lib/components/ui/badge';
 
   export let stop: TStop;
   export let saved = false;
@@ -31,7 +32,7 @@
   });
 </script>
 
-<div class="flex flex-row rounded border p-2 dark:border-none dark:bg-slate-800">
+<div class="flex flex-row rounded bg-slate-50 p-2 dark:border-none dark:bg-slate-800">
   <div
     class="flex flex-1 cursor-pointer flex-col gap-1 focus:outline-2"
     on:click={() => {
@@ -45,7 +46,7 @@
       $departuresFromStop.refetch();
     }}
   >
-    <div class="mb-1 dark:text-slate-50">{stop.name}</div>
+    <div class="mb-1 font-medium dark:text-slate-50">{stop.name}</div>
     <div class="flex flex-row flex-wrap gap-1">
       {#each stop?.routes ?? [] as route}
         <RouteIcon icon={route} size="small" />
@@ -60,7 +61,13 @@
         >
       {/if}
       {#if stop.locationType === 1}
-        <MultipleStop class="inline-flex p-1 dark:text-white" />
+        <!-- <div class="flex items-center gap-1 rounded-lg border bg-slate-100 px-1 dark:bg-slate-600"> -->
+        <!-- <MultipleStop class="inline-flex h-4 w-4 dark:text-white" /> -->
+        <!-- <Badge variant="outline">stop area</Badge> -->
+        <span class=" rounded border px-1 text-sm font-medium text-slate-800 dark:text-slate-50"
+          >stop area</span
+        >
+        <!-- </div> -->
       {/if}
     </div>
   </div>
@@ -72,7 +79,7 @@
 <!-- TODO loading indicator -->
 
 {#if expanded}
-  <div class="flex flex-col gap-1 rounded bg-none p-1 dark:bg-slate-700">
+  <div class="flex flex-col gap-1 rounded border bg-none p-1 dark:bg-slate-700">
     {#if $departuresFromStop.isPending}
       <LoadingCards numberOfItems={3} />
     {/if}

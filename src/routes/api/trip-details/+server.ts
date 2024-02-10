@@ -18,7 +18,7 @@ export async function GET({ fetch, url }): Promise<TypedResponse<TripDetails>> {
       fetch
     );
 
-    console.log(response);
+    // console.log(response);
 
     const details: TripDetails = response.trainSchedulerDetails[0].scheduler.map((stop) => {
       return {

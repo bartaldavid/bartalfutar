@@ -4,6 +4,7 @@
   import type { LayoutData } from './$types';
   import { onMount } from 'svelte';
   import NavBar from '$components/NavBar.svelte';
+  import { ModeWatcher } from 'mode-watcher';
 
   export let data: LayoutData;
 
@@ -26,3 +27,5 @@
     <slot />
   </main>
 </QueryClientProvider>
+
+<ModeWatcher />

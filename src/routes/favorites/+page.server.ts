@@ -4,7 +4,7 @@ import type { StopGroup as StopGroups } from '$lib/types.js';
 import { eq } from 'drizzle-orm';
 
 export async function load({ locals }) {
-  const session = await locals.getSession();
+  const session = await locals.auth();
   const userId = session?.user.id;
 
   if (!userId) {

@@ -15,7 +15,8 @@ export const handle = SvelteKitAuth({
     // GitHub({ clientId: GITHUB_ID, clientSecret: GITHUB_SECRET }),
     Google({
       clientId: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET
+      clientSecret: GOOGLE_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true
     })
   ],
   adapter: DrizzleAdapter(db),

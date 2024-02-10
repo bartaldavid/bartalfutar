@@ -1473,6 +1473,7 @@ export function futarClient(fetcher: typeof window.fetch) {
     const searchParams = new URLSearchParams(params?.query as any);
     searchParams.set('key', BKK_API_KEY);
     const response = await fetcher(newUrl + '?' + searchParams.toString(), { method });
+    // console.log(newUrl + '?' + searchParams.toString());
     return await response.json();
   }, 'https://futar.bkk.hu/api/query/v1/ws');
 }

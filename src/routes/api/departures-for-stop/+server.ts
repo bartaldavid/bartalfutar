@@ -33,7 +33,7 @@ export async function GET({ fetch, url }): Promise<
       fetch
     );
 
-    console.log(data);
+    // console.log(data);
 
     const departures: DepartureType[] = data.stationSchedulerDetails.departureScheduler.map(
       (departure) => {
@@ -99,11 +99,11 @@ export async function GET({ fetch, url }): Promise<
       };
     }) ?? [];
 
-  const stops = query.stopId.map((id) => ({
-    id,
-    name: data?.references?.stops?.[id]?.name,
-    type: data?.references?.stops?.[id]?.type
-  }));
+  const stops = data?.entry?.stopId
+    ? [{ id: data.entry.stopId, name: data.references?.stops?.[data.entry.stopId]?.name }]
+    : [];
+
+  console.log(stops);
 
   return typed_json({
     departures,
