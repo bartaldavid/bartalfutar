@@ -32,17 +32,15 @@
   }
 </script>
 
-<div
+<button
   class="flex w-full flex-col rounded bg-slate-100 p-4 hover:cursor-pointer dark:bg-slate-800 dark:text-slate-50 {$isDeparted &&
     'text-xs opacity-70'}"
   on:click={() => expandable && toggleDetails()}
-  on:keypress={() => {}}
-  role="button"
   tabindex="0"
 >
-  <div class="flex justify-between gap-2">
+  <div class="flex w-full justify-between gap-2">
     <div class="flex flex-col gap-1">
-      <div>
+      <div class="flex items-baseline gap-1">
         {#if !$isDeparted}
           {#if isDelayed || !isRealtime}
             <span class="">{displayDate(departureDate)}</span>
@@ -101,4 +99,4 @@
   {#if departure.id && expandedTripId === departure.id}
     <TripDetails tripId={departure.id} />
   {/if}
-</div>
+</button>

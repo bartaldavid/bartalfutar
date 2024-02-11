@@ -15,6 +15,7 @@
     listenForPermissionChange
   } from '$lib/stores/geolocation-permission';
   import { typed_fetch } from '../api/endpoint-types';
+  import { Button } from '$lib/components/ui/button';
 
   $: nearbyDepartures = createQuery({
     queryKey: ['departuresForLocation', $location.position?.coords],
@@ -45,8 +46,9 @@
         isFetching={$nearbyDepartures.isFetching}
         on:refresh={async () => await $nearbyDepartures.refetch()}
       />
-      <button
-        class="p-2"
+      <Button
+        size="icon"
+        variant="ghost"
         on:click={() => {
           loadLocation();
         }}
@@ -58,7 +60,7 @@
         {:else}
           <LocationSearchingIcon />
         {/if}
-      </button>
+      </Button>
     </div>
   </svelte:fragment>
   <svelte:fragment slot="content">
@@ -94,11 +96,7 @@
               : 'You denied us access to your location. Please allow us to access your location to show departures around you.'}
           </p>
           {#if $geolocationPermissionState === 'prompt'}
-            <button
-              on:click={() => loadLocation()}
-              class="rounded bg-slate-300 p-2 px-8 text-blue-600 hover:bg-slate-200 dark:bg-slate-600 dark:text-blue-300 hover:dark:bg-slate-500"
-              >Allow</button
-            >
+            <Button on:click={() => loadLocation()}>Allow</Button>
           {/if}
         </div>
       {/if}
