@@ -8,6 +8,7 @@
   let loading = false;
 </script>
 
+<!-- TODO show dialog to sign in -->
 <form
   use:enhance={() => {
     loading = true;
