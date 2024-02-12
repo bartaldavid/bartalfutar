@@ -5,7 +5,7 @@
   export let groups: StopGroup;
 </script>
 
-<div class="flex w-full flex-col gap-1 sm:w-72">
+<div class="flex w-full flex-col gap-1 divide-y-2 sm:w-72">
   {#each Object.entries(groups) as [groupType, groupItems]}
     <SavedStopGroup {groupType} {groupItems} />
   {:else}

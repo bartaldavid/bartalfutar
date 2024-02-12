@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Button } from '$lib/components/ui/button';
   import { createEventDispatcher } from 'svelte';
   import Autorenew from '~icons/material-symbols/autorenew';
   import Refresh from '~icons/material-symbols/refresh';
@@ -7,13 +8,10 @@
   const dispatch = createEventDispatcher();
 </script>
 
-<button
-  class="p-2 dark:text-slate-200 hover:dark:text-slate-50"
-  on:click={() => dispatch('refresh')}
->
+<Button size="icon" variant="ghost" on:click={() => dispatch('refresh')}>
   {#if isFetching}
     <Autorenew />
   {:else}
     <Refresh />
   {/if}
-</button>
+</Button>

@@ -1,6 +1,13 @@
 <script lang="ts">
+  import type { HTMLAttributes } from 'svelte/elements';
+
   export let countDownToDate: Date;
   export let showApostrophe = false;
+
+  type $$Props = HTMLAttributes<HTMLSpanElement> & {
+    countDownToDate: Date;
+    showApostrophe?: boolean;
+  };
 
   function countdown(date: Date, now: number) {
     const distance = date.getTime() - now;
@@ -25,4 +32,4 @@
   }, 1000);
 </script>
 
-<span>{coundownString}</span>
+<span {...$$restProps}>{coundownString}</span>

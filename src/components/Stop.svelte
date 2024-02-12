@@ -14,6 +14,8 @@
   import { REFETCH_INTERVAL_MS } from '$lib/data/constants';
   import LoadingCards from './LoadingCards.svelte';
   import { Badge } from '$lib/components/ui/badge';
+  import { isMav } from '$lib/util/stops';
+  import MavLogo from './MavLogo.svelte';
 
   export let stop: TStop;
   export let saved = false;
@@ -46,7 +48,11 @@
       $departuresFromStop.refetch();
     }}
   >
-    <div class="mb-1 font-medium dark:text-slate-50">{stop.name}</div>
+    <div class="mb-1 flex items-center gap-1 font-medium dark:text-slate-50">
+      {stop.name}
+      <!-- TODO change color -->
+      {#if isMav(stop.id)}<MavLogo class="h-4 w-6 text-white" />{/if}
+    </div>
     <div class="flex flex-row flex-wrap gap-1">
       {#each stop?.routes ?? [] as route}
         <RouteIcon icon={route} size="small" />
@@ -64,8 +70,9 @@
         <!-- <div class="flex items-center gap-1 rounded-lg border bg-slate-100 px-1 dark:bg-slate-600"> -->
         <!-- <MultipleStop class="inline-flex h-4 w-4 dark:text-white" /> -->
         <!-- <Badge variant="outline">stop area</Badge> -->
-        <span class=" rounded border px-1 text-sm font-medium text-slate-800 dark:text-slate-50"
-          >stop area</span
+        <span
+          class="rounded border px-1 text-sm font-medium text-slate-800 dark:border-slate-300 dark:text-slate-50"
+          >all stops</span
         >
         <!-- </div> -->
       {/if}

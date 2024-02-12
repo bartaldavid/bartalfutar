@@ -10,6 +10,7 @@
   import FavoriteToggle from '../../../components/FavoriteToggle.svelte';
   import { typed_fetch } from '../../api/endpoint-types';
   import LoadingCards from '$components/LoadingCards.svelte';
+  import { Button } from '$lib/components/ui/button';
 
   export let data: PageData;
 
@@ -36,13 +37,13 @@
 
 <PageLayout pageTitle={stopName ?? 'Loading...'}>
   <svelte:fragment slot="header">
-    <div class="flex gap-1 dark:text-slate-50">
+    <div class="flex items-baseline gap-1 dark:text-slate-50">
       <FavoriteToggle stopId={data.stopId} saved={data.saved} />
       <RefreshButton
         isFetching={$stopData.isFetching}
         on:refresh={async () => await $stopData.refetch()}
       />
-      <a href={parent ?? '/'} class="p-2 hover:text-slate-50 dark:text-slate-200"><Close /></a>
+      <Button href={parent ?? '/'} variant="ghost" size="icon"><Close /></Button>
     </div>
   </svelte:fragment>
   <svelte:fragment slot="content">

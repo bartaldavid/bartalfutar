@@ -4,6 +4,7 @@ import { typed_json, type TypedResponse } from '$lib/util/fetch.js';
 import { z } from 'zod';
 import { getQueryFromParams } from '../endpoint-types.js';
 import type { MavRoot } from '$lib/data/mav-spec.js';
+import { isMav } from '$lib/util/stops.js';
 
 export const _params = z.object({
   stopId: z.array(z.string()),
@@ -21,9 +22,7 @@ export async function GET({ fetch, url }): Promise<
 > {
   const query = _params.parse(getQueryFromParams(url.searchParams));
 
-  const stopParts = query.stopId[0].split('_');
-
-  if (stopParts.length === 3 && stopParts[2] === '0') {
+  if (isMav(query.stopId[0])) {
     const data = await fetchMav(
       {
         stationId: query.stopId[0].split('_')[1].replace('CS', ''),
