@@ -67,7 +67,7 @@
         {/if}
       </div>
 
-      <div class="flex flex-row items-baseline gap-1">
+      <div class="flex flex-row items-baseline gap-1 text-left">
         {#if departure.icon}
           <RouteIcon icon={departure.icon} />
           <span>{departure.headSign}</span>
@@ -76,7 +76,7 @@
 
       {#if departure.alerts?.length && !$isDeparted}
         {#each departure.alerts ?? [] as alert}
-          <div class="text-sm text-red-400">
+          <div class="text-left text-sm text-red-400">
             {@html alert}
           </div>
         {/each}

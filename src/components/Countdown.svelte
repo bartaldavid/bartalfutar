@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { now } from '$lib/stores/now';
   import type { HTMLAttributes } from 'svelte/elements';
 
   export let countDownToDate: Date;
@@ -18,6 +19,7 @@
 
     if (hours > 0) return `${hours}h ${minutes}`;
     if (minutes >= 10) return `${minutes}${showApostrophe ? "'" : ''}`;
+    if (minutes < -1) return `${minutes + 1}'`;
     if (minutes <= 0) return `${seconds} s`;
     return `${minutes}:${seconds.toLocaleString('hu', {
       minimumIntegerDigits: 2,
@@ -25,11 +27,11 @@
     })}`;
   }
 
-  let coundownString = countdown(countDownToDate, Date.now());
+  $: coundownString = countdown(countDownToDate, $now.valueOf());
 
-  setInterval(() => {
-    coundownString = countdown(countDownToDate, Date.now());
-  }, 1000);
+  // setInterval(() => {
+  //   coundownString = countdown(countDownToDate, $now.valueOf());
+  // }, 1000);
 </script>
 
 <span {...$$restProps}>{coundownString}</span>
