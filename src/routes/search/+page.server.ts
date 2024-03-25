@@ -1,10 +1,10 @@
-import { db } from '$lib/server/db.js';
-import { favoriteStops, routes, stops, stopsRoutes } from '$lib/server/schema.js';
+import { favoriteStops, routes, stops, stopsRoutes } from '$lib/server/libsql-schema.js';
 import { removeStopFromDb, saveStopToDb } from '$lib/server/utils';
 import { fail } from '@sveltejs/kit';
 import { eq, sql } from 'drizzle-orm';
 import { typed_fetch } from '../api/endpoint-types.js';
 import type { TStop } from '$lib/types.js';
+import { db } from '$lib/server/libsql-db.js';
 
 // TODO stream references?
 export async function load({ fetch, url, locals }) {
@@ -82,7 +82,7 @@ async function fetchFavoritesAndRoutes(userId: string) {
         type: stops.type,
         locationType: stops.locationType,
         direction: stops.direction,
-        routeIds: sql<string[]>`json_arrayagg(${stopsRoutes.routeId})`
+        routeIds: sql<string[]>`json_group_array(${stopsRoutes.routeId})`
       })
       .from(stops)
       .innerJoin(favoriteStops, eq(stops.id, favoriteStops.stopId))

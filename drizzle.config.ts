@@ -3,10 +3,11 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
 export default {
-  schema: './src/lib/server/schema.ts',
-  driver: 'mysql2',
+  schema: './src/lib/server/libsql-schema.ts',
+  driver: 'turso',
   dbCredentials: {
-    uri: process.env.PLANETSCALE_URL as string
+    url: process.env.TURSO_DB_URL as string,
+    authToken: process.env.TURSO_AUTH_TOKEN as string
   },
-  out: './drizzle-orm/'
+  out: './drizzle-orm/libsql'
 } satisfies Config;

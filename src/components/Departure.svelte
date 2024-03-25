@@ -70,7 +70,7 @@
       <div class="flex flex-row items-baseline gap-1">
         {#if departure.icon}
           <RouteIcon icon={departure.icon} />
-          <span>{departure.headSign}</span>
+          <span class="text-start">{departure.headSign}</span>
         {/if}
       </div>
 

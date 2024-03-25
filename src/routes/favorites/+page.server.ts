@@ -1,5 +1,5 @@
-import { db } from '$lib/server/db.js';
-import { favoriteStops, stops } from '$lib/server/schema';
+import { db } from '$lib/server/libsql-db';
+import { favoriteStops, stops } from '$lib/server/libsql-schema.js';
 import type { StopGroup as StopGroups } from '$lib/types.js';
 import { eq } from 'drizzle-orm';
 

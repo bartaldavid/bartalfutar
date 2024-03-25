@@ -1,5 +1,5 @@
-import { db } from '$lib/server/db';
-import { favoriteStops } from '$lib/server/schema';
+import { db } from '$lib/server/libsql-db.js';
+import { favoriteStops } from '$lib/server/libsql-schema.js';
 import { eq } from 'drizzle-orm';
 
 export async function load({ locals }) {

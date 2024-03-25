@@ -1,7 +1,7 @@
 import type { Session } from '@auth/core/types';
-import { db } from './db';
-import { favoriteStops, routes, stops, stopsRoutes } from './schema';
-import { and, eq, sql } from 'drizzle-orm';
+import { db } from './libsql-db';
+import { favoriteStops, routes, stops, stopsRoutes } from './libsql-schema';
+import { and, eq } from 'drizzle-orm';
 import { futarClient } from './futar';
 
 export async function saveStopToDb({
@@ -41,24 +41,12 @@ export async function saveStopToDb({
   const now = performance.now();
   // TODO replace with CTE?
   await db.transaction(async (tx) => {
-    await tx
-      .insert(stops)
-      .values(stopRow)
-      .onDuplicateKeyUpdate({ set: { id: sql`id` } });
-    if (routeRows.length) {
-      await tx
-        .insert(routes)
-        .values(routeRows)
-        .onDuplicateKeyUpdate({ set: { id: sql`id` } });
-      await tx
-        .insert(stopsRoutes)
-        .values(stopRoutesRows)
-        .onDuplicateKeyUpdate({ set: { stopId: sql`stop_id` } });
+    await tx.insert(stops).values(stopRow);
+    if (routeRows.length > 0) {
+      await tx.insert(routes).values(routeRows);
+      await tx.insert(stopsRoutes).values(stopRoutesRows);
     }
-    await tx
-      .insert(favoriteStops)
-      .values({ stopId, userId })
-      .onDuplicateKeyUpdate({ set: { stopId: sql`stop_id` } });
+    await tx.insert(favoriteStops).values({ stopId, userId });
   });
 
   const end = performance.now();
