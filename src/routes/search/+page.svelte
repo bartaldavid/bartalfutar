@@ -7,6 +7,7 @@
   import type { TStop } from '$lib/types';
   import { page } from '$app/stores';
   import { Search } from 'lucide-svelte';
+  import { replaceState } from '$app/navigation';
 
   export let data;
 
@@ -28,7 +29,7 @@
     clearTimeout(timer);
 
     $page.url.searchParams.set('q', searchQuery);
-    history.replaceState(history.state, '', $page.url);
+    replaceState($page.url, history.state);
 
     if (searchQuery.length > searchQueryMinimumLength) {
       timer = setTimeout(() => $searchData.refetch(), debounceIntervalMs);

@@ -1,14 +1,26 @@
 <script lang="ts">
+  import { now } from '$lib/stores/now';
   import type { DepartureType } from '$lib/types';
   import Departure from './Departure.svelte';
+  import EarlierDepartures from './EarlierDepartures.svelte';
 
   export let departures: DepartureType[] = [];
   export let expandable = false;
 
   let expandedTripId = '';
+  let alreadyDeparted: DepartureType[] = [];
+
+  now.subscribe((now) => {
+    alreadyDeparted = departures.filter(
+      (departure) =>
+        departure.predictedDepartureTime && departure.predictedDepartureTime * 1000 < now.valueOf()
+    );
+  });
 </script>
 
-{#each departures as departure}
+<EarlierDepartures departures={alreadyDeparted} />
+
+{#each departures.filter((d) => !alreadyDeparted.includes(d)) as departure}
   <Departure
     {departure}
     {expandedTripId}
