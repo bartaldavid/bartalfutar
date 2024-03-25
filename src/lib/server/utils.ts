@@ -41,10 +41,10 @@ export async function saveStopToDb({
   const now = performance.now();
   // TODO replace with CTE?
   await db.transaction(async (tx) => {
-    await tx.insert(stops).values(stopRow);
+    await tx.insert(stops).values(stopRow).onConflictDoNothing();
     if (routeRows.length > 0) {
-      await tx.insert(routes).values(routeRows);
-      await tx.insert(stopsRoutes).values(stopRoutesRows);
+      await tx.insert(routes).values(routeRows).onConflictDoNothing();
+      await tx.insert(stopsRoutes).values(stopRoutesRows).onConflictDoNothing();
     }
     await tx.insert(favoriteStops).values({ stopId, userId });
   });

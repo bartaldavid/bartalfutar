@@ -82,7 +82,7 @@ async function fetchFavoritesAndRoutes(userId: string) {
         type: stops.type,
         locationType: stops.locationType,
         direction: stops.direction,
-        routeIds: sql<string[]>`json_group_array(${stopsRoutes.routeId})`
+        routeIds: sql<string>`(json_group_array(${stopsRoutes.routeId}))`
       })
       .from(stops)
       .innerJoin(favoriteStops, eq(stops.id, favoriteStops.stopId))
@@ -100,9 +100,11 @@ async function fetchFavoritesAndRoutes(userId: string) {
       .innerJoin(stopsRoutes, eq(stopsRoutes.routeId, routes.id))
       .innerJoin(favoriteStops, eq(stopsRoutes.stopId, favoriteStops.stopId))
       .where(eq(favoriteStops.userId, userId));
-    return { favorite_stops: favorite_stops_query, routes: routes_query };
+    // HACK array should be parsed earlier
+    return { favorite_stops: favorite_stops_query.map(s => ({...s, routeIds: JSON.parse(s.routeIds)})), routes: routes_query };
   });
   const end = performance.now();
   console.log(`Query took ${end - now}ms`);
+  console.log(result)
   return result;
 }
