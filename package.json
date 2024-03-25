@@ -51,6 +51,8 @@
 		"@planetscale/database": "^1.15.0",
 		"@sveltejs/adapter-vercel": "^5.1.0",
 		"@tanstack/svelte-query": "^5.18.1",
+		"@trpc/client": "11.0.0-next-beta.283",
+		"@trpc/server": "11.0.0-next-beta.283",
 		"bits-ui": "^0.17.0",
 		"clsx": "^2.1.0",
 		"drizzle-orm": "^0.29.3",
@@ -62,6 +64,7 @@
 		"radix-icons-svelte": "^1.2.1",
 		"tailwind-merge": "^2.2.1",
 		"tailwind-variants": "^0.1.20",
+		"trpc-svelte-query-adapter": "^2.2.2",
 		"zod": "^3.22.4"
 	}
 }
