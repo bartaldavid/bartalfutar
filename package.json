@@ -40,7 +40,7 @@
 		"typed-openapi": "^0.4.1",
 		"typescript": "^5.3.3",
 		"unplugin-icons": "^0.18.5",
-		"vite": "^5.0.12"
+		"vite": "^5.0.13"
 	},
 	"type": "module",
 	"dependencies": {
