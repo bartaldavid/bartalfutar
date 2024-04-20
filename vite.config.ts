@@ -46,7 +46,8 @@ export default defineConfig({
         type: 'module'
       },
       workbox: {
-        globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,woff,woff2}']
+        globPatterns: ['client/**/*.{js,css,ico,png,svg,webp,woff,woff2}'],
+        runtimeCaching: [{ urlPattern: '/favorites', handler: 'StaleWhileRevalidate' }]
       },
       injectRegister: null
     }),
