@@ -102,7 +102,6 @@ export async function GET({ fetch, url }): Promise<
     ? [{ id: data.entry.stopId, name: data.references?.stops?.[data.entry.stopId]?.name }]
     : [];
 
-  console.log(stops);
 
   return typed_json({
     departures,

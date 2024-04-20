@@ -61,7 +61,6 @@ export const actions = {
 
     if (!saved) {
       const result = await saveStopToDb({ stopId, session, fetch });
-      console.log(result);
       if (result.error) {
         return fail(404, { message: result.error });
       }
@@ -104,7 +103,5 @@ async function fetchFavoritesAndRoutes(userId: string) {
     return { favorite_stops: favorite_stops_query, routes: routes_query };
   });
   const end = performance.now();
-  console.log(`Query took ${end - now}ms`);
-  console.log(result)
   return result;
 }

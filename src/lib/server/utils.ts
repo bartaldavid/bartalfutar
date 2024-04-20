@@ -20,7 +20,7 @@ export async function saveStopToDb({
   const { data } = await api.get('/{dialect}/api/where/references', {
     query: { stopId: [stopId] }
   });
-  console.log(data);
+  // console.log(data);
   const stopRef = data.references?.stops?.[stopId];
   const routeRefs = data.references?.routes;
 
@@ -38,7 +38,7 @@ export async function saveStopToDb({
   }));
   const stopRoutesRows = stopRef?.routeIds?.map((routeId) => ({ stopId, routeId })) ?? [];
 
-  const now = performance.now();
+  // const now = performance.now();
   // TODO replace with CTE?
   await db.transaction(async (tx) => {
     await tx.insert(stops).values(stopRow).onConflictDoNothing();
@@ -49,8 +49,8 @@ export async function saveStopToDb({
     await tx.insert(favoriteStops).values({ stopId, userId });
   });
 
-  const end = performance.now();
-  console.log(`Transaction took ${end - now}ms`);
+  // const end = performance.now();
+  // console.log(`Transaction took ${end - now}ms`);
 
   return { success: true, stopId, error: null };
 }
