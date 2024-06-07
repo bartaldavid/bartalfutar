@@ -1,7 +1,7 @@
 <script lang="ts">
   import Countdown from './Countdown.svelte';
   import TripDetails from './TripDetails.svelte';
-  import { displayDate, useTransitStopTime } from '../lib/util/date';
+  import { displayDate, useTransitStopTime } from '../lib/util/date.svelte';
   import RouteIcon from './RouteIcon.svelte';
   import type { DepartureType } from '$lib/types';
   import { TrainTrack } from 'lucide-svelte';

@@ -15,7 +15,13 @@
 
   let searchQuery = $state(data.query);
   let timer: NodeJS.Timeout | undefined = $state();
-  let stopsToDisplay: TStop[] = $state([]);
+  let stopsToDisplay: TStop[] = $derived.by(() => {
+    if (data?.query === searchQuery && data.searchData) {
+      return data?.searchData ?? [];
+    } else {
+      return $searchData.data ?? [];
+    }
+  });
   let inputElement: HTMLInputElement;
 
   let searchData = createQuery({
@@ -24,6 +30,7 @@
     enabled: false,
     initialData: data?.searchData
   });
+
   function debounceFetch() {
     clearTimeout(timer);
 
@@ -37,14 +44,6 @@
 
   onMount(() => {
     inputElement.focus();
-  });
-
-  $effect(() => {
-    if (data?.query === searchQuery && data.searchData) {
-      stopsToDisplay = data?.searchData ?? [];
-    } else {
-      stopsToDisplay = $searchData.data ?? [];
-    }
   });
 </script>
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { DepartureGroup } from '$lib/types';
-  import { useTransitStopTime } from '../lib/util/date';
+  import { useTransitStopTime } from '../lib/util/date.svelte';
   import Countdown from './Countdown.svelte';
   import RouteIcon from './RouteIcon.svelte';
   import TripDetails from './TripDetails.svelte';

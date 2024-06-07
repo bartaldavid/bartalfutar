@@ -1,10 +1,12 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { displayDate, epochToDate, useTransitStopTime } from '../lib/util/date';
+  import { displayDate, epochToDate, useTransitStopTime } from '../lib/util/date.svelte';
   import { typed_fetch } from '../routes/api/endpoint-types';
-  import { now } from '$lib/stores/now.svelte';
+  import { useNow } from '$lib/stores/now.svelte';
 
   let { tripId }: { tripId: string } = $props();
+
+  const time = useNow();
 
   let tripData = createQuery({
     queryKey: ['trip', tripId],
@@ -21,13 +23,13 @@
     {#each $tripData.data as stopTime}
       <span
         class:opacity-60={stopTime?.relevantStopTime &&
-          stopTime?.relevantStopTime < $now.getTime() / 1000}
+          stopTime?.relevantStopTime < time.now.getTime() / 1000}
       >
         {displayDate(epochToDate(stopTime?.relevantStopTime))}
       </span>
       <span
         class:opacity-60={stopTime?.relevantStopTime &&
-          stopTime?.relevantStopTime < $now.getTime() / 1000}
+          stopTime?.relevantStopTime < time.now.getTime() / 1000}
       >
         {stopTime.stopName}
       </span>

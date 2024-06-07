@@ -1,8 +1,7 @@
 // FIXME should null cases be handled elsewhere?
 
-import { derived } from 'svelte/store';
 import type { components } from '../data/bkk-openapi';
-import { now } from '$lib/stores/now.svelte';
+import { useNow } from '$lib/stores/now.svelte';
 
 export function epochToDate(epochDate: number | null | undefined): Date | null {
   if (!epochDate) return null;
@@ -19,6 +18,7 @@ export function displayDate(date: Date | null | undefined): string {
   });
 }
 
+// rewrite this to make it reactive
 export function useTransitStopTime(
   transitStopTime:
     | components['schemas']['TransitStopTime']
@@ -26,6 +26,8 @@ export function useTransitStopTime(
 ) {
   const { arrivalTime, departureTime, predictedArrivalTime, predictedDepartureTime } =
     transitStopTime;
+
+  const time = useNow();
 
   const isRealtime = !!predictedArrivalTime || !!predictedDepartureTime;
   let relevantDate: Date | null = null;
@@ -47,9 +49,7 @@ export function useTransitStopTime(
 
     isDelayed = delayInMinutes >= 1;
   }
-  const isDeparted = derived(now, ($now) =>
-    !relevantDate ? false : relevantDate?.valueOf() <= $now.valueOf()
-  );
+  let isDeparted = $derived(!relevantDate ? false : relevantDate?.valueOf() <= time.now.valueOf());
 
   return {
     relevantDate,
