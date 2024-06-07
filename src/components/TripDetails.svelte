@@ -4,12 +4,13 @@
   import { typed_fetch } from '../routes/api/endpoint-types';
   import { now } from '$lib/stores/now';
 
-  export let tripId: string;
+  let { tripId }: { tripId: string } = $props();
 
-  $: tripData = createQuery({
-    queryKey: ['trip', tripId],
-    queryFn: async () => await typed_fetch('/api/trip-details', { tripId: tripId })
-  });
+  let tripData = 
+    createQuery({
+      queryKey: ['trip', tripId],
+      queryFn: async () => await typed_fetch('/api/trip-details', { tripId: tripId })
+    });
 </script>
 
 {#if $tripData.isLoading}

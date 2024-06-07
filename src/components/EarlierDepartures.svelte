@@ -4,7 +4,7 @@
   import Countdown from './Countdown.svelte';
   import RouteIcon from './RouteIcon.svelte';
 
-  export let departures: DepartureType[] = [];
+  let { departures = [] }: { departures: DepartureType[] } = $props();
 </script>
 
 {#if departures.length > 0}

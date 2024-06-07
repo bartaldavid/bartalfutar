@@ -6,7 +6,8 @@
   import NavBar from '$components/NavBar.svelte';
   import { ModeWatcher } from 'mode-watcher';
 
-  export let data: LayoutData;
+  // export let data: LayoutData;
+  let { data, children } = $props();
 
   onMount(() => {
     if ('serviceWorker' in navigator) {
@@ -24,7 +25,7 @@
 <QueryClientProvider client={data.queryClient}>
   <main class="mx-2 flex justify-center md:flex-row">
     <NavBar />
-    <slot />
+    {@render children()}
   </main>
 </QueryClientProvider>
 

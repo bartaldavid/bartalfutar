@@ -4,11 +4,13 @@
   import Departure from './Departure.svelte';
   import EarlierDepartures from './EarlierDepartures.svelte';
 
-  export let departures: DepartureType[] = [];
-  export let expandable = false;
+  let {
+    departures = [],
+    expandable = false
+  }: { departures?: DepartureType[]; expandable?: boolean } = $props();
 
-  let expandedTripId = '';
-  let alreadyDeparted: DepartureType[] = [];
+  let expandedTripId = $state<string>('');
+  let alreadyDeparted = $state<DepartureType[]>([]);
 
   now.subscribe((now) => {
     alreadyDeparted = departures.filter(
@@ -23,13 +25,13 @@
 {#each departures.filter((d) => !alreadyDeparted.includes(d)) as departure}
   <Departure
     {departure}
-    {expandedTripId}
+    expanded={expandedTripId === departure.id}
     {expandable}
-    on:collapse={() => {
+    oncollapse={() => {
       expandedTripId = '';
     }}
-    on:expand={(event) => {
-      expandedTripId = event.detail.id;
+    onexpand={(id) => {
+      expandedTripId = id;
     }}
   />
 {:else}

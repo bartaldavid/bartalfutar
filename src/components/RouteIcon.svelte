@@ -1,9 +1,14 @@
 <script lang="ts">
   import type { RouteIcon } from '$lib/types';
   import { cn } from '$lib/utils';
+  import type { HTMLAttributes } from 'svelte/elements';
 
-  export let icon: RouteIcon = {};
-  export let size: 'small' | 'normal' = 'normal';
+  type Props = HTMLAttributes<HTMLSpanElement> & {
+    icon?: RouteIcon;
+    size?: 'small' | 'normal';
+  };
+
+  let { icon = {}, size = 'normal', ...props }: Props = $props();
 </script>
 
 <span
@@ -14,7 +19,7 @@
     !icon.color && 'border',
     size === 'small' && 'text-xs'
   )}
-  {...$$restProps}
+  {...props}
 >
   {icon.text}
 </span>

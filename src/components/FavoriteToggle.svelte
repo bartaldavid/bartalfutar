@@ -4,9 +4,8 @@
   import { enhance } from '$app/forms';
   import { Button } from '$lib/components/ui/button';
 
-  export let stopId: string;
-  export let saved = false;
-  let loading = false;
+  let { stopId, saved }: { stopId: string; saved?: boolean } = $props();
+  let loading = $state(false);
 </script>
 
 <!-- TODO show dialog to sign in -->

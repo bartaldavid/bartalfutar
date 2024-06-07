@@ -2,18 +2,25 @@
   import Countdown from './Countdown.svelte';
   import TripDetails from './TripDetails.svelte';
   import { displayDate, useTransitStopTime } from '../lib/util/date';
-  import { createEventDispatcher } from 'svelte';
   import RouteIcon from './RouteIcon.svelte';
   import type { DepartureType } from '$lib/types';
   import { TrainTrack } from 'lucide-svelte';
 
-  export let departure: DepartureType;
-  export let expandedTripId: string;
-  export let expandable: boolean;
+  let {
+    expanded,
+    departure,
+    expandable,
+    onexpand,
+    oncollapse
+  }: {
+    expanded: boolean;
+    departure: DepartureType;
+    expandable: boolean;
+    onexpand: (id: string) => void;
+    oncollapse: () => void;
+  } = $props();
 
-  const dispatch = createEventDispatcher();
-
-  $: ({
+  let {
     departureDate,
     predictedDepartureDate,
     delayInMinutes,
@@ -21,21 +28,13 @@
     isRealtime,
     isDelayed,
     isDeparted
-  } = useTransitStopTime(departure));
-
-  async function toggleDetails() {
-    if (departure.id && expandedTripId !== departure.id) {
-      dispatch('expand', { id: departure.id });
-    } else {
-      dispatch('collapse');
-    }
-  }
+  } = $derived(useTransitStopTime(departure));
 </script>
 
 <button
   class="flex w-full flex-col rounded bg-slate-100 p-4 hover:cursor-pointer dark:bg-slate-800 dark:text-slate-50 {$isDeparted &&
     'text-xs opacity-70'}"
-  on:click={() => expandable && toggleDetails()}
+  onclick={() => expandable && (expanded ? oncollapse() : onexpand(departure.id))}
   tabindex="0"
 >
   <div class="flex w-full justify-between gap-2">
@@ -96,7 +95,7 @@
     <!-- TODO show icon to indicate expandable behaviour -->
   </div>
 
-  {#if departure.id && expandedTripId === departure.id}
+  {#if expanded}
     <TripDetails tripId={departure.id} />
   {/if}
 </button>

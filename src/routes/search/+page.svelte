@@ -9,21 +9,23 @@
   import { Search } from 'lucide-svelte';
   import { replaceState } from '$app/navigation';
 
-  export let data;
+  let { data } = $props();
 
-  $: favorite_ids = data?.favorites_ids ?? [];
+  let favorite_ids = $derived(data?.favorites_ids ?? []);
 
-  let searchQuery = data?.query?.toString() ?? '';
-  let timer: NodeJS.Timeout;
-  let stopsToDisplay: TStop[];
+  let searchQuery = $state(data.query);
+  let timer: NodeJS.Timeout | undefined = $state();
+  let stopsToDisplay: TStop[] = $state([]);
   let inputElement: HTMLInputElement;
 
-  const searchData = createQuery({
-    queryKey: ['search', searchQuery],
-    queryFn: async () => typed_fetch('/api/stops-for-location', { q: searchQuery }),
-    enabled: false,
-    initialData: data?.searchData
-  });
+  let searchData = 
+    createQuery({
+      queryKey: ['search', searchQuery],
+      queryFn: async () => typed_fetch('/api/stops-for-location', { q: searchQuery }),
+      enabled: false,
+      initialData: data?.searchData
+    })
+  ;
 
   function debounceFetch() {
     clearTimeout(timer);
@@ -40,11 +42,13 @@
     inputElement.focus();
   });
 
-  $: if (data?.query === searchQuery && data.searchData) {
-    stopsToDisplay = data?.searchData ?? [];
-  } else {
-    stopsToDisplay = $searchData.data ?? [];
-  }
+  $effect(() => {
+    if (data?.query === searchQuery && data.searchData) {
+      stopsToDisplay = data?.searchData ?? [];
+    } else {
+      stopsToDisplay = $searchData.data ?? [];
+    }
+  });
 </script>
 
 <div class="m-1 mt-4 flex w-full scroll-mb-80 flex-col sm:w-72 md:mt-12">
@@ -58,7 +62,7 @@
       type="search"
       placeholder="Search for stops"
       bind:value={searchQuery}
-      on:keyup={() => {
+      onkeyup={() => {
         debounceFetch();
       }}
       bind:this={inputElement}

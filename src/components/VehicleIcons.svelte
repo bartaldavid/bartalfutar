@@ -1,12 +1,9 @@
-<script lang="ts">
-  import type { components } from '../lib/data/bkk-openapi';
+<script context="module" lang="ts">
   import Train from '~icons/material-symbols/train';
   import Bus from '~icons/material-symbols/directions-bus';
   import Subway from '~icons/material-symbols/subway';
   import Tram from '~icons/material-symbols/tram';
   import ZoomOutMap from '~icons/material-symbols/zoom-out-map';
-
-  export let vehicleType: string;
 
   type typeMap = {
     [key in components['schemas']['TransitStop']['type'] as string | 'MULTIPLE']?: {
@@ -27,10 +24,16 @@
   };
 </script>
 
+<script lang="ts">
+  import type { components } from '../lib/data/bkk-openapi';
+
+  let { vehicleType, class: className }: { vehicleType: string; class: string } = $props();
+</script>
+
 {#if vehicleType}
   <svelte:component
     this={typesToIconsMap[vehicleType]?.icon}
-    class={$$restProps.class}
+    class={className}
     style={`color:${typesToIconsMap[vehicleType]?.color};`}
   />
 {/if}

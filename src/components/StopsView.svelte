@@ -2,7 +2,7 @@
   import type { StopGroup } from '$lib/types';
   import SavedStopGroup from './SavedStopGroup.svelte';
 
-  export let groups: StopGroup;
+  let { groups }: { groups: StopGroup } = $props();
 </script>
 
 <div class="flex w-full flex-col gap-1 divide-y-2 sm:w-72">

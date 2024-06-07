@@ -5,14 +5,14 @@
   import RouteIcon from './RouteIcon.svelte';
   import TripDetails from './TripDetails.svelte';
 
-  export let departureGroup: DepartureGroup;
+  let { departureGroup }: { departureGroup: DepartureGroup } = $props();
 
-  let expanded = false;
+  let expanded = $state(false);
 </script>
 
 <button
   class="flex flex-col gap-1 rounded bg-slate-100 p-4 dark:bg-slate-800 dark:text-slate-50"
-  on:click={() => {
+  onclick={() => {
     expanded = !expanded;
   }}
 >
