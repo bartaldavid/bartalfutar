@@ -50,8 +50,6 @@
 		"@libsql/client": "^0.6.2",
 		"@sveltejs/adapter-vercel": "^5.3.1",
 		"@tanstack/svelte-query": "^5.40.1",
-		"@trpc/client": "11.0.0-next-beta.283",
-		"@trpc/server": "11.0.0-next-beta.283",
 		"bits-ui": "^0.21.10",
 		"clsx": "^2.1.1",
 		"core-js": "^3.37.1",
@@ -62,7 +60,6 @@
 		"radix-icons-svelte": "^1.2.1",
 		"tailwind-merge": "^2.3.0",
 		"tailwind-variants": "^0.2.1",
-		"trpc-svelte-query-adapter": "^2.3.4",
 		"zod": "^3.23.8"
 	}
 }

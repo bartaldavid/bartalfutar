@@ -33,10 +33,6 @@
   const now = useNow();
 
   let coundownString = $derived(countdown(countDownToDate, now.now.valueOf(), showApostrophe));
-
-  // setInterval(() => {
-  //   coundownString = countdown(countDownToDate, $now.valueOf());
-  // }, 1000);
 </script>
 
 <span {...rest}>{coundownString}</span>
