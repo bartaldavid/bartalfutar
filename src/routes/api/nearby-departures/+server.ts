@@ -1,8 +1,8 @@
-import { futarClient } from '$lib/server/futar';
 import type { DepartureGroup } from '$lib/types.js';
 import { typed_json, type TypedResponse } from '$lib/util/fetch.js';
 import { z } from 'zod';
 import { getQueryFromParams } from '../endpoint-types.js';
+import { futarClient } from '$lib/server/futar.js';
 
 export const _params = z.object({
   stopIds: z.array(z.string()).optional(),
@@ -17,11 +17,19 @@ export const _params = z.object({
 export async function GET({ url, fetch }): Promise<TypedResponse<DepartureGroup[]>> {
   const query = _params.parse(getQueryFromParams(url.searchParams));
 
-  const api = futarClient(fetch);
+  const { data: response } = await futarClient.GET(
+    '/{dialect}/api/where/arrivals-and-departures-for-location',
+    {
+      params: {
+        query,
+        path: {
+          dialect: 'otp'
+        }
+      }
+    }
+  );
 
-  const { data } = await api.get('/{dialect}/api/where/arrivals-and-departures-for-location', {
-    query
-  });
+  const data = response?.data;
 
   const departureGroups =
     data?.list?.map((group) => {

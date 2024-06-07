@@ -1,9 +1,9 @@
-import { futarClient } from '$lib/server/futar.js';
 import type { TripDetails } from '$lib/types.js';
 import { typed_json, type TypedResponse } from '$lib/util/fetch.js';
 import { z } from 'zod';
 import { getQueryFromParams } from '../endpoint-types.js';
 import type { MavTrainDetails } from './mav-details-spec.js';
+import { futarClient } from '$lib/server/futar.js';
 
 export const _params = z.object({
   tripId: z.string()
@@ -17,8 +17,6 @@ export async function GET({ fetch, url }): Promise<TypedResponse<TripDetails>> {
       { trainId: parseInt(query.tripId), minCount: 0, maxCount: 30 },
       fetch
     );
-
-    // console.log(response);
 
     const details: TripDetails = response.trainSchedulerDetails[0].scheduler.map((stop) => {
       return {
@@ -38,12 +36,17 @@ export async function GET({ fetch, url }): Promise<TypedResponse<TripDetails>> {
     return typed_json(details);
   }
 
-  const api = futarClient(fetch);
-
   // FIXME this is not working
-  const { data } = await api.get('/{dialect}/api/where/trip-details', {
-    query
+  const { data: response } = await futarClient.GET('/{dialect}/api/where/trip-details', {
+    params: {
+      query,
+      path: {
+        dialect: 'otp'
+      }
+    }
   });
+
+  const data = response?.data;
 
   const details: TripDetails =
     data?.entry?.stopTimes?.map((stop) => {
