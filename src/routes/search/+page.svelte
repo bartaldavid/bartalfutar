@@ -18,15 +18,12 @@
   let stopsToDisplay: TStop[] = $state([]);
   let inputElement: HTMLInputElement;
 
-  let searchData = 
-    createQuery({
-      queryKey: ['search', searchQuery],
-      queryFn: async () => typed_fetch('/api/stops-for-location', { q: searchQuery }),
-      enabled: false,
-      initialData: data?.searchData
-    })
-  ;
-
+  let searchData = createQuery({
+    queryKey: ['search', searchQuery],
+    queryFn: async () => typed_fetch('/api/stops-for-location', { q: searchQuery }),
+    enabled: false,
+    initialData: data?.searchData
+  });
   function debounceFetch() {
     clearTimeout(timer);
 

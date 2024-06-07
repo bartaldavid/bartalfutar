@@ -2,15 +2,14 @@
   import { createQuery } from '@tanstack/svelte-query';
   import { displayDate, epochToDate, useTransitStopTime } from '../lib/util/date';
   import { typed_fetch } from '../routes/api/endpoint-types';
-  import { now } from '$lib/stores/now';
+  import { now } from '$lib/stores/now.svelte';
 
   let { tripId }: { tripId: string } = $props();
 
-  let tripData = 
-    createQuery({
-      queryKey: ['trip', tripId],
-      queryFn: async () => await typed_fetch('/api/trip-details', { tripId: tripId })
-    });
+  let tripData = createQuery({
+    queryKey: ['trip', tripId],
+    queryFn: async () => await typed_fetch('/api/trip-details', { tripId: tripId })
+  });
 </script>
 
 {#if $tripData.isLoading}

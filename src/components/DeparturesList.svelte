@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { now } from '$lib/stores/now';
+  import { useNow } from '$lib/stores/now.svelte';
   import type { DepartureType } from '$lib/types';
   import Departure from './Departure.svelte';
   import EarlierDepartures from './EarlierDepartures.svelte';
@@ -10,19 +10,30 @@
   }: { departures?: DepartureType[]; expandable?: boolean } = $props();
 
   let expandedTripId = $state<string>('');
-  let alreadyDeparted = $state<DepartureType[]>([]);
 
-  now.subscribe((now) => {
-    alreadyDeparted = departures.filter(
+  const time = useNow();
+
+  let alreadyDeparted = $derived(
+    departures.filter(
       (departure) =>
-        departure.predictedDepartureTime && departure.predictedDepartureTime * 1000 < now.valueOf()
-    );
-  });
+        departure.predictedDepartureTime &&
+        departure.predictedDepartureTime * 1000 <= time.now.valueOf()
+    )
+  );
+  let futureDepartures = $derived(
+    departures.filter(
+      (d) =>
+        (d.departureTime && d.departureTime * 1000 > time.now.valueOf()) ||
+        (d.predictedDepartureTime && d.predictedDepartureTime * 1000 > time.now.valueOf())
+    )
+  );
+
+  // $inspect(time.now);
 </script>
 
 <EarlierDepartures departures={alreadyDeparted} />
 
-{#each departures.filter((d) => !alreadyDeparted.includes(d)) as departure}
+{#each futureDepartures as departure}
   <Departure
     {departure}
     expanded={expandedTripId === departure.id}

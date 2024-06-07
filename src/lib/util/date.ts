@@ -2,7 +2,7 @@
 
 import { derived } from 'svelte/store';
 import type { components } from '../data/bkk-openapi';
-import { now } from '$lib/stores/now';
+import { now } from '$lib/stores/now.svelte';
 
 export function epochToDate(epochDate: number | null | undefined): Date | null {
   if (!epochDate) return null;

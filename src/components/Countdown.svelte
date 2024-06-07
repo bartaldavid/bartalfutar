@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
   function countdown(date: Date, now: number, showApostrophe: boolean) {
     const distance = date.getTime() - now;
 
@@ -18,7 +18,7 @@
 </script>
 
 <script lang="ts">
-  import { now } from '$lib/stores/now';
+  import { useNow } from '$lib/stores/now.svelte.js';
   import type { HTMLAttributes } from 'svelte/elements';
 
   let {
@@ -30,9 +30,9 @@
     showApostrophe?: boolean;
   } & HTMLAttributes<HTMLSpanElement> = $props();
 
-  let coundownString = $derived.by(() =>
-    countdown(countDownToDate, $now.valueOf(), showApostrophe)
-  );
+  const now = useNow();
+
+  let coundownString = $derived(countdown(countDownToDate, now.now.valueOf(), showApostrophe));
 
   // setInterval(() => {
   //   coundownString = countdown(countDownToDate, $now.valueOf());
