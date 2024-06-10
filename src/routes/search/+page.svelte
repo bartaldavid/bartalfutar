@@ -73,7 +73,7 @@
       type="search"
       placeholder="Search for stops"
       bind:value={searchQuery}
-      onkeyup={() => {
+      oninput={() => {
         debounceFetch();
       }}
       bind:this={inputElement}
