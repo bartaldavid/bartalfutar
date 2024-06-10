@@ -5,6 +5,7 @@
   import { onMount } from 'svelte';
   import NavBar from '$components/NavBar.svelte';
   import { ModeWatcher } from 'mode-watcher';
+  import { SvelteQueryDevtools } from '@tanstack/svelte-query-devtools';
 
   // export let data: LayoutData;
   let { data, children } = $props();
@@ -27,6 +28,7 @@
     <NavBar />
     {@render children()}
   </main>
+  <SvelteQueryDevtools />
 </QueryClientProvider>
 
 <ModeWatcher />

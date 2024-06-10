@@ -16,14 +16,6 @@
 
   let searchQuery = $state(data.query);
   let timer: NodeJS.Timeout | undefined = $state();
-  let stopsToDisplay: TStop[] = $derived.by(() => {
-    if (data?.query === searchQuery && data.searchData) {
-      return data?.searchData ?? [];
-    } else {
-      return $stopsQuery.data ?? [];
-    }
-  });
-  let inputElement: HTMLInputElement;
 
   let stopsQuery = createQuery({
     queryKey: ['search', searchQuery],
@@ -33,13 +25,23 @@
   });
 
   let placesQuery = createQuery({
-    queryKey: ['search', Date.now()],
+    queryKey: ['search-places', searchQuery],
     queryFn: async () =>
       fetch('/api/places-autocomplete?q=' + searchQuery).then(
         (res) => res.json() as Promise<{ main: string; secondary: string; placeId: string }[]>
       ),
     enabled: searchQuery.length > searchQueryMinimumLength
   });
+
+  let stopsToDisplay: TStop[] = $derived.by(() => {
+    if (data?.query === searchQuery && data.searchData) {
+      return data?.searchData ?? [];
+    } else {
+      return $stopsQuery.data ?? [];
+    }
+  });
+
+  let inputElement: HTMLInputElement;
 
   function debounceFetch() {
     clearTimeout(timer);
