@@ -8,6 +8,7 @@
   import { page } from '$app/stores';
   import { Search } from 'lucide-svelte';
   import { replaceState } from '$app/navigation';
+  import PlaceCard from './PlaceCard.svelte';
 
   let { data } = $props();
 
@@ -19,16 +20,25 @@
     if (data?.query === searchQuery && data.searchData) {
       return data?.searchData ?? [];
     } else {
-      return $searchData.data ?? [];
+      return $stopsQuery.data ?? [];
     }
   });
   let inputElement: HTMLInputElement;
 
-  let searchData = createQuery({
+  let stopsQuery = createQuery({
     queryKey: ['search', searchQuery],
     queryFn: async () => typed_fetch('/api/stops-for-location', { q: searchQuery }),
-    enabled: false,
+    enabled: searchQuery.length > searchQueryMinimumLength,
     initialData: data?.searchData
+  });
+
+  let placesQuery = createQuery({
+    queryKey: ['search', Date.now()],
+    queryFn: async () =>
+      fetch('/api/places-autocomplete?q=' + searchQuery).then(
+        (res) => res.json() as Promise<{ main: string; secondary: string; placeId: string }[]>
+      ),
+    enabled: searchQuery.length > searchQueryMinimumLength
   });
 
   function debounceFetch() {
@@ -38,7 +48,10 @@
     replaceState($page.url, history.state);
 
     if (searchQuery.length > searchQueryMinimumLength) {
-      timer = setTimeout(() => $searchData.refetch(), debounceIntervalMs);
+      timer = setTimeout(() => {
+        $stopsQuery.refetch();
+        $placesQuery.refetch();
+      }, debounceIntervalMs);
     }
   }
 
@@ -68,7 +81,17 @@
     />
   </form>
 
-  {#if stopsToDisplay}
+  {#if $placesQuery.isFetched && $placesQuery.data}
+    <h2 class="mb-1 text-sm font-medium">Places</h2>
+    <div class="flex flex-col gap-2">
+      {#each $placesQuery.data as place}
+        <PlaceCard {place} />
+      {/each}
+    </div>
+  {/if}
+
+  {#if stopsToDisplay.length > 0}
+    <h2 class="mb-1 mt-4 text-sm font-medium">Stops</h2>
     <div class="flex flex-col gap-1">
       {#each stopsToDisplay as stop}
         <Stop {stop} saved={!!stop.id && favorite_ids.includes(stop.id)} />

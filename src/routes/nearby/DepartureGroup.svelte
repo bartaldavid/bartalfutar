@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { DepartureGroup } from '$lib/types';
   import { cn } from '$lib/utils';
-  import { useTransitStopTime } from '../lib/util/date.svelte';
-  import Countdown from './Countdown.svelte';
-  import RouteIcon from './RouteIcon.svelte';
-  import TripDetails from './TripDetails.svelte';
+  import { useTransitStopTime } from '../../lib/util/date.svelte';
+  import Countdown from '../../components/Countdown.svelte';
+  import RouteIcon from '../../components/RouteIcon.svelte';
+  import TripDetails from '../../components/TripDetails.svelte';
 
   let { departureGroup }: { departureGroup: DepartureGroup } = $props();
 
@@ -24,12 +24,12 @@
   </div>
   <div class="flex gap-2">
     {#each departureGroup.departures ?? [] as departure}
-      {@const { relevantDate, isDelayed } = useTransitStopTime(departure)}
+      {@const { relevantDate, isDelayed, isRealtime } = useTransitStopTime(departure)}
       {#if relevantDate}
         <Countdown
           countDownToDate={relevantDate}
           showApostrophe
-          class={cn(isDelayed && 'text-red-600')}
+          class={cn(isDelayed && 'text-red-600 dark:text-red-400', isRealtime && 'text-green-500')}
         />
       {/if}
     {:else}

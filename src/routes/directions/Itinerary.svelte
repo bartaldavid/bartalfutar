@@ -14,6 +14,14 @@
     minute: 'numeric',
     hour12: false
   });
+
+  function isSameDay(date1: Date, date2: Date): boolean {
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+    );
+  }
 </script>
 
 <Accordion.Item value={crypto.randomUUID()}>
@@ -24,7 +32,12 @@
       <div class="flex flex-col items-start gap-1">
         <LegPreview legs={itinerary.legs} />
         {#if itinerary.start && itinerary.end}
-          <span>{df.formatRange(new Date(itinerary.start), new Date(itinerary.end))}</span>
+          <!-- TODO improve this -->
+          <span
+            >{isSameDay(new Date(itinerary.start), new Date(itinerary.end))
+              ? df.formatRange(new Date(itinerary.start), new Date(itinerary.end))
+              : `${df.format(new Date(itinerary.start))} - ${df.format(new Date(itinerary.end))}`}</span
+          >
         {/if}
         <!-- {#if itinerary.freqency}
         <small>Every {itinerary.freqency} minutes</small>

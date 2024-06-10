@@ -49,6 +49,7 @@
       );
       replaceState($page.url, history.state);
       locationSetup = true;
+      $directionsData.refetch();
     }
   });
 
@@ -91,7 +92,7 @@
     <div class="flex items-center gap-2">
       <MapPin />
       <a
-        href="/search-places?{new URLSearchParams({
+        href="/search?{new URLSearchParams({
           q: data.to_address || '',
           ...($location.position?.coords && {
             from: `${$location.position?.coords.latitude},${$location.position?.coords.longitude}`
@@ -119,7 +120,9 @@
         <Itinerary {itinerary} />
       {/each}
     </Accordion.Root>
+  {/if}
 
-    <!-- <pre>{JSON.stringify($directionsData.data, null, 2)}</pre> -->
+  {#if $directionsData.isError}
+    <pre>{$directionsData.error.message}</pre>
   {/if}
 </PageLayout>

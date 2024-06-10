@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import PageLayout from '../../components/PageLayout.svelte';
   import { createQuery } from '@tanstack/svelte-query';
-  import DepartureGroup from '../../components/DepartureGroup.svelte';
+  import DepartureGroup from './DepartureGroup.svelte';
   import { loadLocation, location } from '$lib/stores/geolocation';
   import { REFETCH_INTERVAL_MS } from '../../lib/data/constants';
   import LocationSearchingIcon from '~icons/material-symbols/location-searching';
