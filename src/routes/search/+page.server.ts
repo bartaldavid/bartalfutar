@@ -61,7 +61,6 @@ export const actions = {
 
     if (!saved) {
       const result = await saveStopToDb({ stopId, session, fetch });
-      console.log(result);
       if (result.error) {
         return fail(404, { message: result.error });
       }
@@ -82,7 +81,9 @@ async function fetchFavoritesAndRoutes(userId: string) {
         type: stops.type,
         locationType: stops.locationType,
         direction: stops.direction,
-        routeIds: sql<string[]>`(json_group_array(${stopsRoutes.routeId}))`.mapWith(v => JSON.parse(v) as string[])
+        routeIds: sql<string[]>`(json_group_array(${stopsRoutes.routeId}))`.mapWith(
+          (v) => JSON.parse(v) as string[]
+        )
       })
       .from(stops)
       .innerJoin(favoriteStops, eq(stops.id, favoriteStops.stopId))
@@ -105,6 +106,5 @@ async function fetchFavoritesAndRoutes(userId: string) {
   });
   const end = performance.now();
   console.log(`Query took ${end - now}ms`);
-  console.log(result)
   return result;
 }

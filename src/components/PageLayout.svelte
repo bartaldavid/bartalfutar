@@ -4,15 +4,17 @@
   let {
     pageTitle = '',
     header,
-    children
+    children,
+    topMargin = false
   }: {
     pageTitle?: string;
+    topMargin?: boolean;
     header?: Snippet;
     children?: Snippet;
   } = $props();
 </script>
 
-<div class="mb-24 flex w-full flex-col dark:text-white md:w-72">
+<div class="mb-24 flex w-full flex-col dark:text-white md:w-72 {topMargin ? 'mt-12' : ''}">
   {#if pageTitle}
     <div class="mb-4 mt-12 flex items-center justify-between">
       <h1 class="text-lg dark:text-white">{pageTitle}</h1>

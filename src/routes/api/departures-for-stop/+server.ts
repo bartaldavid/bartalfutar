@@ -105,8 +105,6 @@ export async function GET({ fetch, url }): Promise<
       ]
     : [];
 
-  console.log(stops);
-
   return typed_json({
     departures,
     stops,

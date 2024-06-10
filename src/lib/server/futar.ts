@@ -10,6 +10,7 @@ const futarAuth = {
   async onRequest(req, options) {
     const url = new URL(req.url);
     url.searchParams.set('key', BKK_API_KEY);
+    console.log(url);
     return new Request(url.toString(), req);
   }
 } satisfies Middleware;
