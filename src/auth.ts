@@ -21,7 +21,8 @@ export const { handle } = SvelteKitAuth({
       }
       return Promise.resolve(session);
     }
-  }
+  },
+  trustHost: true
 });
 
 /**
