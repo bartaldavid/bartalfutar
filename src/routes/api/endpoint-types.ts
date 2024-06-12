@@ -18,6 +18,10 @@ interface EndpointMap {
     params: z.infer<typeof import('./trip-details/+server')._params>;
     response: GetResponseType<ReturnType<typeof import('./trip-details/+server').GET>>;
   };
+  '/api/directions': {
+    params: z.infer<typeof import('./directions/+server')._params>;
+    response: GetResponseType<ReturnType<typeof import('./directions/+server').GET>>;
+  };
 }
 
 export async function typed_fetch<

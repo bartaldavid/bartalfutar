@@ -1,10 +1,9 @@
 <script lang="ts">
-  import type { components } from '../lib/data/bkk-openapi';
   import VehicleIcons from './VehicleIcons.svelte';
   import { page } from '$app/stores';
 
-  export let groupType: string;
-  export let groupItems: { id: string; name: string }[];
+  let { groupType, groupItems }: { groupType: string; groupItems: { id: string; name: string }[] } =
+    $props();
 </script>
 
 <div class="flex flex-row py-2">

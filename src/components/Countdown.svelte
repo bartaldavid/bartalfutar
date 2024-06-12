@@ -1,16 +1,5 @@
-<script lang="ts">
-  import { now } from '$lib/stores/now';
-  import type { HTMLAttributes } from 'svelte/elements';
-
-  export let countDownToDate: Date;
-  export let showApostrophe = false;
-
-  type $$Props = HTMLAttributes<HTMLSpanElement> & {
-    countDownToDate: Date;
-    showApostrophe?: boolean;
-  };
-
-  function countdown(date: Date, now: number) {
+<script context="module" lang="ts">
+  function countdown(date: Date, now: number, showApostrophe: boolean) {
     const distance = date.getTime() - now;
 
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -26,12 +15,24 @@
       useGrouping: false
     })}`;
   }
-
-  $: coundownString = countdown(countDownToDate, $now.valueOf());
-
-  // setInterval(() => {
-  //   coundownString = countdown(countDownToDate, $now.valueOf());
-  // }, 1000);
 </script>
 
-<span {...$$restProps}>{coundownString}</span>
+<script lang="ts">
+  import { useNow } from '$lib/stores/now.svelte.js';
+  import type { HTMLAttributes } from 'svelte/elements';
+
+  let {
+    countDownToDate,
+    showApostrophe = false,
+    ...rest
+  }: {
+    countDownToDate: Date;
+    showApostrophe?: boolean;
+  } & HTMLAttributes<HTMLSpanElement> = $props();
+
+  const now = useNow();
+
+  let coundownString = $derived(countdown(countDownToDate, now.now.valueOf(), showApostrophe));
+</script>
+
+<span {...rest}>{coundownString}</span>

@@ -3,6 +3,7 @@ import { db } from './libsql-db';
 import { favoriteStops, routes, stops, stopsRoutes } from './libsql-schema';
 import { and, eq } from 'drizzle-orm';
 import { futarClient } from './futar';
+import type { components } from '$lib/schema-generated';
 
 export async function saveStopToDb({
   stopId,
@@ -15,21 +16,22 @@ export async function saveStopToDb({
 }) {
   const userId = session.user.id;
 
-  const api = futarClient(fetch);
   // FIXME type this correctly
-  const { data } = await api.get('/{dialect}/api/where/references', {
-    query: { stopId: [stopId] }
+  const { data: FIXME_type } = await futarClient.GET('/{dialect}/api/where/references', {
+    params: { query: { stopId: [stopId] }, path: { dialect: 'otp' } },
+    fetch
   });
-  // console.log(data);
-  const stopRef = data.references?.stops?.[stopId];
-  const routeRefs = data.references?.routes;
 
-  if (!data.references || !stopRef || !routeRefs || !stopRef.id) {
+  // @ts-expect-error bad types in openapi
+  const data = FIXME_type.data as components['schemas']['ReferencesMethodResponse'];
+
+  const stopRef = data?.references?.stops?.[stopId];
+  const routeRefs = data?.references?.routes;
+
+  if (!data?.references || !stopRef || !routeRefs || !stopRef.id) {
     return { error: 'Invalid API response', success: false, stopId };
   }
 
-  // FIXME refractor this
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { routeIds: _, ...restStop } = stopRef;
   const stopRow = { id: stopId, ...restStop };
   const routeRows = Object.entries(routeRefs).map(([routeId, data]) => ({

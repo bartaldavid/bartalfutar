@@ -1,4 +1,4 @@
-import type { components } from '$lib/data/bkk-openapi';
+import type { components } from '$lib/schema-generated';
 import type { AdapterAccount } from '@auth/core/adapters';
 import { sql } from 'drizzle-orm';
 import { integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite-core';

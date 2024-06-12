@@ -1,10 +1,10 @@
-import { futarClient } from '$lib/server/futar.js';
 import type { DepartureType } from '$lib/types.js';
 import { typed_json, type TypedResponse } from '$lib/util/fetch.js';
 import { z } from 'zod';
 import { getQueryFromParams } from '../endpoint-types.js';
 import type { MavRoot } from '$lib/data/mav-spec.js';
 import { isMav } from '$lib/util/stops.js';
+import { futarClient } from '$lib/server/futar.js';
 
 export const _params = z.object({
   stopId: z.array(z.string()),
@@ -68,16 +68,14 @@ export async function GET({ fetch, url }): Promise<
     return typed_json({ departures, stops, source: 'MÁV' });
   }
 
-  const api = futarClient(fetch);
-
-  const { data } = await api.get('/{dialect}/api/where/arrivals-and-departures-for-stop', {
-    query
+  const { data } = await futarClient.GET('/{dialect}/api/where/arrivals-and-departures-for-stop', {
+    params: { query, path: { dialect: 'otp' } }
   });
 
   const departures: DepartureType[] =
-    data?.entry?.stopTimes?.map((departure) => {
+    data?.data?.entry?.stopTimes?.map((departure) => {
       if (!departure.tripId) return { id: 'No tripId, bad response' };
-      const routeId = data.references?.trips?.[departure.tripId]?.routeId;
+      const routeId = data?.data?.references?.trips?.[departure.tripId]?.routeId;
       if (!routeId) return { id: 'No routeId, bad response' };
       return {
         id: departure.tripId,
@@ -88,20 +86,24 @@ export async function GET({ fetch, url }): Promise<
         headSign: departure.stopHeadsign,
         alerts: departure.alertIds?.map(
           // TODO alerts could be translated into EN / HU
-          (alertId) => data.references?.alerts?.[alertId].description?.someTranslation ?? ''
+          (alertId) => data?.data?.references?.alerts?.[alertId].description?.someTranslation ?? ''
         ),
         icon: {
-          color: data.references?.routes?.[routeId]?.color,
-          text: data.references?.routes?.[routeId]?.shortName,
-          textColor: data.references?.routes?.[routeId]?.textColor
+          color: data?.data?.references?.routes?.[routeId]?.color,
+          text: data?.data?.references?.routes?.[routeId]?.shortName,
+          textColor: data?.data?.references?.routes?.[routeId]?.textColor
         }
       };
     }) ?? [];
 
-  const stops = data?.entry?.stopId
-    ? [{ id: data.entry.stopId, name: data.references?.stops?.[data.entry.stopId]?.name }]
+  const stops = data?.data?.entry?.stopId
+    ? [
+        {
+          id: data?.data?.entry.stopId,
+          name: data?.data?.references?.stops?.[data?.data?.entry.stopId]?.name
+        }
+      ]
     : [];
-
 
   return typed_json({
     departures,

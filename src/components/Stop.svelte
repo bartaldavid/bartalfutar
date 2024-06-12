@@ -17,9 +17,8 @@
   import { isMav } from '$lib/util/stops';
   import MavLogo from './MavLogo.svelte';
 
-  export let stop: TStop;
-  export let saved = false;
-  let expanded = false;
+  let { stop, saved = false }: { stop: TStop; saved?: boolean } = $props();
+  let expanded = $state(false);
 
   const departuresFromStop = createQuery({
     queryKey: ['stop', stop.id!, 3],
@@ -37,13 +36,13 @@
 <div class="flex flex-row rounded bg-slate-50 p-2 dark:border-none dark:bg-slate-800">
   <div
     class="flex flex-1 cursor-pointer flex-col gap-1 focus:outline-2"
-    on:click={() => {
+    onclick={() => {
       expanded = !expanded;
       $departuresFromStop.refetch();
     }}
     role="button"
     tabindex={0}
-    on:keydown={(e) => {
+    onkeydown={(e) => {
       if (e.key == 'Enter') expanded = !expanded;
       $departuresFromStop.refetch();
     }}

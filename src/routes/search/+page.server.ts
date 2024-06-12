@@ -81,7 +81,9 @@ async function fetchFavoritesAndRoutes(userId: string) {
         type: stops.type,
         locationType: stops.locationType,
         direction: stops.direction,
-        routeIds: sql<string[]>`(json_group_array(${stopsRoutes.routeId}))`.mapWith(v => JSON.parse(v) as string[])
+        routeIds: sql<string[]>`(json_group_array(${stopsRoutes.routeId}))`.mapWith(
+          (v) => JSON.parse(v) as string[]
+        )
       })
       .from(stops)
       .innerJoin(favoriteStops, eq(stops.id, favoriteStops.stopId))
@@ -103,5 +105,6 @@ async function fetchFavoritesAndRoutes(userId: string) {
     return { favorite_stops: favorite_stops_query, routes: routes_query };
   });
   const end = performance.now();
+  console.log(`Query took ${end - now}ms`);
   return result;
 }

@@ -22,7 +22,7 @@
     }
   ];
 
-  $: parent = $page.url.searchParams.get('from');
+  let parent = $derived($page.url.searchParams.get('from'));
 </script>
 
 <nav

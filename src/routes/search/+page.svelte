@@ -8,22 +8,40 @@
   import { page } from '$app/stores';
   import { Search } from 'lucide-svelte';
   import { replaceState } from '$app/navigation';
+  import PlaceCard from './PlaceCard.svelte';
 
-  export let data;
+  let { data } = $props();
 
-  $: favorite_ids = data?.favorites_ids ?? [];
+  let favorite_ids = $derived(data?.favorites_ids ?? []);
 
-  let searchQuery = data?.query?.toString() ?? '';
-  let timer: NodeJS.Timeout;
-  let stopsToDisplay: TStop[];
-  let inputElement: HTMLInputElement;
+  let searchQuery = $state(data.query);
+  let timer: NodeJS.Timeout | undefined = $state();
 
-  const searchData = createQuery({
+  let stopsQuery = createQuery({
     queryKey: ['search', searchQuery],
     queryFn: async () => typed_fetch('/api/stops-for-location', { q: searchQuery }),
-    enabled: false,
+    enabled: searchQuery.length > searchQueryMinimumLength,
     initialData: data?.searchData
   });
+
+  let placesQuery = createQuery({
+    queryKey: ['search-places', searchQuery],
+    queryFn: async () =>
+      fetch('/api/places-autocomplete?q=' + searchQuery).then(
+        (res) => res.json() as Promise<{ main: string; secondary: string; placeId: string }[]>
+      ),
+    enabled: searchQuery.length > searchQueryMinimumLength
+  });
+
+  let stopsToDisplay: TStop[] = $derived.by(() => {
+    if (data?.query === searchQuery && data.searchData) {
+      return data?.searchData ?? [];
+    } else {
+      return $stopsQuery.data ?? [];
+    }
+  });
+
+  let inputElement: HTMLInputElement;
 
   function debounceFetch() {
     clearTimeout(timer);
@@ -32,19 +50,16 @@
     replaceState($page.url, history.state);
 
     if (searchQuery.length > searchQueryMinimumLength) {
-      timer = setTimeout(() => $searchData.refetch(), debounceIntervalMs);
+      timer = setTimeout(() => {
+        $stopsQuery.refetch();
+        $placesQuery.refetch();
+      }, debounceIntervalMs);
     }
   }
 
   onMount(() => {
     inputElement.focus();
   });
-
-  $: if (data?.query === searchQuery && data.searchData) {
-    stopsToDisplay = data?.searchData ?? [];
-  } else {
-    stopsToDisplay = $searchData.data ?? [];
-  }
 </script>
 
 <div class="m-1 mt-4 flex w-full scroll-mb-80 flex-col sm:w-72 md:mt-12">
@@ -58,7 +73,7 @@
       type="search"
       placeholder="Search for stops"
       bind:value={searchQuery}
-      on:keyup={() => {
+      oninput={() => {
         debounceFetch();
       }}
       bind:this={inputElement}
@@ -68,7 +83,17 @@
     />
   </form>
 
-  {#if stopsToDisplay}
+  {#if $placesQuery.isFetched && $placesQuery.data}
+    <h2 class="mb-1 text-sm font-medium">Places</h2>
+    <div class="flex flex-col gap-2">
+      {#each $placesQuery.data as place}
+        <PlaceCard {place} />
+      {/each}
+    </div>
+  {/if}
+
+  {#if stopsToDisplay.length > 0}
+    <h2 class="mb-1 mt-4 text-sm font-medium">Stops</h2>
     <div class="flex flex-col gap-1">
       {#each stopsToDisplay as stop}
         <Stop {stop} saved={!!stop.id && favorite_ids.includes(stop.id)} />

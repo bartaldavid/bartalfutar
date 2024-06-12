@@ -9,5 +9,6 @@ export default {
     url: process.env.TURSO_DB_URL as string,
     authToken: process.env.TURSO_AUTH_TOKEN as string
   },
-  out: './drizzle-orm/libsql'
+  out: './drizzle-orm/libsql',
+  dialect: 'sqlite'
 } satisfies Config;

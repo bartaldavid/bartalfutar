@@ -16,14 +16,20 @@ export interface paths {
   '/{dialect}/api/where/bicycle-rental': {
     get: operations['getBicycleRentalStations'];
   };
+  '/{dialect}/api/where/booking-redirect': {
+    get: operations['bookingRedirect'];
+  };
   '/{dialect}/api/where/metadata': {
     get: operations['getMetadata'];
   };
   '/{dialect}/api/where/multi-route-details': {
     get: operations['getMultiRouteDetails'];
   };
+  '/{dialect}/api/where/onboard-depart-search': {
+    post: operations['searchForOnboardDepartVehicles'];
+  };
   '/{dialect}/api/where/plan-trip': {
-    get: operations['plan'];
+    get: operations['planTrip'];
   };
   '/{dialect}/api/where/plan-access': {
     get: operations['planAccess'];
@@ -121,6 +127,11 @@ export interface components {
       text?: string;
       data?: components['schemas']['TransitEntryWithReferencesTransitSearch'];
     };
+    /**
+     * @description A zavar hatásának típusa.
+     * @enum {string}
+     */
+    EffectType: 'NO_SERVICE' | 'WARNING';
     MobileTransitReferences: {
       /** @description Szolgáltatók referenciáinak listája. */
       agencies?: components['schemas']['TransitAgency'][];
@@ -131,28 +142,28 @@ export interface components {
       /** @description Menetek referenciáinak listája. */
       trips?: components['schemas']['TransitTrip'][];
       /** @description Zavarok referenciáinak listája. */
-      // alerts?: components["schemas"]["TransitAlert"][];
+      alerts?: components['schemas']['TransitAlert'][];
     };
     OTPTransitReferences: {
       /** @description Szolgáltatók referenciáinak listája. */
       agencies?: {
-        [key: string]: components['schemas']['TransitAgency'] | undefined;
+        [key: string]: components['schemas']['TransitAgency'];
       };
       /** @description Járatok referenciáinak listája. */
       routes?: {
-        [key: string]: components['schemas']['TransitRoute'] | undefined;
+        [key: string]: components['schemas']['TransitRoute'];
       };
       /** @description Megállók referenciáinak listája. */
       stops?: {
-        [key: string]: components['schemas']['TransitStop'] | undefined;
+        [key: string]: components['schemas']['TransitStop'];
       };
       /** @description Menetek referenciáinak listája. */
       trips?: {
-        [key: string]: components['schemas']['TransitTrip'] | undefined;
+        [key: string]: components['schemas']['TransitTrip'];
       };
       /** @description Zavarok referenciáinak listája. */
       alerts?: {
-        [key: string]: components['schemas']['TransitAlert'] | undefined;
+        [key: string]: components['schemas']['TransitAlert'];
       };
     };
     /**
@@ -180,7 +191,8 @@ export interface components {
       | 'ERROR_VEHICLE_LOCATION_SERVICE'
       | 'ERROR_BIKE_RENTAL_SERVICE'
       | 'ERROR_TICKETING_SERVICE'
-      | 'ERROR_TRANSIT_INDEX_SERVICE';
+      | 'ERROR_TRANSIT_INDEX_SERVICE'
+      | 'MOVED_TEMPORARILY';
     /** @description Szolgáltatók referenciáinak listája. */
     TransitAgency: {
       /**
@@ -246,7 +258,6 @@ export interface components {
        */
       modifiedTime?: number;
       /**
-       * @deprecated
        * @description A zavar által érintett megállók azonosítóinak listája.
        * @example [
        *   "BKK_F01086",
@@ -287,6 +298,8 @@ export interface components {
        * ]
        */
       stopIds?: string[];
+      header?: components['schemas']['TranslatedString'];
+      effectType?: components['schemas']['EffectType'];
     };
     /** @description A válasz adat. */
     TransitEntryWithReferencesTransitSearch: {
@@ -304,8 +317,7 @@ export interface components {
       class?: string;
     };
     /** @description A válaszhoz tartozó referenciák. */
-    TransitReferences: components['schemas']['OTPTransitReferences'];
-    // | components["schemas"]["MobileTransitReferences"];
+    TransitReferences: components['schemas']['OTPTransitReferences']; // | components["schemas"]["MobileTransitReferences"];
     /** @description Járatok referenciáinak listája. */
     TransitRoute: {
       /**
@@ -664,7 +676,7 @@ export interface components {
        * }
        */
       translations?: {
-        [key: string]: string | undefined;
+        [key: string]: string;
       };
       /**
        * @description A fordítás-összerendelések első eleme.
@@ -789,6 +801,11 @@ export interface components {
        */
       wheelchairAccessible?: boolean;
       /**
+       * @description Igaz, ha a menet legalább egy rákövetkező megállója foglalást igényel.
+       * @example true
+       */
+      mayRequireBooking?: boolean;
+      /**
        * @deprecated
        * @description A megálló csoportjának azonosítója.
        * @example [
@@ -834,7 +851,7 @@ export interface components {
     /** @description A lekért adat. */
     TransitArrivalsAndDepartures: {
       /**
-       * @description A menetrendi bejegyzésekhez tartozó megálló azonosítója.
+       * @description A megálló azonosítója.
        * @example BKK_F01029
        */
       stopId?: string;
@@ -1101,7 +1118,7 @@ export interface components {
        * }
        */
       dayTypes?: {
-        [key: string]: string | undefined;
+        [key: string]: string;
       };
     };
     MultiRouteDetailsMethodResponse: {
@@ -1180,8 +1197,8 @@ export interface components {
       /** @description A járat hosszú neve. */
       longName?: string | null;
       /**
-       * @description A járat neve. Ha egy | szerepel a névben, akkor a végállomásokat választja el amelyek külön sorokban megjeleníthetőek. COMPACT referenciák kérése lines. Not filled out when using COMPACT references.
-       * @example Újbuda-központ M | Széll Kálmán tér M esetében nincs kitöltve.
+       * @description A járat neve. Ha egy | szerepel a névben, akkor a végállomásokat választja el amelyek külön sorokban megjeleníthetőek. COMPACT referenciák kérése esetében nincs kitöltve.
+       * @example Újbuda-központ M | Széll Kálmán tér M
        */
       description?: string | null;
       /**
@@ -1278,6 +1295,19 @@ export interface components {
        */
       stopIds?: string[];
       /**
+       * @description Igaz, ha a járaton vannak olyan menetek, amelyeken szükséges lehet az előre foglalás.
+       * @example true
+       */
+      mayRequireBooking?: boolean;
+      /**
+       * @description A járat variáns megálló azonosítói, amelyekre lehetséges lehet a foglalás.
+       * @example [
+       *   "BKK_F02477",
+       *   "BKK_F00308"
+       * ]
+       */
+      bookableStopIds?: string[];
+      /**
        * @description A járat variáns iránya.
        * @example 0
        */
@@ -1299,24 +1329,283 @@ export interface components {
        */
       type?: string;
     };
+    OnboardDepartSearchMethodResponse: {
+      /**
+       * Format: int64
+       * @description Az aktuális szerveridő ezredmásodpercben.
+       * @example 1625747515786
+       */
+      currentTime?: number;
+      /**
+       * Format: int32
+       * @description A válasz API verziója.
+       * @example 3
+       */
+      version?: number;
+      status?: components['schemas']['Status'];
+      /**
+       * Format: int32
+       * @description A válasz státusz kódja.
+       * @example 200
+       */
+      code?: number;
+      /**
+       * @description A válasz szövege.
+       * @example OK
+       */
+      text?: string;
+      data?: components['schemas']['TransitListEntryWithReferencesTransitVehicle'];
+    };
+    /** @description A jármű pozíciója. */
+    TransitCoordinatePoint: {
+      /**
+       * Format: float
+       * @description Szélességi koordináta.
+       * @example 47.47375
+       */
+      lat?: number;
+      /**
+       * Format: float
+       * @description Hosszúsági koordináta.
+       * @example 19.049086
+       */
+      lon?: number;
+    };
+    /** @description A válasz adat. */
+    TransitListEntryWithReferencesTransitVehicle: {
+      /** @description A lekért adatok listája. */
+      list?: components['schemas']['TransitVehicle'][];
+      /** @description Az értéke mindig `false`. */
+      outOfRange?: boolean;
+      /**
+       * @description Igaz, ha a lista több elemet tartalmaz, mint a limit paraméter. Indulási és érkezési idő típusú lekéréseknél használjuk.
+       * @example false
+       */
+      limitExceeded?: boolean;
+      references?: components['schemas']['TransitReferences'];
+      /**
+       * @description Az adat típusa. Lista esetén "listWithReferences".
+       * @example listWithReferences
+       */
+      class?: string;
+    };
+    /** @description A lekért adatok listája. */
+    TransitVehicle: {
+      /**
+       * @description A jármű azonosítója.
+       * @example BKK_2035
+       */
+      vehicleId?: string;
+      /**
+       * @description A járműhöz tartozó megálló azonosítója.
+       * @example BKK_F01992
+       */
+      stopId?: string;
+      /**
+       * Format: int32
+       * @description A jármű által érintett aktuális megálló sorszáma a meneten.
+       * @example 1
+       */
+      stopSequence?: number | null;
+      /**
+       * @description A menethez tartozó járat azonosítója, amit a jármű teljesít.
+       * @example BKK_3040
+       */
+      routeId?: string;
+      /**
+       * Format: float
+       * @description A jármű irányszöge.
+       * @example 97
+       */
+      bearing?: number;
+      location?: components['schemas']['TransitCoordinatePoint'];
+      /**
+       * @description A jármű által teljesített menet menetrendi napja.
+       * @example 20210707
+       */
+      serviceDate?: string;
+      /**
+       * @description A jármű rendszáma.
+       * @example V2035
+       */
+      licensePlate?: string;
+      /**
+       * @description A jármű kijelzőjén megjelenő célállomáskép.
+       * @example Széll Kálmán tér M
+       */
+      label?: string | null;
+      /**
+       * @description A jármű típusa.
+       * @example Siemens Combino
+       */
+      model?: string | null;
+      /**
+       * @description Igaz, ha a jármű letért az útvonaláról.
+       * @example false
+       */
+      deviated?: boolean;
+      /**
+       * @description Igaz, ha a jármű pozíciója kiöregedett.
+       * @example false
+       */
+      stale?: boolean | null;
+      /**
+       * Format: int64
+       * @description A járműhöz tartozó utolsó valós idejű adat időbélyege másodpercben.
+       * @example 1625683727
+       */
+      lastUpdateTime?: number;
+      /**
+       * @description A jármű állapota.
+       * @example IN_TRANSIT_TO
+       * @enum {string}
+       */
+      status?: 'INCOMING_AT' | 'STOPPED_AT' | 'IN_TRANSIT_TO';
+      /**
+       * @description A járműhöz tartozó torlódási állapot.
+       * @example CONGESTION
+       * @enum {string|null}
+       */
+      congestionLevel?: 'UNKNOWN' | 'CONGESTION' | null;
+      /**
+       * @deprecated
+       * @description A jármű fajtája. Deprecated: használjuk a `style` attribútumot.
+       * @example TRAM
+       * @enum {string}
+       */
+      vehicleRouteType?:
+        | 'WALK'
+        | 'BICYCLE'
+        | 'CAR'
+        | 'TRAM'
+        | 'SUBWAY'
+        | 'SUBURBAN_RAILWAY'
+        | 'RAIL'
+        | 'COACH'
+        | 'BUS'
+        | 'TROLLEYBUS'
+        | 'FERRY'
+        | 'CABLE_CAR'
+        | 'GONDOLA'
+        | 'FUNICULAR'
+        | 'TRANSIT'
+        | 'TRAINISH'
+        | 'BUSISH'
+        | 'LEG_SWITCH'
+        | 'CUSTOM_MOTOR_VEHICLE';
+      /**
+       * Format: int32
+       * @description Hol tart a jármű a két megálló közti szakaszon, százalékban.
+       * @example 28
+       */
+      stopDistancePercent?: number;
+      /**
+       * @description Igaz, ha a jármű alacsonypadlós.
+       * @example true
+       */
+      wheelchairAccessible?: boolean;
+      occupancy?: components['schemas']['TransitVehicleOccupancy'];
+      capacity?: components['schemas']['TransitVehicleOccupancy'];
+      /**
+       * @description A járműhöz tartozó menet azonosítója.
+       * @example BKK_C3135012112
+       */
+      tripId?: string | null;
+      /**
+       * @description A menet utazástervező azonosítója, amelyet a `fromPlace` megadásához lehet használni.
+       * @example 20210708:BKK:AS4356
+       */
+      vertex?: string;
+      style?: components['schemas']['TransitVehicleStyle'];
+    };
+    /** @description A jármű kapacitása. */
+    TransitVehicleOccupancy: {
+      /**
+       * Format: int32
+       * @description Hány felnőtt van a járművön.
+       * @example 350
+       */
+      adults?: number | null;
+      /**
+       * Format: int32
+       * @description Hány gyermek van a járművön.
+       * @example 350
+       */
+      children?: number | null;
+      /**
+       * Format: int32
+       * @description Hány babakocsi van a járművön
+       * @example 350
+       */
+      strollers?: number | null;
+      /**
+       * Format: int32
+       * @description Hány kerekesszék van a járművön.
+       * @example 350
+       */
+      wheelchairs?: number | null;
+      /**
+       * Format: int32
+       * @description Hány be nem kategorizált entitás van a járművön.
+       * @example 350
+       */
+      other?: number | null;
+    } | null;
+    /** @description A járműhöz tartozó stílus. */
+    TransitVehicleStyle: {
+      icon?: components['schemas']['TransitVehicleStyleIcon'];
+    } | null;
+    OnboardDepartPosition: {
+      /**
+       * Format: double
+       * @description A szélességi koordinátája egy pozició pontnak.
+       * @example 47.497313
+       */
+      lat: number;
+      /**
+       * Format: double
+       * @description A hosszúsági koordinátája egy pozició pontnak.
+       * @example 19.064683
+       */
+      lon: number;
+      /**
+       * Format: int64
+       * @description Az időpontja egy pozició pontnak epoch másodpercben.
+       * @example 1644829176
+       */
+      timestamp: number;
+      /**
+       * Format: double
+       * @description A pontossága egy pozició pontnak méterben.
+       * @example 100
+       */
+      accuracy?: number | null;
+      /**
+       * Format: double
+       * @description A sebesség egy pozició pontban m/s-ban.
+       * @example 8
+       */
+      speed?: number | null;
+    };
     /** @enum {string} */
     TraverseMode:
       | 'WALK'
       | 'BICYCLE'
       | 'CAR'
-      | 'SUBURBAN_RAILWAY'
-      | 'COACH'
       | 'TRAM'
       | 'SUBWAY'
       | 'RAIL'
       | 'BUS'
-      | 'TROLLEYBUS'
       | 'FERRY'
       | 'CABLE_CAR'
       | 'GONDOLA'
       | 'FUNICULAR'
       | 'TRANSIT'
-      | 'AIRPLANE';
+      | 'AIRPLANE'
+      | 'TROLLEYBUS'
+      | 'MONORAIL'
+      | 'SUBURBAN_RAILWAY'
+      | 'COACH';
     /**
      * @default MID
      * @enum {string}
@@ -1331,6 +1620,12 @@ export interface components {
       /** Format: int64 */
       prevDateTime?: number;
     };
+    /**
+     * @description Kerékpáros útszakaszok kategórizálásai.
+     * @example LOW_TRAFFIC
+     * @enum {string|null}
+     */
+    BikeStreetCategory: 'CYCLEWAY' | 'CYCLELANE' | 'LOW_TRAFFIC' | 'OTHER' | 'PEDESTRIAN' | null;
     /** @description Az útiterv kivonatos megjelenítéséhez használható  lábak és adatok. */
     DisplayedLeg: {
       /**
@@ -1359,6 +1654,24 @@ export interface components {
        * @example realCity ITS Kft.
        */
       name?: string;
+    };
+    /**
+     * @description A lábhoz tartozó magassági adatok.
+     * @example []
+     */
+    ElevationPoint: {
+      /**
+       * Format: double
+       * @description A magassági pont távolsága a láb kezdetéhez képest méterben.
+       * @example 10.871
+       */
+      distance?: number;
+      /**
+       * Format: double
+       * @description A pont magassága.
+       * @example 0
+       */
+      elevation?: number | null;
     };
     /** @description A láb geometriája. */
     EncodedPolylineBean: {
@@ -1433,8 +1746,20 @@ export interface components {
        * @example false
        */
       walkLimitExceeded?: boolean;
-      /** @description Jelzi, hogy a visszaadott útvonalak tartalmazhatnak olyan járatokat (pl.: vonatok), amire a terv során érintett jegyértékesítési helyen example: false nem lehet jegyet váltani. */
+      /**
+       * @description Jelzi, hogy a visszaadott útvonalak tartalmazhatnak olyan járatokat (pl.: vonatok), amire a terv során érintett jegyértékesítési helyen nem lehet jegyet váltani.
+       * @example false
+       */
       notAllTicketsAvailable?: boolean;
+      /**
+       * @description Az útiterv során hány méter kerékpározást tartalmaztak az egyes kategóriák. Az objektum kulcsai a kategóriák (`BikeStreetCategory`).
+       * @example {
+       *   "LOW_TRAFFIC": 12
+       * }
+       */
+      bikeCategoryDistances?: {
+        [key: string]: number;
+      };
       /**
        * Format: double
        * @description Az útiterv során hány métert süllyed az útvonal.
@@ -1594,6 +1919,11 @@ export interface components {
       to?: components['schemas']['Place'];
       legGeometry?: components['schemas']['EncodedPolylineBean'];
       /**
+       * @description A lábhoz tartozó magassági adatok.
+       * @example []
+       */
+      legElevation?: components['schemas']['ElevationPoint'][];
+      /**
        * @description A lábhoz tartozó aktív zavarok azonosítói.
        * @example [
        *   "BKK_bkkinfo-75685"
@@ -1626,11 +1956,6 @@ export interface components {
        */
       rentedBike?: boolean | null;
       /**
-       * @description Jelzi, hogy a lábon sétálni kell kerékpáros tervezés esetén.
-       * @example true
-       */
-      walkingBike?: boolean | null;
-      /**
        * @description A várakozási idő mennyiségi típusa a tranzit típusú lábon.
        * @example SHORT
        * @enum {string|null}
@@ -1652,8 +1977,8 @@ export interface components {
        */
       tripIds?: (string | null)[] | null;
       /**
-       * @description Útiterv minták esetén jelzi, hogy a mintában a megfelelő lábak valamelyikén szerepel aktív riasztás. Nincs kitöltve, ha az útiterv minták ki vannak
-       * @example true kapcsolva.
+       * @description Útiterv minták esetén jelzi, hogy a mintában a megfelelő lábak valamelyikén szerepel aktív riasztás. Nincs kitöltve, ha az útiterv minták ki vannak kapcsolva.
+       * @example true
        */
       hasAlertInPattern?: boolean | null;
       /**
@@ -1662,6 +1987,22 @@ export interface components {
        * @example 998
        */
       generalizedCost?: number;
+      /**
+       * @description Igaz, ha szükséges foglalás.
+       * @example true
+       */
+      requiresBooking?: boolean;
+      /**
+       * @description Igaz, ha járatról történt a tervezés.
+       * @default false
+       * @example true
+       */
+      onBoardAccess?: boolean | null;
+      /**
+       * @description A menet utazástervező azonosítója, amelyet a `fromPlace` megadásához lehet használni.
+       * @example 20210708:BKK:AS4356
+       */
+      vertex?: string;
       /** Format: int64 */
       duration?: number;
       timeZone?: {
@@ -1677,16 +2018,6 @@ export interface components {
       intermediateStops?: components['schemas']['Place'][] | null;
       /** @description Az útvonal lépései gyalogos, kerékpáros vagy autós láb lesetén. */
       steps?: components['schemas']['WalkStep'][] | null;
-    };
-    /**
-     * @description A lépéshez tartozó magassági adatok. Mindig üres, mert a rendszer még nem kezeli.
-     * @example []
-     */
-    P2Double: {
-      /** Format: double */
-      first?: number;
-      /** Format: double */
-      second?: number;
     };
     /** @description Útitervminták engedélyezése esetén a minták időtartam-adatai. */
     PatternStatistics: {
@@ -1875,7 +2206,7 @@ export interface components {
     Response: {
       /** @description A tervezési paraméterek. */
       requestParameters?: {
-        [key: string]: string | undefined;
+        [key: string]: string;
       };
       plan?: components['schemas']['TripPlan'];
       metadata?: components['schemas']['ApiTripSearchMetadata'];
@@ -2099,25 +2430,58 @@ export interface components {
        */
       lat?: number;
       /**
-       * @description A lépéshez tartozó magassági adatok. Mindig üres, mert a rendszer még nem kezeli.
-       * @example []
+       * @description A szakasz egyirányúsága.
+       * @example ONEWAY_WITH_TRAFFIC
+       * @enum {string}
        */
-      elevation?: components['schemas']['P2Double'][];
+      bicycleStreetDirection?: 'BIDIRECTIONAL' | 'ONEWAY_WITH_TRAFFIC' | 'ONEWAY_AGAINST_TRAFFIC';
+      bicycleCategory?: components['schemas']['BikeStreetCategory'];
+      /**
+       * @description Jelzi, hogy a szakszon sétálni kell kerékpáros tervezés esetén.
+       * @example true
+       */
+      walkingBike?: boolean | null;
+      geometry?: components['schemas']['EncodedPolylineBean'];
     } | null;
+    ReferencesMethodErrors: {
+      /**
+       * @description A szolgáltató ID-k, amelyek feloldása sikertelen volt.
+       * @example BKK
+       */
+      agencyIds?: string[];
+      /**
+       * @description A zavar ID-k, amelyek feloldása sikertelen volt.
+       * @example BKK_bkkinfo-81404
+       */
+      alertIds?: string[];
+      /**
+       * @description A járat ID-k, amelyek feloldása sikertelen volt.
+       * @example BKK_3040
+       */
+      routeIds?: string[];
+      /**
+       * @description A megálló ID-k, amelyek feloldása sikertelen volt.
+       * @example BKK_F00001
+       */
+      stopIds?: string[];
+    };
     ReferencesMethodResponse: {
       /**
        * @description Igaz, ha a lista több elemet tartalmaz, mint a limit paraméter. Indulási és érkezési idő típusú lekéréseknél használjuk.
        * @example false
        */
       limitExceeded?: boolean;
-      /** @description A lekért adat. */
-      entry?: Record<string, never>;
+      entry?: components['schemas']['ReferencesMethodResult'];
       references?: components['schemas']['TransitReferences'];
       /**
-       * @description Az adat típusa. Egy entitás esetén "entryWithReferences"
+       * @description Az adat típusa. Egy entitás esetén "entryWithReferences".
        * @example entryWithReferences
        */
       class?: string;
+    };
+    /** @description A lekért adat. */
+    ReferencesMethodResult: {
+      errors?: components['schemas']['ReferencesMethodErrors'];
     };
     RouteDetailsForStopMethodResponse: {
       /**
@@ -2274,7 +2638,7 @@ export interface components {
       directionId?: string;
       /** @description Célmegálló és a hozzá tartozó menetrendi adatok összerendelése. */
       groups?: {
-        [key: string]: components['schemas']['TransitScheduleGroup'] | undefined;
+        [key: string]: components['schemas']['TransitScheduleGroup'];
       };
       /** @description Az irányhoz tartozó menetrendi bejegyzések. */
       stopTimes?: components['schemas']['TransitScheduleStopTime'][];
@@ -2524,21 +2888,6 @@ export interface components {
       /** @description A termékek listája. */
       products?: components['schemas']['TicketingProduct'][];
     };
-    /** @description A jármű pozíciója. */
-    TransitCoordinatePoint: {
-      /**
-       * Format: float
-       * @description Szélességi koordináta.
-       * @example 47.47375
-       */
-      lat?: number;
-      /**
-       * Format: float
-       * @description Hosszúsági koordináta.
-       * @example 19.049086
-       */
-      lon?: number;
-    };
     /** @description A válasz adat. */
     TransitEntryWithReferencesTransitTripDetailsOTP: {
       /**
@@ -2554,8 +2903,47 @@ export interface components {
        */
       class?: string;
     };
-    /** @description Menetrendi bejegyzések a meneten. */
-    TransitStopTime: {
+    /** @description A lekért adat. */
+    TransitTripDetailsOTP: {
+      /**
+       * @description A menet azonosítója.
+       * @example BKK_C32344815
+       */
+      tripId?: string;
+      /**
+       * @description A menet menetrendi napja.
+       * @example 20210708
+       */
+      serviceDate?: string;
+      /**
+       * @description A menet utazástervező azonosítója, amelyet a `fromPlace` megadásához lehet használni.
+       * @example 20210708:BKK:AS4356
+       */
+      vertex?: string;
+      vehicle?: components['schemas']['TransitVehicle'];
+      polyline?: components['schemas']['TransitPolyline'];
+      /**
+       * @description Aktív zavarok a meneten.
+       * @example [
+       *   "BKK_bkkinfo-75685"
+       * ]
+       */
+      alertIds?: string[];
+      /** @description Menet megállóinak listája. */
+      stopTimes?: components['schemas']['TransitTripStopTime'][];
+      /**
+       * @description A következő menet azonosítója a csoportban, ha a menet hurokjárat.
+       * @example BKK_C3204650
+       */
+      nextBlockTripId?: string | null;
+      /**
+       * @description Igaz, ha a menet (legalább egy szakasza) foglalást igényel.
+       * @example true
+       */
+      mayRequireBooking?: boolean;
+    };
+    /** @description Menet megállóinak listája. */
+    TransitTripStopTime: {
       /**
        * @description A megálló azonosítója
        * @example BKK_050185
@@ -2595,197 +2983,24 @@ export interface components {
        * @example true
        */
       uncertain?: boolean | null;
-    };
-    /** @description A lekért adat. */
-    TransitTripDetailsOTP: {
       /**
-       * @description A menet azonosítója.
-       * @example BKK_C32344815
-       */
-      tripId?: string;
-      /**
-       * @description A menet menetrendi napja.
-       * @example 20210708
-       */
-      serviceDate?: string;
-      vehicle?: components['schemas']['TransitVehicle'];
-      polyline?: components['schemas']['TransitPolyline'];
-      /**
-       * @description Aktív zavarok a meneten.
-       * @example [
-       *   "BKK_bkkinfo-75685"
-       * ]
-       */
-      alertIds?: string[];
-      /** @description Menetrendi bejegyzések a meneten. */
-      stopTimes?: components['schemas']['TransitStopTime'][];
-      /**
-       * @description A következő menet azonosítója a csoportban, ha a menet hurokjárat.
-       * @example BKK_C3204650
-       */
-      nextBlockTripId?: string | null;
-    };
-    /** @description A lekért adatok listája. */
-    TransitVehicle: {
-      /**
-       * @description A jármű azonosítója.
-       * @example BKK_2035
-       */
-      vehicleId?: string;
-      /**
-       * @description A járműhöz tartozó megálló azonosítója.
-       * @example BKK_F01992
-       */
-      stopId?: string;
-      /**
-       * Format: int32
-       * @description A jármű által érintett aktuális megálló sorszáma a meneten.
-       * @example 1
-       */
-      stopSequence?: number | null;
-      /**
-       * @description A menethez tartozó járat azonosítója, amit a jármű teljesít.
-       * @example BKK_3040
-       */
-      routeId?: string;
-      /**
-       * Format: float
-       * @description A jármű irányszöge.
-       * @example 97
-       */
-      bearing?: number;
-      location?: components['schemas']['TransitCoordinatePoint'];
-      /**
-       * @description A jármű által teljesített menet menetrendi napja.
-       * @example 20210707
-       */
-      serviceDate?: string;
-      /**
-       * @description A jármű rendszáma.
-       * @example V2035
-       */
-      licensePlate?: string;
-      /**
-       * @description A jármű kijelzőjén megjelenő célállomáskép.
-       * @example Széll Kálmán tér M
-       */
-      label?: string | null;
-      /**
-       * @description A jármű típusa.
-       * @example Siemens Combino
-       */
-      model?: string | null;
-      /**
-       * @description Igaz, ha a jármű letért az útvonaláról.
-       * @example false
-       */
-      deviated?: boolean;
-      /**
-       * @description Igaz, ha a jármű pozíciója kiöregedett.
-       * @example false
-       */
-      stale?: boolean | null;
-      /**
-       * Format: int64
-       * @description A járműhöz tartozó utolsó valós idejű adat időbélyege másodpercben.
-       * @example 1625683727
-       */
-      lastUpdateTime?: number;
-      /**
-       * @description A jármű állapota.
-       * @example IN_TRANSIT_TO
-       * @enum {string}
-       */
-      status?: 'INCOMING_AT' | 'STOPPED_AT' | 'IN_TRANSIT_TO';
-      /**
-       * @description A járműhöz tartozó torlódási állapot.
-       * @example CONGESTION
-       * @enum {string|null}
-       */
-      congestionLevel?: 'UNKNOWN' | 'CONGESTION' | null;
-      /**
-       * @deprecated
-       * @description A jármű fajtája. Deprecated: használjuk a `style` attribútumot.
-       * @example TRAM
-       * @enum {string}
-       */
-      vehicleRouteType?:
-        | 'WALK'
-        | 'BICYCLE'
-        | 'CAR'
-        | 'TRAM'
-        | 'SUBWAY'
-        | 'SUBURBAN_RAILWAY'
-        | 'RAIL'
-        | 'COACH'
-        | 'BUS'
-        | 'TROLLEYBUS'
-        | 'FERRY'
-        | 'CABLE_CAR'
-        | 'GONDOLA'
-        | 'FUNICULAR'
-        | 'TRANSIT'
-        | 'TRAINISH'
-        | 'BUSISH'
-        | 'LEG_SWITCH'
-        | 'CUSTOM_MOTOR_VEHICLE';
-      /**
-       * Format: int32
-       * @description Hol tart a jármű a két megálló közti szakaszon, százalékban.
-       * @example 28
-       */
-      stopDistancePercent?: number;
-      /**
-       * @description Igaz, ha a jármű alacsonypadlós.
+       * @description Igaz, ha ez a megálló foglalást igényel.
        * @example true
        */
-      wheelchairAccessible?: boolean;
-      occupancy?: components['schemas']['TransitVehicleOccupancy'];
-      capacity?: components['schemas']['TransitVehicleOccupancy'];
+      requiresBooking?: boolean;
       /**
-       * @description A járműhöz tartozó menet azonosítója.
-       * @example BKK_C3135012112
+       * Format: int32
+       * @description A megálló sorrendje a járaton.
+       * @example 1
        */
-      tripId?: string | null;
-      style?: components['schemas']['TransitVehicleStyle'];
+      stopSequence?: number;
+      /**
+       * Format: double
+       * @description Milyen messze található a megálló az elsőtől a minta mentén méterben.
+       * @example 935
+       */
+      shapeDistTraveled?: number;
     };
-    /** @description A jármű kapacitása. */
-    TransitVehicleOccupancy: {
-      /**
-       * Format: int32
-       * @description Hány felnőtt van a járművön.
-       * @example 350
-       */
-      adults?: number | null;
-      /**
-       * Format: int32
-       * @description Hány gyermek van a járművön.
-       * @example 350
-       */
-      children?: number | null;
-      /**
-       * Format: int32
-       * @description Hány babakocsi van a járművön
-       * @example 350
-       */
-      strollers?: number | null;
-      /**
-       * Format: int32
-       * @description Hány kerekesszék van a járművön.
-       * @example 350
-       */
-      wheelchairs?: number | null;
-      /**
-       * Format: int32
-       * @description Hány be nem kategorizált entitás van a járművön.
-       * @example 350
-       */
-      other?: number | null;
-    } | null;
-    /** @description A járműhöz tartozó stílus. */
-    TransitVehicleStyle: {
-      icon?: components['schemas']['TransitVehicleStyleIcon'];
-    } | null;
     TripDetailsOTPMethodResponse: {
       /**
        * Format: int64
@@ -2812,24 +3027,6 @@ export interface components {
        */
       text?: string;
       data?: components['schemas']['TransitEntryWithReferencesTransitTripDetailsOTP'];
-    };
-    /** @description A válasz adat. */
-    TransitListEntryWithReferencesTransitVehicle: {
-      /** @description A lekért adatok listája. */
-      list?: components['schemas']['TransitVehicle'][];
-      /** @description Az értéke mindig `false`. */
-      outOfRange?: boolean;
-      /**
-       * @description Igaz, ha a lista több elemet tartalmaz, mint a limit paraméter. Indulási és érkezési idő típusú lekéréseknél használjuk.
-       * @example false
-       */
-      limitExceeded?: boolean;
-      references?: components['schemas']['TransitReferences'];
-      /**
-       * @description Az adat típusa. Lista esetén "listWithReferences".
-       * @example listWithReferences
-       */
-      class?: string;
     };
     VehicleForTripMethodResponse: {
       /**
@@ -2947,50 +3144,52 @@ export interface components {
   pathItems: never;
 }
 
+export type $defs = Record<string, never>;
+
 export type external = Record<string, never>;
 
 export interface operations {
   searchAlerts: {
     parameters: {
-      /**
-       * @description A keresési feltétel, amit a zavar fejlécével, leírásával, vagy azonosítójával illesztünk.
-       * @example BKK_bkkinfo-75694
-       */
-      /**
-       * @description A keresés időintervallumának eleje epoch másodpercben.
-       * @example 1625695260
-       */
-      /**
-       * @description A keresési időintervallum vége epoch másodpercben.
-       * @example 1625695260
-       */
-      /**
-       * @description A visszaadott elemek minimális száma.
-       * @example 5
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query?: {
+        /**
+         * @description A keresési feltétel, amit a zavar fejlécével, leírásával, vagy azonosítójával illesztünk.
+         * @example BKK_bkkinfo-75694
+         */
         query?: string;
+        /**
+         * @description A keresés időintervallumának eleje epoch másodpercben.
+         * @example 1625695260
+         */
         start?: number;
+        /**
+         * @description A keresési időintervallum vége epoch másodpercben.
+         * @example 1625695260
+         */
         end?: number;
+        /**
+         * @description A visszaadott elemek minimális száma.
+         * @example 5
+         */
         minResult?: number;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -3005,107 +3204,107 @@ export interface operations {
   };
   getArrivalsAndDeparturesForLocation: {
     parameters: {
-      /**
-       * @description Menetrendi adatok maximális száma egy csoportban.
-       * @example 2
-       */
-      /**
-       * @description A kliens hosszúsági koordinátája.
-       * @example 19.049086
-       */
-      /**
-       * @description A kliens szélességi koordinátája.
-       * @example 47.47375
-       */
-      /**
-       * @description A lekérdezési időablak a `time` paraméter előtt ennyi perccel indul.
-       * @example 2
-       */
-      /**
-       * @description A lekérdezési időablak a `time` paraméter után ennyi perccel ér véget.
-       * @example 30
-       */
-      /**
-       * @description A megállók azonosítóinak listája, amelyekhez a lekérést végezzük.
-       * @example BKK_F01029,BKK_F01029
-       */
-      /**
-       * @description A válasz szűrésére használt járatok azonosítóinak listája.
-       * @example BKK_VP06,BKK_0090
-       */
-      /**
-       * @description A lekérdezés kiértékeléséhez használt időpont. Alapértelmezetten az aktuális szerveridő.
-       * @example 1625740980
-       */
-      /**
-       * @description Ha igaz akkor csak az érkezési (és előrejelzett érkezési) idők nem szerepelnek a válaszban.
-       * @example false
-       */
-      /**
-       * @description A visszaadott indulási és érkezési idők listájának maximális hossza.
-       * @example 60
-       */
-      /**
-       * @description A helyszín középpontjának szélessgéi koordinátája.
-       * @example 47.4973131430789
-       */
-      /**
-       * @description A helyszín középpontjának hosszúsági koordinátája.
-       * @example 19.064639534671457
-       */
-      /**
-       * @description A lekérési terület szélességi íve. (Terület szélessége: `lat +/- latspan`).
-       * @example 0.013365429598373169
-       */
-      /**
-       * @description A lekérési terület hosszúsági íve. (Terület hosszúsága: `lon +/- lonSpan`).
-       * @example 0.032126676908724505
-       */
-      /**
-       * @description Ha a `latSpan` vagy a `longSpan` nincs kitöltve, a keresési terület a középpontól számított `radius` méter távolság mind a négy irányban.
-       * @example 100
-       */
-      /** @description A válasz szűrésére használt keresési kifejezés. */
-      /**
-       * @description A visszaadott elemek minimális száma.
-       * @example 5
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query?: {
+        /**
+         * @description Menetrendi adatok maximális száma egy csoportban.
+         * @example 2
+         */
         groupLimit?: number;
+        /**
+         * @description A kliens hosszúsági koordinátája.
+         * @example 19.049086
+         */
         clientLon?: number;
+        /**
+         * @description A kliens szélességi koordinátája.
+         * @example 47.47375
+         */
         clientLat?: number;
+        /**
+         * @description A lekérdezési időablak a `time` paraméter előtt ennyi perccel indul.
+         * @example 2
+         */
         minutesBefore?: number;
+        /**
+         * @description A lekérdezési időablak a `time` paraméter után ennyi perccel ér véget.
+         * @example 30
+         */
         minutesAfter?: number;
+        /**
+         * @description A megállók azonosítóinak listája, amelyekhez a lekérést végezzük.
+         * @example BKK_F01029,BKK_F01029
+         */
         stopId?: string[];
+        /**
+         * @description A válasz szűrésére használt járatok azonosítóinak listája.
+         * @example BKK_VP06,BKK_0090
+         */
         includeRouteId?: string[];
+        /**
+         * @description A lekérdezés kiértékeléséhez használt időpont. Alapértelmezetten az aktuális szerveridő.
+         * @example 1625740980
+         */
         time?: number;
+        /**
+         * @description Ha igaz akkor csak az érkezési (és előrejelzett érkezési) idők nem szerepelnek a válaszban.
+         * @example false
+         */
         onlyDepartures?: boolean;
+        /**
+         * @description A visszaadott indulási és érkezési idők listájának maximális hossza.
+         * @example 60
+         */
         limit?: number;
+        /**
+         * @description A helyszín középpontjának szélessgéi koordinátája.
+         * @example 47.4973131430789
+         */
         lat?: number;
+        /**
+         * @description A helyszín középpontjának hosszúsági koordinátája.
+         * @example 19.064639534671457
+         */
         lon?: number;
+        /**
+         * @description A lekérési terület szélességi íve. (Terület szélessége: `lat +/- latspan`).
+         * @example 0.013365429598373169
+         */
         latSpan?: number;
+        /**
+         * @description A lekérési terület hosszúsági íve. (Terület hosszúsága: `lon +/- lonSpan`).
+         * @example 0.032126676908724505
+         */
         lonSpan?: number;
+        /**
+         * @description Ha a `latSpan` vagy a `longSpan` nincs kitöltve, a keresési terület a középpontól számított `radius` méter távolság mind a négy irányban.
+         * @example 100
+         */
         radius?: number;
+        /** @description A válasz szűrésére használt keresési kifejezés. */
         query?: string;
+        /**
+         * @description A visszaadott elemek minimális száma.
+         * @example 5
+         */
         minResult?: number;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -3120,92 +3319,92 @@ export interface operations {
   };
   getArrivalsAndDeparturesForStop: {
     parameters: {
-      /**
-       * @description A lekérdezési időablak a `time` paraméter előtt ennyi perccel indul.
-       * @example 2
-       */
-      /**
-       * @description A lekérdezési időablak a `time` paraméter után ennyi perccel ér véget.
-       * @example 30
-       */
-      /**
-       * @description A megállók azonosítóinak listája, amelyekhez a lekérést végezzük.
-       * @example BKK_F01029,BKK_F01029
-       */
-      /**
-       * @description A válasz szűrésére használt járatok azonosítóinak listája.
-       * @example BKK_VP06,BKK_0090
-       */
-      /**
-       * @description A lekérdezés kiértékeléséhez használt időpont. Alapértelmezetten az aktuális szerveridő.
-       * @example 1625740980
-       */
-      /**
-       * @description Ha igaz akkor csak az érkezési (és előrejelzett érkezési) idők nem szerepelnek a válaszban.
-       * @example false
-       */
-      /**
-       * @description A visszaadott indulási és érkezési idők listájának maximális hossza.
-       * @example 60
-       */
-      /**
-       * @description A helyszín középpontjának szélessgéi koordinátája.
-       * @example 47.4973131430789
-       */
-      /**
-       * @description A helyszín középpontjának hosszúsági koordinátája.
-       * @example 19.064639534671457
-       */
-      /**
-       * @description A lekérési terület szélességi íve. (Terület szélessége: `lat +/- latspan`).
-       * @example 0.013365429598373169
-       */
-      /**
-       * @description A lekérési terület hosszúsági íve. (Terület hosszúsága: `lon +/- lonSpan`).
-       * @example 0.032126676908724505
-       */
-      /**
-       * @description Ha a `latSpan` vagy a `longSpan` nincs kitöltve, a keresési terület a középpontól számított `radius` méter távolság mind a négy irányban.
-       * @example 100
-       */
-      /** @description A válasz szűrésére használt keresési kifejezés. */
-      /**
-       * @description A visszaadott elemek minimális száma.
-       * @example 5
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query?: {
+        /**
+         * @description A lekérdezési időablak a `time` paraméter előtt ennyi perccel indul.
+         * @example 2
+         */
         minutesBefore?: number;
+        /**
+         * @description A lekérdezési időablak a `time` paraméter után ennyi perccel ér véget.
+         * @example 30
+         */
         minutesAfter?: number;
+        /**
+         * @description A megállók azonosítóinak listája, amelyekhez a lekérést végezzük.
+         * @example BKK_F01029,BKK_F01029
+         */
         stopId?: string[];
+        /**
+         * @description A válasz szűrésére használt járatok azonosítóinak listája.
+         * @example BKK_VP06,BKK_0090
+         */
         includeRouteId?: string[];
+        /**
+         * @description A lekérdezés kiértékeléséhez használt időpont. Alapértelmezetten az aktuális szerveridő.
+         * @example 1625740980
+         */
         time?: number;
+        /**
+         * @description Ha igaz akkor csak az érkezési (és előrejelzett érkezési) idők nem szerepelnek a válaszban.
+         * @example false
+         */
         onlyDepartures?: boolean;
+        /**
+         * @description A visszaadott indulási és érkezési idők listájának maximális hossza.
+         * @example 60
+         */
         limit?: number;
+        /**
+         * @description A helyszín középpontjának szélessgéi koordinátája.
+         * @example 47.4973131430789
+         */
         lat?: number;
+        /**
+         * @description A helyszín középpontjának hosszúsági koordinátája.
+         * @example 19.064639534671457
+         */
         lon?: number;
+        /**
+         * @description A lekérési terület szélességi íve. (Terület szélessége: `lat +/- latspan`).
+         * @example 0.013365429598373169
+         */
         latSpan?: number;
+        /**
+         * @description A lekérési terület hosszúsági íve. (Terület hosszúsága: `lon +/- lonSpan`).
+         * @example 0.032126676908724505
+         */
         lonSpan?: number;
+        /**
+         * @description Ha a `latSpan` vagy a `longSpan` nincs kitöltve, a keresési terület a középpontól számított `radius` méter távolság mind a négy irányban.
+         * @example 100
+         */
         radius?: number;
+        /** @description A válasz szűrésére használt keresési kifejezés. */
         query?: string;
+        /**
+         * @description A visszaadott elemek minimális száma.
+         * @example 5
+         */
         minResult?: number;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -3220,25 +3419,25 @@ export interface operations {
   };
   getBicycleRentalStations: {
     parameters: {
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query?: {
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -3251,32 +3450,91 @@ export interface operations {
       };
     };
   };
+  bookingRedirect: {
+    parameters: {
+      query?: {
+        /**
+         * @description A járat azonosítója.
+         * @example BKK_0650
+         */
+        routeId?: string;
+        /**
+         * @description A járat íránya.
+         * @example 1
+         */
+        directionId?: string;
+        /**
+         * @description A menet azonosítója.
+         * @example BKK_ADF5443
+         */
+        tripId?: string;
+        /**
+         * @description A menet üzem napja.
+         * @example 20220130
+         */
+        serviceDate?: string;
+        /**
+         * @description A felszállási megálló azonosítója.
+         * @example BKK_064215
+         */
+        boardStopId?: string;
+        /**
+         * @description A leszállási megálló azonosítója.
+         * @example BKK_064215
+         */
+        alightStopId?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
+        version?: components['schemas']['ApiVersion'];
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
+        appVersion?: string;
+      };
+      path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
+        dialect: components['schemas']['Dialect'];
+      };
+    };
+    responses: {
+      /** @description Átírányit a foglalási oldalra. */
+      302: {
+        content: never;
+      };
+    };
+  };
   getMetadata: {
     parameters: {
-      /**
-       * @description A lekérés kiértékelésének időpontja epoch másodpercben (az aktív zavarok lekéréséhez szükséges).A szerver ideje az alapértelmezett értéke.
-       * @example 1625666578
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query?: {
+        /**
+         * @description A lekérés kiértékelésének időpontja epoch másodpercben (az aktív zavarok lekéréséhez szükséges).A szerver ideje az alapértelmezett értéke.
+         * @example 1625666578
+         */
         time?: number;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -3291,40 +3549,40 @@ export interface operations {
   };
   getMultiRouteDetails: {
     parameters: {
-      /**
-       * @description A lekért járatok azonosítói.
-       * @example BKK_3040,BKK_3060
-       */
-      /**
-       * @description Az aktív zavarok lekéréséhez használt dátum. Alapértelmezett értéke az aktuális nap.
-       * @example 20210707
-       */
-      /**
-       * @description Ha igaz, akkor az útvonalhoz tartozó kapcsolódó útvonalak is szerepelnek a válaszban.
-       * @example false
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query: {
+        /**
+         * @description A lekért járatok azonosítói.
+         * @example BKK_3040,BKK_3060
+         */
         routeId: string[];
+        /**
+         * @description Az aktív zavarok lekéréséhez használt dátum. Alapértelmezett értéke az aktuális nap.
+         * @example 20210707
+         */
         date?: string;
+        /**
+         * @description Ha igaz, akkor az útvonalhoz tartozó kapcsolódó útvonalak is szerepelnek a válaszban.
+         * @example false
+         */
         related?: boolean;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -3336,107 +3594,149 @@ export interface operations {
         };
       };
       /** @description A `date` paramétert nem sikerült beolvasni. */
-      400: never;
+      400: {
+        content: never;
+      };
       /** @description Ismeretlen járat azonosító. */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
-  plan: {
+  searchForOnboardDepartVehicles: {
     parameters: {
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
-      /**
-       * @description A dátum, amikor a tervezés indul (`arriveBy` esetén érkezik).
-       * @example "2021-07-09T00:00:00.000Z"
-       */
-      /**
-       * @description Az idő, amikor a tervezés indul (`arriveBy` esetén érkezik).
-       * @example 11:35
-       */
-      /**
-       * @description Az indulási hely adatai `név::hely` formában. A `név` az adott hely tetszőleges neve, amely az útiterv kiindulási pontjának lesz a neve (`leg.from.name`). A `hely` lehet koordináta `lat,lon` formában, vagy a geocoder API által visszaadott `vertex` azonosítója.
-       * @example BKK Központi Ügyfélszolgálat::47.4985022,19.0551266
-       */
-      /**
-       * @description Az érkezési hely adatai `név::hely` formában. A `név` az adott hely tetszőleges neve, amely az útiterv érkezési pontjának lesz a neve (`leg.to.name`). A `hely` lehet koordináta `lat,lon` formában, vagy a geocoder API által visszaadott `vertex` azonosítója.
-       * @example Mechwart liget::BKK:CSF00195
-       */
-      /**
-       * @description A tervező milyen közlekedési módokat használjon. A kerékpár kölcsönzés a `BICYCLE,WALK` paraméterekkel kapcsolható be.
-       * @example TRANSIT,WALK
-       */
-      /**
-       * @description Az első járműre szállás előtt történjen-e jegyvásárlás.
-       * @example true
-       */
-      /**
-       * @description A válasz tartalmazza-e a járatok által érintett köztes megállókat is.
-       * @example true
-       */
-      /**
-       * @description Érkezési időre tervezzünk-e a megadott `date` és `time` paraméterrel.
-       * @example true
-       */
-      /**
-       * @description Az összes járat alacsonypadlós legyen-e.
-       * @example false
-       */
-      /**
-       * @description Kerékpáros háromszög módú tervezés esetén mennyire számít a biztonság. 0 és 1 közötti szám, és 1-et kell kiadnia a másik két faktor összegével.
-       * @example 0.5
-       */
-      /**
-       * @description Kerékpáros háromszög módú tervezés esetén mennyire számít az útvonal síksága. 0 és 1 közötti szám, és 1-et kell kiadnia a másik két faktor összegével.
-       * @example 0
-       */
-      /**
-       * @description Kerékpáros háromszög módú tervezés esetén mennyire számít a gyorsaság. 0 és 1 közötti szám, és 1-et kell kiadnia a másik két faktor összegével.
-       * @example 0.5
-       */
-      /**
-       * @description A kereső mire optimalizálja az útvonalakat.
-       * @example BEST
-       */
-      /**
-       * @description A séta sebességét meghatározó profil.
-       * @example MID
-       */
-      /**
-       * @description Legfeljebb hány útvonal szerepeljen a válaszban.
-       * @example 5
-       */
-      query: {
-        version?: components['schemas']['ApiVersion'];
+      query?: {
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
+        version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
+      };
+      path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
+        dialect: components['schemas']['Dialect'];
+      };
+    };
+    requestBody?: {
+      content: {
+        'application/json': components['schemas']['OnboardDepartPosition'][];
+      };
+    };
+    responses: {
+      /** @description Visszatér az utas útvonalára illeszkedő járművekkel. */
+      200: {
+        content: {
+          'application/json': components['schemas']['OnboardDepartSearchMethodResponse'];
+        };
+      };
+    };
+  };
+  planTrip: {
+    parameters: {
+      query: {
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
+        version?: components['schemas']['ApiVersion'];
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
+        appVersion?: string;
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
+        includeReferences?: components['schemas']['ReferencesSchema'][];
+        /**
+         * @description A dátum, amikor a tervezés indul (`arriveBy` esetén érkezik).
+         * @example "2021-07-09T00:00:00.000Z"
+         */
         date?: string;
+        /**
+         * @description Az idő, amikor a tervezés indul (`arriveBy` esetén érkezik).
+         * @example 11:35
+         */
         time?: string;
+        /**
+         * @description Az indulási hely adatai `név::hely` formában. A `név` az adott hely tetszőleges neve, amely az útiterv kiindulási pontjának lesz a neve (`leg.from.name`). A `hely` lehet koordináta `lat,lon` formában, vagy a geocoder API által visszaadott `vertex` azonosítója.
+         * @example BKK Központi Ügyfélszolgálat::47.4985022,19.0551266
+         */
         fromPlace: string;
+        /**
+         * @description Az érkezési hely adatai `név::hely` formában. A `név` az adott hely tetszőleges neve, amely az útiterv érkezési pontjának lesz a neve (`leg.to.name`). A `hely` lehet koordináta `lat,lon` formában, vagy a geocoder API által visszaadott `vertex` azonosítója.
+         * @example Mechwart liget::BKK:CSF00195
+         */
         toPlace: string;
+        /**
+         * @description A tervező milyen közlekedési módokat használjon. A kerékpár kölcsönzés a `BICYCLE,WALK` paraméterekkel kapcsolható be.
+         * @example TRANSIT,WALK
+         */
         mode: components['schemas']['TraverseMode'][];
+        /**
+         * @description Az első járműre szállás előtt történjen-e jegyvásárlás.
+         * @example true
+         */
         shouldBuyTickets?: boolean;
+        /**
+         * @description A válasz tartalmazza-e a járatok által érintett köztes megállókat is.
+         * @example true
+         */
         showIntermediateStops?: boolean;
+        /**
+         * @description Érkezési időre tervezzünk-e a megadott `date` és `time` paraméterrel.
+         * @example true
+         */
         arriveBy?: boolean;
+        /**
+         * @description Az összes járat alacsonypadlós legyen-e.
+         * @example false
+         */
         wheelchair?: boolean;
+        /**
+         * @description Kerékpáros háromszög módú tervezés esetén mennyire számít a biztonság. 0 és 1 közötti szám, és 1-et kell kiadnia a másik két faktor összegével.
+         * @example 0.5
+         */
         triangleSafetyFactor?: number;
+        /**
+         * @description Kerékpáros háromszög módú tervezés esetén mennyire számít az útvonal síksága. 0 és 1 közötti szám, és 1-et kell kiadnia a másik két faktor összegével.
+         * @example 0
+         */
         triangleSlopeFactor?: number;
+        /**
+         * @description Kerékpáros háromszög módú tervezés esetén mennyire számít a gyorsaság. 0 és 1 közötti szám, és 1-et kell kiadnia a másik két faktor összegével.
+         * @example 0.5
+         */
         triangleTimeFactor?: number;
+        /**
+         * @description A kereső mire optimalizálja az útvonalakat.
+         * @example BEST
+         */
         optimize?: 'BEST' | 'WALK' | 'TRANSFERS';
+        /**
+         * @description A séta sebességét meghatározó profil.
+         * @example MID
+         */
         walkProfile?: components['schemas']['WalkProfile'];
+        /**
+         * @description Legfeljebb hány útvonal szerepeljen a válaszban.
+         * @example 5
+         */
         numItineraries?: number;
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -3451,105 +3751,105 @@ export interface operations {
   };
   planAccess: {
     parameters: {
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
-      /**
-       * @description A dátum, amikor a tervezés indul (`arriveBy` esetén érkezik).
-       * @example "2021-07-09T00:00:00.000Z"
-       */
-      /**
-       * @description Az idő, amikor a tervezés indul (`arriveBy` esetén érkezik).
-       * @example 11:35
-       */
-      /**
-       * @description Az indulási hely adatai `név::hely` formában. A `név` az adott hely tetszőleges neve, amely az útiterv kiindulási pontjának lesz a neve (`leg.from.name`). A `hely` lehet koordináta `lat,lon` formában, vagy a geocoder API által visszaadott `vertex` azonosítója.
-       * @example BKK Központi Ügyfélszolgálat::47.4985022,19.0551266
-       */
-      /**
-       * @description Az érkezési hely adatai `név::hely` formában. A `név` az adott hely tetszőleges neve, amely az útiterv érkezési pontjának lesz a neve (`leg.to.name`). A `hely` lehet koordináta `lat,lon` formában, vagy a geocoder API által visszaadott `vertex` azonosítója.
-       * @example Mechwart liget::BKK:CSF00195
-       */
-      /**
-       * @description A tervező milyen közlekedési módokat használjon. A kerékpár kölcsönzés a `BICYCLE,WALK` paraméterekkel kapcsolható be.
-       * @example TRANSIT,WALK
-       */
-      /**
-       * @description Az első járműre szállás előtt történjen-e jegyvásárlás.
-       * @example true
-       */
-      /**
-       * @description A válasz tartalmazza-e a járatok által érintett köztes megállókat is.
-       * @example true
-       */
-      /**
-       * @description Érkezési időre tervezzünk-e a megadott `date` és `time` paraméterrel.
-       * @example true
-       */
-      /**
-       * @description Az összes járat alacsonypadlós legyen-e.
-       * @example false
-       */
-      /**
-       * @description Kerékpáros háromszög módú tervezés esetén mennyire számít a biztonság. 0 és 1 közötti szám, és 1-et kell kiadnia a másik két faktor összegével.
-       * @example 0.5
-       */
-      /**
-       * @description Kerékpáros háromszög módú tervezés esetén mennyire számít az útvonal síksága. 0 és 1 közötti szám, és 1-et kell kiadnia a másik két faktor összegével.
-       * @example 0
-       */
-      /**
-       * @description Kerékpáros háromszög módú tervezés esetén mennyire számít a gyorsaság. 0 és 1 közötti szám, és 1-et kell kiadnia a másik két faktor összegével.
-       * @example 0.5
-       */
-      /**
-       * @description A kereső mire optimalizálja az útvonalakat.
-       * @example BEST
-       */
-      /**
-       * @description A séta sebességét meghatározó profil.
-       * @example MID
-       */
-      /**
-       * @description Legfeljebb hány útvonal szerepeljen a válaszban.
-       * @example 5
-       */
       query: {
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
+        /**
+         * @description A dátum, amikor a tervezés indul (`arriveBy` esetén érkezik).
+         * @example "2021-07-09T00:00:00.000Z"
+         */
         date?: string;
+        /**
+         * @description Az idő, amikor a tervezés indul (`arriveBy` esetén érkezik).
+         * @example 11:35
+         */
         time?: string;
+        /**
+         * @description Az indulási hely adatai `név::hely` formában. A `név` az adott hely tetszőleges neve, amely az útiterv kiindulási pontjának lesz a neve (`leg.from.name`). A `hely` lehet koordináta `lat,lon` formában, vagy a geocoder API által visszaadott `vertex` azonosítója.
+         * @example BKK Központi Ügyfélszolgálat::47.4985022,19.0551266
+         */
         fromPlace: string;
+        /**
+         * @description Az érkezési hely adatai `név::hely` formában. A `név` az adott hely tetszőleges neve, amely az útiterv érkezési pontjának lesz a neve (`leg.to.name`). A `hely` lehet koordináta `lat,lon` formában, vagy a geocoder API által visszaadott `vertex` azonosítója.
+         * @example Mechwart liget::BKK:CSF00195
+         */
         toPlace: string;
+        /**
+         * @description A tervező milyen közlekedési módokat használjon. A kerékpár kölcsönzés a `BICYCLE,WALK` paraméterekkel kapcsolható be.
+         * @example TRANSIT,WALK
+         */
         mode: components['schemas']['TraverseMode'][];
+        /**
+         * @description Az első járműre szállás előtt történjen-e jegyvásárlás.
+         * @example true
+         */
         shouldBuyTickets?: boolean;
+        /**
+         * @description A válasz tartalmazza-e a járatok által érintett köztes megállókat is.
+         * @example true
+         */
         showIntermediateStops?: boolean;
+        /**
+         * @description Érkezési időre tervezzünk-e a megadott `date` és `time` paraméterrel.
+         * @example true
+         */
         arriveBy?: boolean;
+        /**
+         * @description Az összes járat alacsonypadlós legyen-e.
+         * @example false
+         */
         wheelchair?: boolean;
+        /**
+         * @description Kerékpáros háromszög módú tervezés esetén mennyire számít a biztonság. 0 és 1 közötti szám, és 1-et kell kiadnia a másik két faktor összegével.
+         * @example 0.5
+         */
         triangleSafetyFactor?: number;
+        /**
+         * @description Kerékpáros háromszög módú tervezés esetén mennyire számít az útvonal síksága. 0 és 1 közötti szám, és 1-et kell kiadnia a másik két faktor összegével.
+         * @example 0
+         */
         triangleSlopeFactor?: number;
+        /**
+         * @description Kerékpáros háromszög módú tervezés esetén mennyire számít a gyorsaság. 0 és 1 közötti szám, és 1-et kell kiadnia a másik két faktor összegével.
+         * @example 0.5
+         */
         triangleTimeFactor?: number;
+        /**
+         * @description A kereső mire optimalizálja az útvonalakat.
+         * @example BEST
+         */
         optimize?: 'BEST' | 'WALK' | 'TRANSFERS';
+        /**
+         * @description A séta sebességét meghatározó profil.
+         * @example MID
+         */
         walkProfile?: components['schemas']['WalkProfile'];
+        /**
+         * @description Legfeljebb hány útvonal szerepeljen a válaszban.
+         * @example 5
+         */
         numItineraries?: number;
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
-      /** @description A megadott paraméterekkel tervez útvonalat. */
+      /** @description A megadott paraméterekkel tervez megállóba útvonalat. */
       200: {
         content: {
           'application/json': components['schemas']['PlanTripResponse'];
@@ -3559,45 +3859,45 @@ export interface operations {
   };
   getReferences: {
     parameters: {
-      /**
-       * @description A szolgáltató ID-je.
-       * @example BKK
-       */
-      /**
-       * @description A zavar ID-je.
-       * @example BKK_bkkinfo-81404
-       */
-      /**
-       * @description A járat ID-ja.
-       * @example BKK_3040
-       */
-      /**
-       * @description A megálló ID-ja.
-       * @example BKK_F00001
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query?: {
+        /**
+         * @description A szolgáltató ID-je.
+         * @example BKK
+         */
         agencyId?: string[];
+        /**
+         * @description A zavar ID-je.
+         * @example BKK_bkkinfo-81404
+         */
         alertId?: string[];
+        /**
+         * @description A járat ID-ja.
+         * @example BKK_3040
+         */
         routeId?: string[];
+        /**
+         * @description A megálló ID-ja.
+         * @example BKK_F00001
+         */
         stopId?: string[];
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -3612,30 +3912,30 @@ export interface operations {
   };
   getRouteDetailsForStop: {
     parameters: {
-      /**
-       * @description A lekért megálló azonosítója.
-       * @example BKK_F01294
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query?: {
+        /**
+         * @description A lekért megálló azonosítója.
+         * @example BKK_F01294
+         */
         stopId?: string;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -3647,45 +3947,47 @@ export interface operations {
         };
       };
       /** @description Ismeretlen megálló azonosító. */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   getRouteDetails: {
     parameters: {
-      /**
-       * @description A járat ID-ja.
-       * @example BKK_3040
-       */
-      /**
-       * @description Az aktív zavarok lekéréséhez használt dátum. Alapértelmezett értéke az aktuális nap.
-       * @example 20210707
-       */
-      /**
-       * @description Ha igaz, akkor az útvonalhoz tartozó kapcsolódó útvonalak is szerepelnek a válaszban.
-       * @example false
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query: {
+        /**
+         * @description A járat ID-ja.
+         * @example BKK_3040
+         */
         routeId: string;
+        /**
+         * @description Az aktív zavarok lekéréséhez használt dátum. Alapértelmezett értéke az aktuális nap.
+         * @example 20210707
+         */
         date?: string;
+        /**
+         * @description Ha igaz, akkor az útvonalhoz tartozó kapcsolódó útvonalak is szerepelnek a válaszban.
+         * @example false
+         */
         related?: boolean;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -3697,47 +3999,51 @@ export interface operations {
         };
       };
       /** @description Rossz formátumú a `date` paraméter. */
-      400: never;
+      400: {
+        content: never;
+      };
       /** @description Az ID-hoz nem található járat. */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   getScheduleForStop: {
     parameters: {
-      /**
-       * @description A releváns megállók azonosítói.
-       * @example BKK_F01294,BKK_F01294
-       */
-      /**
-       * @description A kért dátum.
-       * @example 20210708
-       */
-      /**
-       * @description Igaz esetén az érkezési és előrejelzett érkezési idők ki lesznek hagyva a válaszból.
-       * @example false
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query?: {
+        /**
+         * @description A releváns megállók azonosítói.
+         * @example BKK_F01294,BKK_F01294
+         */
         stopId?: string[];
+        /**
+         * @description A kért dátum.
+         * @example 20210708
+         */
         date?: string;
+        /**
+         * @description Igaz esetén az érkezési és előrejelzett érkezési idők ki lesznek hagyva a válaszból.
+         * @example false
+         */
         onlyDepartures?: boolean;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -3749,53 +4055,56 @@ export interface operations {
         };
       };
       /** @description Nem sikerült beolvasni a dátumot. */
-      400: never;
+      400: {
+        content: never;
+      };
       /** @description Ismeretlen stopId. */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   search: {
     parameters: {
-      /**
-       * @description Szűrőfeltétel, amire illesztve vannak a zavarok, járatok és megállók.
-       * @example BKK_bkkinfo-75694
-       */
-      /**
-       * @description A látható térkép középpontjának szélessgéi koordinátája.
-       * @example 47.4973131430789
-       */
-      /**
-       * @description A látható térkép középpontjának hosszúsági koordinátája.
-       * @example 19.064639534671457
-       */
-      /**
-       * @description A visszaadott elemek minimális száma.
-       * @example 5
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query?: {
+        /**
+         * @description Szűrőfeltétel, amire illesztve vannak a zavarok, járatok és megállók.
+         * @example BKK_bkkinfo-75694
+         */
         query?: string;
+        /**
+         * @description A látható térkép középpontjának szélessgéi koordinátája.
+         * @example 47.4973131430789
+         */
         lat?: number;
+        /**
+         * @description A látható térkép középpontjának hosszúsági koordinátája.
+         * @example 19.064639534671457
+         */
         lon?: number;
+        /**
+         * @description A visszaadott elemek minimális száma.
+         * @example 5
+         */
         minResult?: number;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
+        appVersion?: string;
         /**
          * @description Az API verziója.
          * @example 2
          */
-        appVersion?: string;
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -3810,11 +4119,11 @@ export interface operations {
   };
   getStatistics: {
     parameters: {
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -3829,57 +4138,57 @@ export interface operations {
   };
   getStopsForLocation: {
     parameters: {
-      /**
-       * @description A helyszín középpontjának szélessgéi koordinátája.
-       * @example 47.4973131430789
-       */
-      /**
-       * @description A helyszín középpontjának hosszúsági koordinátája.
-       * @example 19.064639534671457
-       */
-      /**
-       * @description A lekérési terület szélességi íve. (Terület szélessége: `lat +/- latspan`).
-       * @example 0.013365429598373169
-       */
-      /**
-       * @description A lekérési terület hosszúsági íve. (Terület hosszúsága: `lon +/- lonSpan`).
-       * @example 0.032126676908724505
-       */
-      /**
-       * @description Ha a `latSpan` vagy a `longSpan` nincs kitöltve, a keresési terület a középpontól számított `radius` méter távolság mind a négy irányban.
-       * @example 100
-       */
-      /** @description A válasz szűrésére használt keresési kifejezés. */
-      /**
-       * @description A visszaadott elemek minimális száma.
-       * @example 5
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query?: {
+        /**
+         * @description A helyszín középpontjának szélessgéi koordinátája.
+         * @example 47.4973131430789
+         */
         lat?: number;
+        /**
+         * @description A helyszín középpontjának hosszúsági koordinátája.
+         * @example 19.064639534671457
+         */
         lon?: number;
+        /**
+         * @description A lekérési terület szélességi íve. (Terület szélessége: `lat +/- latspan`).
+         * @example 0.013365429598373169
+         */
         latSpan?: number;
+        /**
+         * @description A lekérési terület hosszúsági íve. (Terület hosszúsága: `lon +/- lonSpan`).
+         * @example 0.032126676908724505
+         */
         lonSpan?: number;
+        /**
+         * @description Ha a `latSpan` vagy a `longSpan` nincs kitöltve, a keresési terület a középpontól számított `radius` méter távolság mind a négy irányban.
+         * @example 100
+         */
         radius?: number;
+        /** @description A válasz szűrésére használt keresési kifejezés. */
         query?: string;
+        /**
+         * @description A visszaadott elemek minimális száma.
+         * @example 5
+         */
         minResult?: number;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -3894,85 +4203,106 @@ export interface operations {
   };
   getTicketingData: {
     parameters: {
-      /**
-       * @description Ha meg van adva, akkor csak abban az esetben érkezik vissza adat, ha az változott a másodpercekben megadott időpont óta. Különben HTTP 304 a válasz.
-       * @example 1625685137
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query?: {
+        /**
+         * @description Csak azokat az elemeket adjuk vissza, amik módosultak az itt megadott időbélyeg (UNIX időbélyeg másodpercben) után. Ha nincs változás üres listákkal tér vissza. Elsőbbsége van a header paraméterrel szemben.
+         * @example 1625685137
+         */
         ifModifiedSince?: number;
+        /**
+         * @description Ha igaz, és az adat változott az `ifModifiedSince` query paraméterben megadott időpont óta, akkor az összes adat visszaadásra kerül. Ha nincs megadva csak a módosult elemek szerepelnek a válaszban. Csak az `ifModifiedSince` query paraméterrel együtt szerepelhet, mivel az `If-Modified-Since` fejléc minden esetben a teljes választ tartalmazza.
+         * @example true
+         */
+        full?: boolean;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
+      header?: {
+        /**
+         * @description Ha meg van adva, akkor csak abban az esetben érkezik vissza adat, ha az változott a megadott időpont óta. Különben HTTP 304 a válasz. A query paraméternek elsőbbsége van ezzel szemben.
+         * @example Fri, 21 Jan 2022 09:48:43 GMT+01:00
+         */
+        'If-Modified-Since'?: string;
+      };
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
     responses: {
-      /** @description Visszaadja az összes jegyértékesítő helyet és jegytípust. */
+      /** @description Visszaadja a jegyértékesítő helyeket és jegytípusokat. */
       200: {
         content: {
           'application/json': components['schemas']['TicketingMethodResponse'];
         };
       };
-      /** @description Nem változott az adat az `ifModifiedSince` paraméterben megadott időpont óta. */
-      304: never;
+      /** @description Nem változott az adat az `ifModifiedSince` query vagy header paraméterben megadott időpont óta. */
+      304: {
+        content: never;
+      };
     };
   };
   getTripDetails: {
     parameters: {
-      /**
-       * @description Amennyiben meg van adva, azon menet érkezik a válaszban, amit az adott jármű teljesít.
-       * @example BKK_4510
-       */
-      /**
-       * @description Ha nincs kitöltve a járműazonosító, az itt megadott azonosítóval rendelkező menet lesz a válaszban.
-       * @example BKK_C23556161
-       */
-      /**
-       * @description Ha nincs kitöltve a járműazonosító, ezen a dátumon lesz keresve az adott azonosítójú menet.
-       * @example 20210708
-       */
-      /**
-       * @description Akkor adunk vissza adatot, ha az módosult az itt megadott időbélyeg (UNIX időbélyeg másodpercben) után. Ellenkező esetben HTTP 304 a válasz, ha nincs változás.
-       * @example 1625685137
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query?: {
+        /**
+         * @description Amennyiben meg van adva, azon menet érkezik a válaszban, amit az adott jármű teljesít.
+         * @example BKK_4510
+         */
         vehicleId?: string;
+        /**
+         * @description Ha nincs kitöltve a járműazonosító, az itt megadott azonosítóval rendelkező menet lesz a válaszban.
+         * @example BKK_C23556161
+         */
         tripId?: string;
+        /**
+         * @description Ha nincs kitöltve a járműazonosító, ezen a dátumon lesz keresve az adott azonosítójú menet.
+         * @example 20210708
+         */
         date?: string;
+        /**
+         * @description Akkor adunk vissza adatot, ha az módosult az itt megadott időbélyeg (UNIX időbélyeg másodpercben) után. Ellenkező esetben HTTP 304 a válasz, ha nincs változás. Elsőbbsége van a header paraméterrel szemben.
+         * @example 1625685137
+         */
         ifModifiedSince?: number;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
+      header?: {
+        /**
+         * @description Ha meg van adva, akkor csak abban az esetben érkezik vissza adat, ha az változott a megadott időpont óta. Különben HTTP 304 a válasz. A query paraméternek elsőbbsége van ezzel szemben.
+         * @example Fri, 21 Jan 2022 09:48:43 GMT+01:00
+         */
+        'If-Modified-Since'?: string;
+      };
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -3984,49 +4314,62 @@ export interface operations {
         };
       };
       /** @description Nem változott az adat az `ifModifiedSince` paraméterben megadott időpont óta. */
-      304: never;
+      304: {
+        content: never;
+      };
       /** @description Nem sikerült beolvasni a dátumot. */
-      400: never;
+      400: {
+        content: never;
+      };
       /** @description A következő esetek egyike: -Ismeretlen járműazonosító. -Ismereten menetazonosító. -A kért menet nem közlekedik az adott napon. */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   getVehicleForTrip: {
     parameters: {
-      /**
-       * @description A lekért menetek azonosítói.
-       * @example BKK_C3135012112,BKK_C3135012044
-       */
-      /**
-       * @description A lekért menetrendi napok. Alapértelmezetten az aktuális nap.
-       * @example BKK_F01081
-       */
-      /**
-       * @description Akkor adunk vissza adatot, ha az módosult az itt megadott időbélyeg (UNIX időbélyeg másodpercben) után. Ellenkező esetben HTTP 304 a válasz, ha nincs változás.
-       * @example 1625685137
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query: {
+        /**
+         * @description A lekért menetek azonosítói.
+         * @example BKK_C3135012112,BKK_C3135012044
+         */
         tripId: string[];
+        /**
+         * @description A lekért menetrendi napok. Alapértelmezetten az aktuális nap.
+         * @example BKK_F01081
+         */
         date?: string[];
+        /**
+         * @description Akkor adunk vissza adatot, ha az módosult az itt megadott időbélyeg (UNIX időbélyeg másodpercben) után. Ellenkező esetben HTTP 304 a válasz, ha nincs változás. Elsőbbsége van a header paraméterrel szemben.
+         * @example 1625685137
+         */
         ifModifiedSince?: number;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
+      header?: {
+        /**
+         * @description Ha meg van adva, akkor csak abban az esetben érkezik vissza adat, ha az változott a megadott időpont óta. Különben HTTP 304 a válasz. A query paraméternek elsőbbsége van ezzel szemben.
+         * @example Fri, 21 Jan 2022 09:48:43 GMT+01:00
+         */
+        'If-Modified-Since'?: string;
+      };
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -4038,69 +4381,82 @@ export interface operations {
         };
       };
       /** @description Nem változott az adat az `ifModifiedSince` paraméterben megadott időpont óta. */
-      304: never;
+      304: {
+        content: never;
+      };
       /** @description A menet azonosítókat és menetrendi napokat tartalmazó tömbök mérete nem egyezik. */
-      400: never;
+      400: {
+        content: never;
+      };
       /** @description Az egyik menet azonosítóhoz nem található menet. */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   getVehiclesForLocation: {
     parameters: {
-      /**
-       * @description A válasz listát szűrő feltétel, amit tartalmaznia kell a jármű azonosítójának, rendszámának vagy a típusának.
-       * @example BKK_4510
-       */
-      /**
-       * @description A terület középpontjának szélességi koordinátája.
-       * @example 47.4973131430789
-       */
-      /**
-       * @description A terület középpontjának hosszúsági koordinátája.
-       * @example 19.064639534671457
-       */
-      /**
-       * @description A lekérési terület szélességi íve. (Terület szélessége: `lat +/- latspan`).
-       * @example 0.013365429598373169
-       */
-      /**
-       * @description A lekérési terület hosszúsági íve. (Terület hosszúsága: `lon +/- lonSpan`).
-       * @example 0.032126676908724505
-       */
-      /**
-       * @description Ha a `latSpan` vagy a `longSpan` nincs kitöltve, a keresési terület a középpontól számított `radius` méter távolság mind a négy irányban.
-       * @example 100
-       */
-      /**
-       * @description Akkor adunk vissza adatot, ha az módosult az itt megadott időbélyeg (UNIX időbélyeg másodpercben) után. Ellenkező esetben HTTP 304 a válasz, ha nincs változás.
-       * @example 1625685137
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query?: {
+        /**
+         * @description A válasz listát szűrő feltétel, amit tartalmaznia kell a jármű azonosítójának, rendszámának vagy a típusának.
+         * @example BKK_4510
+         */
         query?: string;
+        /**
+         * @description A terület középpontjának szélességi koordinátája.
+         * @example 47.4973131430789
+         */
         lat?: number;
+        /**
+         * @description A terület középpontjának hosszúsági koordinátája.
+         * @example 19.064639534671457
+         */
         lon?: number;
+        /**
+         * @description A lekérési terület szélességi íve. (Terület szélessége: `lat +/- latspan`).
+         * @example 0.013365429598373169
+         */
         latSpan?: number;
+        /**
+         * @description A lekérési terület hosszúsági íve. (Terület hosszúsága: `lon +/- lonSpan`).
+         * @example 0.032126676908724505
+         */
         lonSpan?: number;
+        /**
+         * @description Ha a `latSpan` vagy a `longSpan` nincs kitöltve, a keresési terület a középpontól számított `radius` méter távolság mind a négy irányban.
+         * @example 100
+         */
         radius?: number;
+        /**
+         * @description Akkor adunk vissza adatot, ha az módosult az itt megadott időbélyeg (UNIX időbélyeg másodpercben) után. Ellenkező esetben HTTP 304 a válasz, ha nincs változás. Elsőbbsége van a header paraméterrel szemben.
+         * @example 1625685137
+         */
         ifModifiedSince?: number;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
+      header?: {
+        /**
+         * @description Ha meg van adva, akkor csak abban az esetben érkezik vissza adat, ha az változott a megadott időpont óta. Különben HTTP 304 a válasz. A query paraméternek elsőbbsége van ezzel szemben.
+         * @example Fri, 21 Jan 2022 09:48:43 GMT+01:00
+         */
+        'If-Modified-Since'?: string;
+      };
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -4112,45 +4468,54 @@ export interface operations {
         };
       };
       /** @description Nem változott az adat az `ifModifiedSince` paraméterben megadott időpont óta. */
-      304: never;
+      304: {
+        content: never;
+      };
     };
   };
   getVehiclesForRoute: {
     parameters: {
-      /**
-       * @description A lekért járatok azonosítói.
-       * @example BKK_3040,BKK_3060
-       */
-      /**
-       * @description Tartalmazza-e a válasz a kapcsolódó járatokat is a referenciákban.
-       * @example false
-       */
-      /**
-       * @description Akkor adunk vissza adatot, ha az módosult az itt megadott időbélyeg (UNIX időbélyeg másodpercben) után. Ellenkező esetben HTTP 304 a válasz, ha nincs változás.
-       * @example 1625685137
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query: {
+        /**
+         * @description A lekért járatok azonosítói.
+         * @example BKK_3040,BKK_3060
+         */
         routeId: string[];
+        /**
+         * @description Tartalmazza-e a válasz a kapcsolódó járatokat is a referenciákban.
+         * @example false
+         */
         related?: boolean;
+        /**
+         * @description Akkor adunk vissza adatot, ha az módosult az itt megadott időbélyeg (UNIX időbélyeg másodpercben) után. Ellenkező esetben HTTP 304 a válasz, ha nincs változás. Elsőbbsége van a header paraméterrel szemben.
+         * @example 1625685137
+         */
         ifModifiedSince?: number;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
+      header?: {
+        /**
+         * @description Ha meg van adva, akkor csak abban az esetben érkezik vissza adat, ha az változott a megadott időpont óta. Különben HTTP 304 a válasz. A query paraméternek elsőbbsége van ezzel szemben.
+         * @example Fri, 21 Jan 2022 09:48:43 GMT+01:00
+         */
+        'If-Modified-Since'?: string;
+      };
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -4162,42 +4527,53 @@ export interface operations {
         };
       };
       /** @description Nem változott az adat az `ifModifiedSince` paraméterben megadott időpont óta. */
-      304: never;
+      304: {
+        content: never;
+      };
       /** @description A járat azonosítóhoz nem található járat. */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
   getVehiclesForStop: {
     parameters: {
-      /**
-       * @description A lekért megálló azonosítója.
-       * @example BKK_F01081
-       */
-      /**
-       * @description Akkor adunk vissza adatot, ha az módosult az itt megadott időbélyeg (UNIX időbélyeg másodpercben) után. Ellenkező esetben HTTP 304 a válasz, ha nincs változás.
-       * @example 1625685137
-       */
-      /**
-       * @description A kliensalkalmazás verziója.
-       * @example 1.1.abc
-       */
-      /**
-       * @description Az API verziója.
-       * @example 2
-       */
-      /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
       query: {
+        /**
+         * @description A lekért megálló azonosítója.
+         * @example BKK_F01081
+         */
         stopId: string;
+        /**
+         * @description Akkor adunk vissza adatot, ha az módosult az itt megadott időbélyeg (UNIX időbélyeg másodpercben) után. Ellenkező esetben HTTP 304 a válasz, ha nincs változás. Elsőbbsége van a header paraméterrel szemben.
+         * @example 1625685137
+         */
         ifModifiedSince?: number;
+        /**
+         * @description A kliensalkalmazás verziója.
+         * @example 1.1.abc
+         */
         appVersion?: string;
+        /**
+         * @description Az API verziója.
+         * @example 2
+         */
         version?: components['schemas']['ApiVersion'];
+        /** @description A referenciák típusát határozza meg. `true` vagy `COMPACT` esetén minden referencia szerepel, `false` esetén üres. `COMPACT` módban a route referenciák `description` mezője kihagyásra kerül. */
         includeReferences?: components['schemas']['ReferencesSchema'][];
       };
-      /**
-       * @description Az API referenciáinak dialektusa.
-       * @example otp
-       */
+      header?: {
+        /**
+         * @description Ha meg van adva, akkor csak abban az esetben érkezik vissza adat, ha az változott a megadott időpont óta. Különben HTTP 304 a válasz. A query paraméternek elsőbbsége van ezzel szemben.
+         * @example Fri, 21 Jan 2022 09:48:43 GMT+01:00
+         */
+        'If-Modified-Since'?: string;
+      };
       path: {
+        /**
+         * @description Az API referenciáinak dialektusa.
+         * @example otp
+         */
         dialect: components['schemas']['Dialect'];
       };
     };
@@ -4209,9 +4585,13 @@ export interface operations {
         };
       };
       /** @description Nem változott az adat az `ifModifiedSince` paraméterben megadott időpont óta. */
-      304: never;
+      304: {
+        content: never;
+      };
       /** @description A megálló azonosítóhoz nem található megálló. */
-      404: never;
+      404: {
+        content: never;
+      };
     };
   };
 }
