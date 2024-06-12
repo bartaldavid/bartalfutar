@@ -1,9 +1,10 @@
 import type { components } from '$lib/schema-generated';
-import type { AdapterAccount } from '@auth/core/adapters';
 import { sql } from 'drizzle-orm';
+import type { ProviderType } from '@auth/sveltekit/providers';
 import { integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 // Auth.js tables
+type AdapterAccountType = Extract<ProviderType, 'oauth' | 'oidc' | 'email' | 'webauthn'>;
 
 export const users = sqliteTable('user', {
   id: text('id').notNull().primaryKey(),
@@ -19,7 +20,7 @@ export const accounts = sqliteTable(
     userId: text('userId')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    type: text('type').$type<AdapterAccount['type']>().notNull(),
+    type: text('type').$type<AdapterAccountType>().notNull(),
     provider: text('provider').notNull(),
     providerAccountId: text('providerAccountId').notNull(),
     refresh_token: text('refresh_token'),

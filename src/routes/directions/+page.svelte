@@ -6,7 +6,7 @@
   import {
     geolocationPermissionState,
     listenForPermissionChange
-  } from '$lib/stores/geolocation-permission';
+  } from '$lib/stores/geolocation-permission.svelte';
   import { loadLocation, location } from '$lib/stores/geolocation';
   import { onMount } from 'svelte';
   import { page } from '$app/stores';

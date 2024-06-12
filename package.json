@@ -44,7 +44,6 @@
   },
   "type": "module",
   "dependencies": {
-    "@auth/core": "^0.32.0",
     "@auth/drizzle-adapter": "^1.2.0",
     "@auth/sveltekit": "^1.2.0",
     "@googlemaps/google-maps-services-js": "^3.4.0",

@@ -1,4 +1,4 @@
-import type { Session } from '@auth/core/types';
+import type { Session } from '@auth/sveltekit';
 import { db } from './libsql-db';
 import { favoriteStops, routes, stops, stopsRoutes } from './libsql-schema';
 import { and, eq } from 'drizzle-orm';

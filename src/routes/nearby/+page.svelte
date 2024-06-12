@@ -13,7 +13,7 @@
   import {
     geolocationPermissionState,
     listenForPermissionChange
-  } from '$lib/stores/geolocation-permission';
+  } from '$lib/stores/geolocation-permission.svelte';
   import { typed_fetch } from '../api/endpoint-types';
   import { Button } from '$lib/components/ui/button';
 

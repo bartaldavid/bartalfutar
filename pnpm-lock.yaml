@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@auth/core':
-        specifier: ^0.32.0
-        version: 0.32.0
       '@auth/drizzle-adapter':
         specifier: ^1.2.0
         version: 1.2.0
@@ -2810,7 +2807,6 @@ packages:
 
   libsql@0.3.11:
     resolution: {integrity: sha512-lgXUHvZcy+4foNrjCBB85jBjB4djGRDZLha+lXGxcvMg4oFFUbx2s8k5bzxIIPAhCrRuCarunGc0qvd27Vi7UA==}
-    cpu: [x64, arm64, wasm32]
     os: [darwin, linux, win32]
 
   lilconfig@2.1.0:

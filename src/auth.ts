@@ -1,6 +1,6 @@
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '$env/static/private';
 import { db } from '$lib/server/libsql-db';
-import Google from '@auth/core/providers/google';
+import Google from '@auth/sveltekit/providers/google';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { SvelteKitAuth } from '@auth/sveltekit';
 
@@ -30,17 +30,10 @@ export const { handle } = SvelteKitAuth({
  *
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
-declare module '@auth/core/types' {
-  interface Session extends DefaultSession {
+declare module '@auth/sveltekit' {
+  interface Session {
     user: {
       id: string;
-      // ...other properties
-      // role: UserRole;
-    } & DefaultSession['user'];
+    };
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
