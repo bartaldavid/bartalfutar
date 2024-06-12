@@ -3,6 +3,7 @@
   import { displayDate, epochToDate, useTransitStopTime } from '../lib/util/date.svelte';
   import { typed_fetch } from '../routes/api/endpoint-types';
   import { useNow } from '$lib/stores/now.svelte';
+  import * as m from '$lib/paraglide/messages.js';
 
   let { tripId }: { tripId: string } = $props();
 
@@ -15,7 +16,7 @@
 </script>
 
 {#if $tripData.isLoading}
-  <span class="text-xs">Loading...</span>
+  <span class="text-xs">{m.loading_()}</span>
 {/if}
 
 {#if $tripData.data?.length}

@@ -2,6 +2,7 @@
   import type { StopGroup } from '$lib/types';
   import SavedStopGroup from './SavedStopGroup.svelte';
   import GondolaLift from '~icons/material-symbols/gondola-lift';
+  import * as m from '$lib/paraglide/messages.js';
 
   let { groups }: { groups: StopGroup } = $props();
 </script>
@@ -16,9 +17,9 @@
       >
         <GondolaLift class="h-24 w-24 self-center mx-auto" />
         <div class="text-lg font-semibold text-center text-balance mt-4">
-          The stops you save will appear here
+          {m.the_stops_you_save_will_appear_here()}
         </div>
-        <p class="font-light text-center mt-4">Sign in to get started</p>
+        <p class="font-light text-center mt-4">{m.sign_in_to_get_started()}</p>
       </div>
     {/each}
   {/if}

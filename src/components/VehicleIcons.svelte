@@ -4,6 +4,7 @@
   import Subway from '~icons/material-symbols/subway';
   import Tram from '~icons/material-symbols/tram';
   import ZoomOutMap from '~icons/material-symbols/zoom-out-map';
+  import type { components } from '$lib/schema-generated';
 
   type typeMap = {
     [key in components['schemas']['TransitStop']['type'] as string | 'MULTIPLE']?: {
@@ -25,8 +26,6 @@
 </script>
 
 <script lang="ts">
-  import type { components } from '../lib/data/bkk-openapi';
-
   let { vehicleType, class: className }: { vehicleType: string; class: string } = $props();
 </script>
 

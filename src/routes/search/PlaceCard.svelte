@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { MapPin } from 'lucide-svelte';
+  import MapPin from 'lucide-svelte/icons/map-pin';
 
   let { place }: { place: { main: string; secondary: string; placeId: string } } = $props();
 </script>

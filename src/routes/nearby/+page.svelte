@@ -16,6 +16,7 @@
   } from '$lib/stores/geolocation-permission.svelte';
   import { typed_fetch } from '../api/endpoint-types';
   import { Button } from '$lib/components/ui/button';
+  import * as m from '$lib/paraglide/messages.js';
 
   let nearbyDepartures = createQuery({
     queryKey: ['departuresForLocation', $location.position?.coords],
@@ -62,7 +63,7 @@
     </Button>
   </div>
 {/snippet}
-<PageLayout pageTitle="Around you" {header}>
+<PageLayout pageTitle={m.around_you()} {header}>
   <div class="flex flex-col gap-2">
     {#if $nearbyDepartures.isLoading}
       <LoadingCards numberOfItems={2} />
@@ -72,7 +73,7 @@
       {#each $nearbyDepartures.data ?? [] as departureGroup (departureGroup.id + departureGroup.headSign)}
         <DepartureGroup {departureGroup} />
       {:else}
-        <div class="text-gray-500 text-center">No departures found</div>
+        <div class="text-gray-500 text-center">{m.no_departures_in_the_next()}</div>
       {/each}
     {/if}
 
@@ -86,16 +87,16 @@
         />
         <span class="pb-5 text-center text-2xl font-bold dark:text-slate-50">
           {$geolocationPermissionState === 'prompt'
-            ? 'Allow location access'
-            : 'Location access denied'}
+            ? m.allow_location_access()
+            : m.location_access_denied()}
         </span>
         <p class="  text-slate-700 dark:text-slate-200">
           {$geolocationPermissionState === 'prompt'
-            ? 'Please allow us to access your location to show departures around you.'
-            : 'You denied us access to your location. Please allow us to access your location to show departures around you.'}
+            ? m.location_prompt_helper()
+            : m.location_denied_helper()}
         </p>
         {#if $geolocationPermissionState === 'prompt'}
-          <Button on:click={() => loadLocation()}>Allow</Button>
+          <Button on:click={() => loadLocation()}>{m.allow()}</Button>
         {/if}
       </div>
     {/if}

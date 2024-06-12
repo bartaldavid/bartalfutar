@@ -15,6 +15,8 @@ export async function GET({ url }) {
       key: GOOGLE_MAPS_API_KEY,
       types: PlaceAutocompleteType.geocode,
       components: ['country:hu']
+      // TODO set language
+      // language: locals.paraglide.lang
     }
   });
 

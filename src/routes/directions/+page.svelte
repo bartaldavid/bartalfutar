@@ -1,6 +1,8 @@
 <script lang="ts">
   import TimeSelector, { type TimeSelectorProps } from './TimeSelector.svelte';
-  import { Locate, MapPin, LocateFixed } from 'lucide-svelte';
+  import Locate from 'lucide-svelte/icons/locate';
+  import MapPin from 'lucide-svelte/icons/map-pin';
+  import LocateFixed from 'lucide-svelte/icons/locate-fixed';
   import type { PageData } from './$types';
   import PageLayout from '$components/PageLayout.svelte';
   import {
@@ -17,10 +19,14 @@
   import BikeToggle from './BikeToggle.svelte';
   import { Accordion } from 'bits-ui';
   import LoadingCards from '$components/LoadingCards.svelte';
+  import * as m from '$lib/paraglide/messages.js';
+  import { writable } from 'svelte/store';
 
   let { data } = $props();
 
   let locationSetup = $state(!!$page.url.searchParams.get('from'));
+
+  let locationSetupStore = $derived(writable(locationSetup));
   // let bike = $state(false);
   let timeSetting = $state<TimeSelectorProps>({
     time: new Date().toLocaleTimeString([], {
@@ -73,7 +79,7 @@
         arrive_by: timeSetting.type === 'arrive_at',
         time: timeSetting.type !== 'now' ? timeSetting.time : undefined
       }),
-    enabled: locationSetup
+    enabled: $locationSetupStore
   });
 </script>
 
@@ -87,7 +93,9 @@
           <Locate />
         </button>
       {/if}
-      <span class="w-full rounded border p-1 dark:border-slate-300">Your current location</span>
+      <span class="w-full rounded border p-1 dark:border-slate-300"
+        >{m.your_current_location()}</span
+      >
     </div>
     <div class="flex items-center gap-2">
       <MapPin />

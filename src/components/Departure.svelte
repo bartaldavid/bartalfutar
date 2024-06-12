@@ -4,7 +4,8 @@
   import { displayDate, useTransitStopTime } from '../lib/util/date.svelte';
   import RouteIcon from './RouteIcon.svelte';
   import type { DepartureType } from '$lib/types';
-  import { TrainTrack } from 'lucide-svelte';
+  import TrainTrack from 'lucide-svelte/icons/train-track';
+  import * as m from '$lib/paraglide/messages.js';
 
   let {
     expanded,
@@ -83,7 +84,7 @@
     {#if relevantDate}
       <div class="flex shrink-0 flex-col justify-center text-center">
         <Countdown countDownToDate={relevantDate} class="font-medium" />
-        <span class="text-sm text-slate-700 dark:text-slate-100">minutes</span>
+        <span class="text-sm text-slate-700 dark:text-slate-100">{m.minutes_from_now()}</span>
       </div>
     {/if}
 

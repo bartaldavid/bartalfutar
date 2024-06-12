@@ -6,10 +6,11 @@
   import DirectionsWalk from '~icons/material-symbols/directions-walk';
   import { slide } from 'svelte/transition';
   import RouteIcon from '$components/RouteIcon.svelte';
+  import { languageTag } from '$lib/paraglide/runtime';
 
   let { itinerary }: { itinerary: NonNullable<Directions['itineraries']>[number] } = $props();
 
-  const df = new Intl.DateTimeFormat('en', {
+  const df = new Intl.DateTimeFormat(languageTag(), {
     hour: 'numeric',
     minute: 'numeric',
     hour12: false

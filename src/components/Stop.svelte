@@ -16,6 +16,7 @@
   import { Badge } from '$lib/components/ui/badge';
   import { isMav } from '$lib/util/stops';
   import MavLogo from './MavLogo.svelte';
+  import * as m from '$lib/paraglide/messages.js';
 
   let { stop, saved = false }: { stop: TStop; saved?: boolean } = $props();
   let expanded = $state(false);
@@ -71,7 +72,7 @@
         <!-- <Badge variant="outline">stop area</Badge> -->
         <span
           class="rounded border px-1 text-sm font-medium text-slate-800 dark:border-slate-300 dark:text-slate-50"
-          >all stops</span
+          >{m.stop_area()}</span
         >
         <!-- </div> -->
       {/if}
@@ -95,7 +96,7 @@
     <a
       class="flex items-center justify-center p-2 dark:text-slate-50"
       href={`/stops/${stop.id}?from=${encodeURIComponent($page.url.pathname)}`}
-      >Show more <ChevronRight /></a
+      >{m.show_more()} <ChevronRight /></a
     >
   </div>
 {/if}

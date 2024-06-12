@@ -3,20 +3,21 @@
   import Favorite from '~icons/material-symbols/favorite';
   import Search from '~icons/material-symbols/search';
   import Nearby from '~icons/material-symbols/nearby';
+  import * as m from '$lib/paraglide/messages.js';
 
   const navItems = [
     {
-      label: 'Favorites',
+      label: m.favorites(),
       path: '/favorites',
       icon: Favorite
     },
     {
-      label: 'Nearby',
+      label: m.nearby(),
       path: '/nearby',
       icon: Nearby
     },
     {
-      label: 'Search',
+      label: m.search(),
       path: '/search',
       icon: Search
     }

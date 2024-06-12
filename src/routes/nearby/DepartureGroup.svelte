@@ -5,6 +5,7 @@
   import Countdown from '../../components/Countdown.svelte';
   import RouteIcon from '../../components/RouteIcon.svelte';
   import TripDetails from '../../components/TripDetails.svelte';
+  import * as m from '$lib/paraglide/messages.js';
 
   let { departureGroup }: { departureGroup: DepartureGroup } = $props();
 
@@ -33,7 +34,7 @@
         />
       {/if}
     {:else}
-      <span class="text-slate-200">No departure in the next 90 minutes</span>
+      <span class="text-slate-200">{m.no_departures_in_the_next()}</span>
     {/each}
   </div>
   {#if expanded && departureGroup.departures?.[0].id}

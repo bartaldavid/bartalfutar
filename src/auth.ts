@@ -2,7 +2,7 @@ import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '$env/static/private';
 import { db } from '$lib/server/libsql-db';
 import Google from '@auth/sveltekit/providers/google';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
-import { SvelteKitAuth } from '@auth/sveltekit';
+import { SvelteKitAuth, type DefaultSession } from '@auth/sveltekit';
 
 export const { handle } = SvelteKitAuth({
   providers: [

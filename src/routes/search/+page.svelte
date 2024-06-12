@@ -6,32 +6,45 @@
   import { typed_fetch } from '../api/endpoint-types';
   import type { TStop } from '$lib/types';
   import { page } from '$app/stores';
-  import { Search } from 'lucide-svelte';
+  import Search from 'lucide-svelte/icons/search';
   import { replaceState } from '$app/navigation';
   import PlaceCard from './PlaceCard.svelte';
+  import * as m from '$lib/paraglide/messages.js';
+  import { derived as derivedStore, writable } from 'svelte/store';
 
   let { data } = $props();
 
   let favorite_ids = $derived(data?.favorites_ids ?? []);
 
   let searchQuery = $state(data.query);
+  // HACK to make tanstack reactive
+  const query = writable(data.query);
+  $effect(() => {
+    query.set(searchQuery);
+  });
+
   let timer: NodeJS.Timeout | undefined = $state();
 
-  let stopsQuery = createQuery({
-    queryKey: ['search', searchQuery],
-    queryFn: async () => typed_fetch('/api/stops-for-location', { q: searchQuery }),
-    enabled: searchQuery.length > searchQueryMinimumLength,
-    initialData: data?.searchData
-  });
+  // TODO combine these with createQueries
+  const stopsQuery = createQuery(
+    derivedStore(query, ($query) => ({
+      queryKey: ['search', $query],
+      queryFn: async () => typed_fetch('/api/stops-for-location', { q: searchQuery }),
+      enabled: $query.length > searchQueryMinimumLength,
+      initialData: data?.searchData
+    }))
+  );
 
-  let placesQuery = createQuery({
-    queryKey: ['search-places', searchQuery],
-    queryFn: async () =>
-      fetch('/api/places-autocomplete?q=' + searchQuery).then(
-        (res) => res.json() as Promise<{ main: string; secondary: string; placeId: string }[]>
-      ),
-    enabled: searchQuery.length > searchQueryMinimumLength
-  });
+  const placesQuery = createQuery(
+    derivedStore(query, ($query) => ({
+      queryKey: ['search-places', $query],
+      queryFn: async () =>
+        fetch('/api/places-autocomplete?q=' + searchQuery).then(
+          (res) => res.json() as Promise<{ main: string; secondary: string; placeId: string }[]>
+        ),
+      enabled: $query.length > searchQueryMinimumLength
+    }))
+  );
 
   let stopsToDisplay: TStop[] = $derived.by(() => {
     if (data?.query === searchQuery && data.searchData) {
@@ -71,7 +84,7 @@
     </label>
     <input
       type="search"
-      placeholder="Search for stops"
+      placeholder={m.search_placeholder()}
       bind:value={searchQuery}
       oninput={() => {
         debounceFetch();
@@ -84,7 +97,7 @@
   </form>
 
   {#if $placesQuery.isFetched && $placesQuery.data}
-    <h2 class="mb-1 text-sm font-medium">Places</h2>
+    <h2 class="mb-1 text-sm font-medium">{m.places()}</h2>
     <div class="flex flex-col gap-2">
       {#each $placesQuery.data as place}
         <PlaceCard {place} />
@@ -93,7 +106,7 @@
   {/if}
 
   {#if stopsToDisplay.length > 0}
-    <h2 class="mb-1 mt-4 text-sm font-medium">Stops</h2>
+    <h2 class="mb-1 mt-4 text-sm font-medium">{m.stops()}</h2>
     <div class="flex flex-col gap-1">
       {#each stopsToDisplay as stop}
         <Stop {stop} saved={!!stop.id && favorite_ids.includes(stop.id)} />
