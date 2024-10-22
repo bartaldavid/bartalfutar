@@ -7,7 +7,7 @@
   import PageLayout from '$components/PageLayout.svelte';
   import {
     geolocationPermissionState,
-    listenForPermissionChange
+    listenForPermissionChange,
   } from '$lib/stores/geolocation-permission.svelte';
   import { loadLocation, location } from '$lib/stores/geolocation';
   import { onMount } from 'svelte';
@@ -32,14 +32,15 @@
     time: new Date().toLocaleTimeString([], {
       hour: '2-digit',
       minute: '2-digit',
-      hour12: false
+      hour12: false,
     }),
-    type: 'now'
+    type: 'now',
   });
 
   onMount(async () => {
-    $geolocationPermissionState = (await navigator.permissions.query({ name: 'geolocation' }))
-      .state;
+    $geolocationPermissionState = (
+      await navigator.permissions.query({ name: 'geolocation' })
+    ).state;
     listenForPermissionChange();
   });
 
@@ -51,11 +52,13 @@
     if (!locationSetup && $location.isLoaded) {
       $page.url.searchParams.set(
         'from',
-        $location.position?.coords.latitude + ',' + $location.position?.coords.longitude
+        $location.position?.coords.latitude +
+          ',' +
+          $location.position?.coords.longitude,
       );
       replaceState($page.url, history.state);
       locationSetup = true;
-      $directionsData.refetch();
+      directionsData.refetch();
     }
   });
 
@@ -67,24 +70,33 @@
   //   }
   // });
 
-  const directionsData = createQuery({
-    queryKey: ['directions', data.to, data.to_address, $location.position?.coords],
+  const directionsData = createQuery(() => ({
+    queryKey: [
+      'directions',
+      data.to,
+      data.to_address,
+      $location.position?.coords,
+    ],
     queryFn: async () =>
       typed_fetch('/api/directions', {
         from:
           $page.url.searchParams.get('from') ??
-          $location.position?.coords?.latitude + ',' + $location.position?.coords?.longitude,
+          $location.position?.coords?.latitude +
+            ',' +
+            $location.position?.coords?.longitude,
         to: data.to ?? '',
         to_name: data.to_address || undefined,
         arrive_by: timeSetting.type === 'arrive_at',
-        time: timeSetting.type !== 'now' ? timeSetting.time : undefined
+        time: timeSetting.type !== 'now' ? timeSetting.time : undefined,
       }),
-    enabled: $locationSetupStore
-  });
+    enabled: $locationSetupStore,
+  }));
 </script>
 
 <PageLayout topMargin>
-  <div class="mb-2 flex flex-col gap-4 rounded p-4 font-light dark:bg-slate-800">
+  <div
+    class="mb-2 flex flex-col gap-4 rounded p-4 font-light dark:bg-slate-800"
+  >
     <div class="flex items-center gap-2">
       {#if locationSetup}
         <LocateFixed />
@@ -103,34 +115,35 @@
         href="/search?{new URLSearchParams({
           q: data.to_address || '',
           ...($location.position?.coords && {
-            from: `${$location.position?.coords.latitude},${$location.position?.coords.longitude}`
-          })
+            from: `${$location.position?.coords.latitude},${$location.position?.coords.longitude}`,
+          }),
         }).toString()}"
-        class="w-full rounded border p-1 dark:border-slate-300">{data.to_address}</a
+        class="w-full rounded border p-1 dark:border-slate-300"
+        >{data.to_address}</a
       >
     </div>
     <div class="flex justify-between">
       <TimeSelector bind:timeSetting />
       <!-- <BikeToggle bind:bike /> -->
-      <button onclick={() => $directionsData.refetch()}>Go</button>
+      <button onclick={() => directionsData.refetch()}>Go</button>
     </div>
   </div>
 
-  {#if $directionsData.isLoading}
+  {#if directionsData.isLoading}
     <div class="flex flex-col gap-2">
       <LoadingCards numberOfItems={3} />
     </div>
   {/if}
 
-  {#if $directionsData.data?.itineraries}
+  {#if directionsData.data?.itineraries}
     <Accordion.Root class="flex flex-col gap-2">
-      {#each $directionsData.data.itineraries as itinerary}
+      {#each directionsData.data.itineraries as itinerary}
         <Itinerary {itinerary} />
       {/each}
     </Accordion.Root>
   {/if}
 
-  {#if $directionsData.isError}
-    <pre>{$directionsData.error.message}</pre>
+  {#if directionsData.isError}
+    <pre>{directionsData.error.message}</pre>
   {/if}
 </PageLayout>

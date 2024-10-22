@@ -12,28 +12,29 @@
   import LoadingCards from '../../components/LoadingCards.svelte';
   import {
     geolocationPermissionState,
-    listenForPermissionChange
+    listenForPermissionChange,
   } from '$lib/stores/geolocation-permission.svelte';
   import { typed_fetch } from '../api/endpoint-types';
   import { Button } from '$lib/components/ui/button';
   import * as m from '$lib/paraglide/messages.js';
 
-  let nearbyDepartures = createQuery({
+  let nearbyDepartures = createQuery(() => ({
     queryKey: ['departuresForLocation', $location.position?.coords],
     queryFn: async () =>
       await typed_fetch('/api/nearby-departures', {
         lat: $location.position?.coords.latitude,
         lon: $location.position?.coords.longitude,
         radius: 500,
-        minutesBefore: 0
+        minutesBefore: 0,
       }),
     refetchInterval: REFETCH_INTERVAL_MS,
-    enabled: $location.isLoaded
-  });
+    enabled: $location.isLoaded,
+  }));
 
   onMount(async () => {
-    $geolocationPermissionState = (await navigator.permissions.query({ name: 'geolocation' }))
-      .state;
+    $geolocationPermissionState = (
+      await navigator.permissions.query({ name: 'geolocation' })
+    ).state;
 
     if ($geolocationPermissionState === 'granted') loadLocation();
     listenForPermissionChange();
@@ -43,8 +44,8 @@
 {#snippet header()}
   <div class="flex gap-1 dark:text-slate-50">
     <RefreshButton
-      isFetching={$nearbyDepartures.isFetching}
-      onrefresh={async () => await $nearbyDepartures.refetch()}
+      isFetching={nearbyDepartures.isFetching}
+      onrefresh={async () => await nearbyDepartures.refetch()}
     />
     <Button
       size="icon"
@@ -65,26 +66,29 @@
 {/snippet}
 <PageLayout pageTitle={m.around_you()} {header}>
   <div class="flex flex-col gap-2">
-    {#if $nearbyDepartures.isLoading}
+    {#if nearbyDepartures.isLoading}
       <LoadingCards numberOfItems={2} />
-    {:else if $nearbyDepartures.isError}
-      <div class="text-red-500">{$nearbyDepartures.error}</div>
-    {:else if $nearbyDepartures.isFetched}
-      {#each $nearbyDepartures.data ?? [] as departureGroup (departureGroup.id + departureGroup.headSign)}
+    {:else if nearbyDepartures.isError}
+      <div class="text-red-500">{nearbyDepartures.error}</div>
+    {:else if nearbyDepartures.isFetched}
+      {#each nearbyDepartures.data ?? [] as departureGroup (departureGroup.id + departureGroup.headSign)}
         <DepartureGroup {departureGroup} />
       {:else}
-        <div class="text-gray-500 text-center">{m.no_departures_in_the_next()}</div>
+        <div class="text-gray-500 text-center">
+          {m.no_departures_in_the_next()}
+        </div>
       {/each}
     {/if}
 
     {#if $geolocationPermissionState !== 'granted'}
-      <div class="flex flex-col items-center gap-2 rounded bg-slate-50 p-3 dark:bg-slate-800">
-        <svelte:component
-          this={$geolocationPermissionState === 'prompt'
-            ? LocationSearchingIcon
-            : LocationDisabledIcon}
-          class="mt-4 text-4xl dark:text-slate-50"
-        />
+      <div
+        class="flex flex-col items-center gap-2 rounded bg-slate-50 p-3 dark:bg-slate-800"
+      >
+        {#if $geolocationPermissionState === 'prompt'}
+          <LocationSearchingIcon class="mt-4 text-4xl dark:text-slate-50" />
+        {:else}
+          <LocationDisabledIcon class="mt-4 text-4xl dark:text-slate-50" />
+        {/if}
         <span class="pb-5 text-center text-2xl font-bold dark:text-slate-50">
           {$geolocationPermissionState === 'prompt'
             ? m.allow_location_access()

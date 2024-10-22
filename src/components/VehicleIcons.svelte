@@ -1,13 +1,16 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   import Train from '~icons/material-symbols/train';
   import Bus from '~icons/material-symbols/directions-bus';
   import Subway from '~icons/material-symbols/subway';
   import Tram from '~icons/material-symbols/tram';
   import ZoomOutMap from '~icons/material-symbols/zoom-out-map';
   import type { components } from '$lib/schema-generated';
+  import type { Component, SvelteComponent } from 'svelte';
 
   type typeMap = {
-    [key in components['schemas']['TransitStop']['type'] as string | 'MULTIPLE']?: {
+    [key in components['schemas']['TransitStop']['type'] as
+      | string
+      | 'MULTIPLE']?: {
       icon: any; // FIXME
       color: string;
     };
@@ -21,17 +24,21 @@
     TROLLEYBUS: { icon: Bus, color: '#009EE3' },
     COACH: { icon: Bus, color: '#F9AB13' },
     SUBURBAN_RAILWAY: { icon: Train, color: '#2E5EA8' },
-    MULTIPLE: { icon: ZoomOutMap, color: '#94a3b8' }
+    MULTIPLE: { icon: ZoomOutMap, color: '#94a3b8' },
   };
 </script>
 
 <script lang="ts">
-  let { vehicleType, class: className }: { vehicleType: string; class: string } = $props();
+  let {
+    vehicleType,
+    class: className,
+  }: { vehicleType: string; class: string } = $props();
+
+  let Icon = $derived(typesToIconsMap[vehicleType]?.icon);
 </script>
 
 {#if vehicleType}
-  <svelte:component
-    this={typesToIconsMap[vehicleType]?.icon}
+  <Icon
     class={className}
     style={`color:${typesToIconsMap[vehicleType]?.color};`}
   />

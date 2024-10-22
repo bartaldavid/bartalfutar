@@ -1,10 +1,10 @@
-import { favoriteStops, routes, stops, stopsRoutes } from '$lib/server/libsql-schema.js';
 import { removeStopFromDb, saveStopToDb } from '$lib/server/utils';
 import { fail } from '@sveltejs/kit';
-import { eq, sql } from 'drizzle-orm';
 import { typed_fetch } from '../api/endpoint-types.js';
 import type { TStop } from '$lib/types.js';
 import { db } from '$lib/server/libsql-db.js';
+import { eq } from 'drizzle-orm';
+import { favoriteStops, stops } from '$lib/server/libsql-schema.js';
 
 // TODO stream references?
 export async function load({ fetch, url, locals }) {
@@ -12,37 +12,67 @@ export async function load({ fetch, url, locals }) {
   const userId = (await locals.auth())?.user.id;
 
   if (query !== '') {
-    const data = await typed_fetch('/api/stops-for-location', { q: query }, fetch);
+    const data = await typed_fetch(
+      '/api/stops-for-location',
+      { q: query },
+      fetch,
+    );
 
     return {
       searchData: data,
-      query
+      query,
     };
   } else if (userId) {
-    const { routes, favorite_stops } = await fetchFavoritesAndRoutes(userId);
+    const favorite_stops_query = db.query.favoriteStops.findMany({
+      with: {
+        stop: {
+          columns: {
+            id: true,
+            name: true,
+            type: true,
+            locationType: true,
+            direction: true,
+          },
+          with: {
+            stopsRoutes: {
+              with: {
+                route: true,
+              },
+            },
+          },
+        },
+      },
+      columns: {},
+      where: eq(favoriteStops.userId, userId),
+    });
 
+    console.log(favorite_stops_query.toSQL());
+
+    const start = performance.now();
+    const favorite_stops = await favorite_stops_query;
+    console.log('Query time:', performance.now() - start);
     return {
-      searchData: favorite_stops.map(
+      searchData: favorite_stops.flatMap(
         (stop) =>
           ({
-            id: stop.id,
-            name: stop.name ?? 'No stop name',
-            direction: stop.direction,
-            routes: stop.routeIds?.map((routeId) => ({
-              text: routes.find((route) => route.id === routeId)?.shortName,
-              color: routes.find((route) => route.id === routeId)?.style?.color,
-              textColor: routes.find((route) => route.id === routeId)?.style?.icon?.textColor
+            id: stop.stop.id,
+            name: stop.stop.name ?? 'No stop name',
+            direction: stop.stop.direction,
+            routes: stop.stop.stopsRoutes.map((stopRoute) => ({
+              text: stopRoute.route?.shortName,
+              color: stopRoute.route?.style?.color,
+              textColor: stopRoute.route?.style?.icon?.textColor,
             })),
-            locationType: stop.locationType
-          }) as TStop
+            locationType: stop.stop.locationType,
+          }) as TStop,
       ),
       query: '',
-      favorites_ids: favorite_stops.map((stop) => stop.id)
+      favorites_ids: favorite_stops.map((stop) => stop.stop.id),
     };
   } else {
     return {
       searchData: null,
-      query: ''
+      query: '',
     };
   }
 }
@@ -68,43 +98,5 @@ export const actions = {
     }
 
     return await removeStopFromDb({ stopId, session });
-  }
+  },
 };
-
-async function fetchFavoritesAndRoutes(userId: string) {
-  const now = performance.now();
-  const result = await db.transaction(async (trx) => {
-    const favorite_stops_query = await trx
-      .select({
-        id: stops.id,
-        name: stops.name,
-        type: stops.type,
-        locationType: stops.locationType,
-        direction: stops.direction,
-        routeIds: sql<string[]>`(json_group_array(${stopsRoutes.routeId}))`.mapWith(
-          (v) => JSON.parse(v) as string[]
-        )
-      })
-      .from(stops)
-      .innerJoin(favoriteStops, eq(stops.id, favoriteStops.stopId))
-      .innerJoin(stopsRoutes, eq(stopsRoutes.stopId, stops.id))
-      .where(eq(favoriteStops.userId, userId))
-      .groupBy(stops.id, stops.name, stops.type, stops.locationType, stops.direction);
-
-    const routes_query = await trx
-      .select({
-        id: routes.id,
-        shortName: routes.shortName,
-        style: routes.style
-      })
-      .from(routes)
-      .innerJoin(stopsRoutes, eq(stopsRoutes.routeId, routes.id))
-      .innerJoin(favoriteStops, eq(stopsRoutes.stopId, favoriteStops.stopId))
-      .where(eq(favoriteStops.userId, userId));
-    // HACK array should be parsed earlier
-    return { favorite_stops: favorite_stops_query, routes: routes_query };
-  });
-  const end = performance.now();
-  console.log(`Query took ${end - now}ms`);
-  return result;
-}

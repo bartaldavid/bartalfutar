@@ -7,7 +7,7 @@
 
   let {
     departures = [],
-    expandable = false
+    expandable = false,
   }: { departures?: DepartureType[]; expandable?: boolean } = $props();
 
   let expandedTripId = $state<string>('');
@@ -18,15 +18,16 @@
     departures.filter(
       (departure) =>
         departure.predictedDepartureTime &&
-        departure.predictedDepartureTime * 1000 <= time.now.valueOf()
-    )
+        departure.predictedDepartureTime * 1000 <= time.now.valueOf(),
+    ),
   );
   let futureDepartures = $derived(
     departures.filter(
       (d) =>
         (d.departureTime && d.departureTime * 1000 > time.now.valueOf()) ||
-        (d.predictedDepartureTime && d.predictedDepartureTime * 1000 > time.now.valueOf())
-    )
+        (d.predictedDepartureTime &&
+          d.predictedDepartureTime * 1000 > time.now.valueOf()),
+    ),
   );
 
   // $inspect(time.now);
@@ -49,6 +50,8 @@
 {:else}
   <div class="flex flex-col items-center justify-center w-full h-12">
     <!-- FIXME 90 should be a variable grabbed from the request -->
-    <span class="dark:text-gray-200 text-slate-600">{m.no_departures_in_the_next()}</span>
+    <span class="dark:text-gray-200 text-slate-600"
+      >{m.no_departures_in_the_next()}</span
+    >
   </div>
 {/each}

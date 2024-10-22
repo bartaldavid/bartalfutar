@@ -12,7 +12,7 @@ export const _params = z.object({
   to_name: z.string().optional(),
   to: z.string(),
   arrive_by: z.boolean().optional().default(false),
-  time: z.string().optional()
+  time: z.string().optional(),
 });
 
 export async function GET({ url }): Promise<TypedResponse<Directions>> {
@@ -21,7 +21,7 @@ export async function GET({ url }): Promise<TypedResponse<Directions>> {
   const {
     data,
     response,
-    error: fetchError
+    error: fetchError,
   } = await futarClient.GET('/{dialect}/api/where/plan-trip', {
     params: {
       query: {
@@ -36,14 +36,14 @@ export async function GET({ url }): Promise<TypedResponse<Directions>> {
             hour: '2-digit',
             minute: '2-digit',
             hour12: false,
-            timeZone: 'Europe/Budapest'
+            timeZone: 'Europe/Budapest',
           }),
-        arriveBy: query.arrive_by
+        arriveBy: query.arrive_by,
       },
       path: {
-        dialect: 'otp'
-      }
-    }
+        dialect: 'otp',
+      },
+    },
   });
 
   if (fetchError) error(500, fetchError);
@@ -67,14 +67,14 @@ export async function GET({ url }): Promise<TypedResponse<Directions>> {
             ? {
                 text: l.routeShortName || undefined,
                 color: l.routeColor || undefined,
-                textColor: l.routeTextColor || undefined
+                textColor: l.routeTextColor || undefined,
               }
             : undefined,
           distance: l.distance ? Math.round(l.distance) : 0,
           duration: l.duration ? Math.round(l.duration / 60000) : 0,
-          intermediateStops: l.intermediateStops?.length
-        })) ?? []
-    }))
+          intermediateStops: l.intermediateStops?.length,
+        })) ?? [],
+    })),
   } satisfies Directions);
 }
 

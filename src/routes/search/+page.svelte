@@ -1,6 +1,9 @@
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
-  import { debounceIntervalMs, searchQueryMinimumLength } from '../../lib/data/constants';
+  import {
+    debounceIntervalMs,
+    searchQueryMinimumLength,
+  } from '../../lib/data/constants';
   import Stop from '../../components/Stop.svelte';
   import { onMount } from 'svelte';
   import { typed_fetch } from '../api/endpoint-types';
@@ -17,40 +20,35 @@
   let favorite_ids = $derived(data?.favorites_ids ?? []);
 
   let searchQuery = $state(data.query);
-  // HACK to make tanstack reactive
-  const query = writable(data.query);
-  $effect(() => {
-    query.set(searchQuery);
-  });
 
   let timer: NodeJS.Timeout | undefined = $state();
 
   // TODO combine these with createQueries
-  const stopsQuery = createQuery(
-    derivedStore(query, ($query) => ({
-      queryKey: ['search', $query],
-      queryFn: async () => typed_fetch('/api/stops-for-location', { q: searchQuery }),
-      enabled: $query.length > searchQueryMinimumLength,
-      initialData: data?.searchData
-    }))
-  );
+  const stopsQuery = createQuery(() => ({
+    queryKey: ['search', searchQuery],
+    queryFn: async () =>
+      typed_fetch('/api/stops-for-location', { q: searchQuery }),
+    enabled: searchQuery.length > searchQueryMinimumLength,
+    initialData: data?.searchData,
+  }));
 
-  const placesQuery = createQuery(
-    derivedStore(query, ($query) => ({
-      queryKey: ['search-places', $query],
-      queryFn: async () =>
-        fetch('/api/places-autocomplete?q=' + searchQuery).then(
-          (res) => res.json() as Promise<{ main: string; secondary: string; placeId: string }[]>
-        ),
-      enabled: $query.length > searchQueryMinimumLength
-    }))
-  );
+  const placesQuery = createQuery(() => ({
+    queryKey: ['search-places', searchQuery],
+    queryFn: async () =>
+      fetch('/api/places-autocomplete?q=' + searchQuery).then(
+        (res) =>
+          res.json() as Promise<
+            { main: string; secondary: string; placeId: string }[]
+          >,
+      ),
+    enabled: searchQuery.length > searchQueryMinimumLength,
+  }));
 
   let stopsToDisplay: TStop[] = $derived.by(() => {
     if (data?.query === searchQuery && data.searchData) {
       return data?.searchData ?? [];
     } else {
-      return $stopsQuery.data ?? [];
+      return stopsQuery.data ?? [];
     }
   });
 
@@ -64,8 +62,8 @@
 
     if (searchQuery.length > searchQueryMinimumLength) {
       timer = setTimeout(() => {
-        $stopsQuery.refetch();
-        $placesQuery.refetch();
+        stopsQuery.refetch();
+        placesQuery.refetch();
       }, debounceIntervalMs);
     }
   }
@@ -96,10 +94,10 @@
     />
   </form>
 
-  {#if $placesQuery.isFetched && $placesQuery.data}
+  {#if placesQuery.isFetched && placesQuery.data}
     <h2 class="mb-1 text-sm font-medium">{m.places()}</h2>
     <div class="flex flex-col gap-2">
-      {#each $placesQuery.data as place}
+      {#each placesQuery.data as place}
         <PlaceCard {place} />
       {/each}
     </div>

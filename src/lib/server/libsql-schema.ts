@@ -1,17 +1,26 @@
 import type { components } from '$lib/schema-generated';
-import { sql } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import type { ProviderType } from '@auth/sveltekit/providers';
-import { integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import {
+  integer,
+  primaryKey,
+  real,
+  sqliteTable,
+  text,
+} from 'drizzle-orm/sqlite-core';
 
 // Auth.js tables
-type AdapterAccountType = Extract<ProviderType, 'oauth' | 'oidc' | 'email' | 'webauthn'>;
+type AdapterAccountType = Extract<
+  ProviderType,
+  'oauth' | 'oidc' | 'email' | 'webauthn'
+>;
 
 export const users = sqliteTable('user', {
   id: text('id').notNull().primaryKey(),
   name: text('name'),
   email: text('email').notNull(),
   emailVerified: integer('emailVerified', { mode: 'timestamp_ms' }),
-  image: text('image')
+  image: text('image'),
 });
 
 export const accounts = sqliteTable(
@@ -29,13 +38,13 @@ export const accounts = sqliteTable(
     token_type: text('token_type'),
     scope: text('scope'),
     id_token: text('id_token'),
-    session_state: text('session_state')
+    session_state: text('session_state'),
   },
   (account) => ({
     compoundKey: primaryKey({
-      columns: [account.provider, account.providerAccountId]
-    })
-  })
+      columns: [account.provider, account.providerAccountId],
+    }),
+  }),
 );
 
 export const sessions = sqliteTable('session', {
@@ -43,7 +52,7 @@ export const sessions = sqliteTable('session', {
   userId: text('userId')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  expires: integer('expires', { mode: 'timestamp_ms' }).notNull()
+  expires: integer('expires', { mode: 'timestamp_ms' }).notNull(),
 });
 
 export const verificationTokens = sqliteTable(
@@ -51,11 +60,11 @@ export const verificationTokens = sqliteTable(
   {
     identifier: text('identifier').notNull(),
     token: text('token').notNull(),
-    expires: integer('expires', { mode: 'timestamp_ms' }).notNull()
+    expires: integer('expires', { mode: 'timestamp_ms' }).notNull(),
   },
   (vt) => ({
-    compoundKey: primaryKey({ columns: [vt.identifier, vt.token] })
-  })
+    compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
+  }),
 );
 
 // bartalfutar data
@@ -75,8 +84,15 @@ export const stops = sqliteTable('stops', {
   type: text('type').$type<components['schemas']['TransitStop']['type']>(),
   wheelchairBoarding: integer('wheelchair_boarding', { mode: 'boolean' }),
   stopColorType: text('stopColorType'),
-  style: text('style', { mode: 'json' }).$type<components['schemas']['TransitStopStyle']>()
+  style: text('style', { mode: 'json' }).$type<
+    components['schemas']['TransitStopStyle']
+  >(),
 });
+
+export const stopsRelations = relations(stops, ({ many }) => ({
+  stopsRoutes: many(stopsRoutes),
+  favoriteStops: many(favoriteStops),
+}));
 
 export const routes = sqliteTable('routes', {
   id: text('id').primaryKey(),
@@ -91,9 +107,15 @@ export const routes = sqliteTable('routes', {
   iconDisplayType: text('icon_display_type'),
   iconDisplayText: text('icon_display_text'),
   bikesAllowed: integer('bikes_allowed', { mode: 'boolean' }),
-  style: text('style', { mode: 'json' }).$type<components['schemas']['TransitRouteStyle']>(),
-  sortOrder: integer('sort_order')
+  style: text('style', { mode: 'json' }).$type<
+    components['schemas']['TransitRouteStyle']
+  >(),
+  sortOrder: integer('sort_order'),
 });
+
+export const routesRelations = relations(routes, ({ many }) => ({
+  stopsRoutes: many(stopsRoutes),
+}));
 
 export const favoriteStops = sqliteTable(
   'favorite_stops',
@@ -106,20 +128,42 @@ export const favoriteStops = sqliteTable(
       .references(() => stops.id),
     userId: text('user_id')
       .notNull()
-      .references(() => users.id)
+      .references(() => users.id),
   },
   (table) => ({
-    pk: primaryKey({ columns: [table.stopId, table.userId] })
-  })
+    pk: primaryKey({ columns: [table.stopId, table.userId] }),
+  }),
 );
+
+export const favoriteStopsRelations = relations(favoriteStops, ({ one }) => ({
+  stop: one(stops, {
+    fields: [favoriteStops.stopId],
+    references: [stops.id],
+  }),
+  user: one(users, {
+    fields: [favoriteStops.userId],
+    references: [users.id],
+  }),
+}));
 
 export const stopsRoutes = sqliteTable(
   'stops_routes',
   {
     stopId: text('stop_id').references(() => stops.id),
-    routeId: text('route_id').references(() => routes.id)
+    routeId: text('route_id').references(() => routes.id),
   },
   (table) => ({
-    pk: primaryKey({ columns: [table.stopId, table.routeId] })
-  })
+    pk: primaryKey({ columns: [table.stopId, table.routeId] }),
+  }),
 );
+
+export const stopsRoutesRelations = relations(stopsRoutes, ({ one }) => ({
+  stop: one(stops, {
+    fields: [stopsRoutes.stopId],
+    references: [stops.id],
+  }),
+  route: one(routes, {
+    fields: [stopsRoutes.routeId],
+    references: [routes.id],
+  }),
+}));

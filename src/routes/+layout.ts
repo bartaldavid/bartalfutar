@@ -5,9 +5,9 @@ export const load = async () => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
-        enabled: browser
-      }
-    }
+        enabled: browser,
+      },
+    },
   });
 
   return { queryClient };

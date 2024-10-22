@@ -14,15 +14,15 @@ const config = {
     adapter: adapter({}),
     alias: {
       $components: './src/components',
-      $lib: './src/lib'
+      $lib: './src/lib',
     },
     files: {
-      serviceWorker: 'src/service-worker.js'
-    }
+      serviceWorker: 'src/service-worker.js',
+    },
   },
   vitePlugin: {
-    inspector: true
-  }
+    inspector: true,
+  },
 };
 
 export default config;

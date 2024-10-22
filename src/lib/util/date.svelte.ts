@@ -14,7 +14,7 @@ export function displayDate(date: Date | null | undefined): string {
   if (!date) return '';
   return date.toLocaleTimeString('hu', {
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
 }
 
@@ -22,10 +22,14 @@ export function displayDate(date: Date | null | undefined): string {
 export function useTransitStopTime(
   transitStopTime:
     | components['schemas']['TransitTripStopTime']
-    | components['schemas']['TransitScheduleStopTime']
+    | components['schemas']['TransitScheduleStopTime'],
 ) {
-  const { arrivalTime, departureTime, predictedArrivalTime, predictedDepartureTime } =
-    transitStopTime;
+  const {
+    arrivalTime,
+    departureTime,
+    predictedArrivalTime,
+    predictedDepartureTime,
+  } = transitStopTime;
 
   const time = useNow();
 
@@ -45,11 +49,15 @@ export function useTransitStopTime(
     relevantDate = predictedDepartureDate || predictedArrivalDate;
 
     delayInMinutes =
-      predictedDepartureTime && departureTime ? (predictedDepartureTime - departureTime) / 60 : 0;
+      predictedDepartureTime && departureTime
+        ? (predictedDepartureTime - departureTime) / 60
+        : 0;
 
     isDelayed = delayInMinutes >= 1;
   }
-  let isDeparted = $derived(!relevantDate ? false : relevantDate?.valueOf() <= time.now.valueOf());
+  let isDeparted = $derived(
+    !relevantDate ? false : relevantDate?.valueOf() <= time.now.valueOf(),
+  );
 
   return {
     relevantDate,
@@ -60,6 +68,6 @@ export function useTransitStopTime(
     arrivalDate,
     departureDate,
     predictedArrivalDate,
-    predictedDepartureDate
+    predictedDepartureDate,
   };
 }

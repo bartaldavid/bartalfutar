@@ -10,8 +10,8 @@ export const { handle } = SvelteKitAuth({
     Google({
       clientId: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      allowDangerousEmailAccountLinking: true
-    })
+      allowDangerousEmailAccountLinking: true,
+    }),
   ],
   adapter: DrizzleAdapter(db),
   callbacks: {
@@ -20,9 +20,9 @@ export const { handle } = SvelteKitAuth({
         session.user.id = user.id;
       }
       return Promise.resolve(session);
-    }
+    },
   },
-  trustHost: true
+  trustHost: true,
 });
 
 /**

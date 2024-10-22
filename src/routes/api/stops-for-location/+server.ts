@@ -8,7 +8,7 @@ export const _params = z.object({
   q: z.string(),
   lat: z.number().optional(),
   lon: z.number().optional(),
-  radius: z.number().optional()
+  radius: z.number().optional(),
 });
 
 export async function GET({ url, fetch }): Promise<TypedResponse<TStop[]>> {
@@ -16,16 +16,19 @@ export async function GET({ url, fetch }): Promise<TypedResponse<TStop[]>> {
 
   if (query.q.length < 4) return typed_json([]);
 
-  const { data: response } = await futarClient.GET('/{dialect}/api/where/stops-for-location', {
-    params: {
-      query: {
-        query: query.q
+  const { data: response } = await futarClient.GET(
+    '/{dialect}/api/where/stops-for-location',
+    {
+      params: {
+        query: {
+          query: query.q,
+        },
+        path: {
+          dialect: 'otp',
+        },
       },
-      path: {
-        dialect: 'otp'
-      }
-    }
-  });
+    },
+  );
 
   const data = response?.data;
 
@@ -39,14 +42,14 @@ export async function GET({ url, fetch }): Promise<TypedResponse<TStop[]>> {
         ?.sort(
           (a, b) =>
             (data.references?.routes?.[b].sortOrder || 0) -
-            (data.references?.routes?.[a].sortOrder || 0)
+            (data.references?.routes?.[a].sortOrder || 0),
         )
         .map((routeId) => ({
           text: data.references?.routes?.[routeId]?.shortName,
           color: data.references?.routes?.[routeId]?.color,
-          textColor: data.references?.routes?.[routeId]?.textColor
+          textColor: data.references?.routes?.[routeId]?.textColor,
         })),
-      locationType: stop.locationType
+      locationType: stop.locationType,
     })) ?? [];
 
   return typed_json(stops);

@@ -16,7 +16,7 @@ export async function load({ locals }) {
       id: stops.id,
       type: stops.type,
       name: stops.name,
-      locationType: stops.locationType
+      locationType: stops.locationType,
     })
     .from(stops)
     .innerJoin(favoriteStops, eq(stops.id, favoriteStops.stopId))
@@ -27,12 +27,12 @@ export async function load({ locals }) {
     if (currentStop.type) {
       (result[currentStop.type] = result[currentStop.type] || []).push({
         id: currentStop.id,
-        name: currentStop.name ?? ''
+        name: currentStop.name ?? '',
       });
     } else if (currentStop.locationType === 1) {
       (result['MULTIPLE'] = result['MULTIPLE'] || []).push({
         id: currentStop.id,
-        name: currentStop.name ?? ''
+        name: currentStop.name ?? '',
       });
     }
     return result;

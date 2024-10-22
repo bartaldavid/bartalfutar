@@ -6,7 +6,8 @@ import { PlaceAutocompleteType } from '@googlemaps/google-maps-services-js';
 export async function GET({ url }) {
   const query = url.searchParams.get('q');
 
-  if (typeof query !== 'string') return json({ error: 'Invalid query' }, { status: 400 });
+  if (typeof query !== 'string')
+    return json({ error: 'Invalid query' }, { status: 400 });
 
   const client = new Client();
   const res = await client.placeAutocomplete({
@@ -14,10 +15,10 @@ export async function GET({ url }) {
       input: query,
       key: GOOGLE_MAPS_API_KEY,
       types: PlaceAutocompleteType.geocode,
-      components: ['country:hu']
+      components: ['country:hu'],
       // TODO set language
       // language: locals.paraglide.lang
-    }
+    },
   });
 
   return json(
@@ -25,8 +26,8 @@ export async function GET({ url }) {
       return {
         main: p.structured_formatting.main_text,
         secondary: p.structured_formatting.secondary_text,
-        placeId: p.place_id
+        placeId: p.place_id,
       };
-    })
+    }),
   );
 }

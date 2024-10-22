@@ -14,6 +14,6 @@ export async function load({ locals }) {
     .execute();
 
   return {
-    favorite_stops: response.map((stop) => stop.id)
+    favorite_stops: response.map((stop) => stop.id),
   };
 }

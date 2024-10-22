@@ -7,7 +7,7 @@ export const shortcut = (
     control?: boolean;
     code: string;
     callback?: () => unknown;
-  }
+  },
 ) => {
   let handler: (this: Window, ev: KeyboardEvent) => unknown;
   const removeHandler = () => window.removeEventListener('keydown', handler),
@@ -30,6 +30,6 @@ export const shortcut = (
   setHandler();
   return {
     update: setHandler,
-    destroy: removeHandler
+    destroy: removeHandler,
   };
 };

@@ -16,8 +16,8 @@
   style:background-color={'#' + icon.color}
   class={cn(
     'rounded p-1 text-sm font-semibold',
-    !icon.color && 'border',
-    size === 'small' && 'text-xs'
+    !icon.color && 'border border-slate-600 dark:border-slate-400',
+    size === 'small' && 'text-xs',
   )}
   {...props}
 >

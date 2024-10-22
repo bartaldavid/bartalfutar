@@ -11,20 +11,21 @@ export const load = (async ({ url }) => {
     const res = await client.placeDetails({
       params: {
         place_id: to_place_id,
-        key: GOOGLE_MAPS_API_KEY
-      }
+        key: GOOGLE_MAPS_API_KEY,
+      },
     });
 
     const newUrl = url;
 
     newUrl.searchParams.delete('to_place_id');
 
-    if (res.data.result.name) newUrl.searchParams.set('to_address', res.data.result.name);
+    if (res.data.result.name)
+      newUrl.searchParams.set('to_address', res.data.result.name);
 
     if (res.data.result.geometry?.location)
       newUrl.searchParams.set(
         'to',
-        `${res.data.result.geometry.location.lat},${res.data.result.geometry.location.lng}`
+        `${res.data.result.geometry.location.lat},${res.data.result.geometry.location.lng}`,
       );
 
     redirect(303, newUrl);

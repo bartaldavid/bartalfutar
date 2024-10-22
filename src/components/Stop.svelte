@@ -4,7 +4,6 @@
 
   import ChevronRight from '~icons/material-symbols/chevron-right';
   import ArrowUpward from '~icons/material-symbols/arrow-upward';
-  import MultipleStop from '~icons/material-symbols/zoom-out-map';
 
   import { page } from '$app/stores';
   import FavoriteToggle from './FavoriteToggle.svelte';
@@ -13,7 +12,6 @@
   import RouteIcon from './RouteIcon.svelte';
   import { REFETCH_INTERVAL_MS } from '$lib/data/constants';
   import LoadingCards from './LoadingCards.svelte';
-  import { Badge } from '$lib/components/ui/badge';
   import { isMav } from '$lib/util/stops';
   import MavLogo from './MavLogo.svelte';
   import * as m from '$lib/paraglide/messages.js';
@@ -21,31 +19,33 @@
   let { stop, saved = false }: { stop: TStop; saved?: boolean } = $props();
   let expanded = $state(false);
 
-  const departuresFromStop = createQuery({
+  const departuresFromStop = createQuery(() => ({
     queryKey: ['stop', stop.id!, 3],
     queryFn: async () =>
       await typed_fetch('/api/departures-for-stop', {
         stopId: [stop.id!],
         limit: 3,
-        minutesBefore: 0
+        minutesBefore: 0,
       }),
     enabled: false,
-    refetchInterval: REFETCH_INTERVAL_MS
-  });
+    refetchInterval: REFETCH_INTERVAL_MS,
+  }));
 </script>
 
-<div class="flex flex-row rounded bg-slate-50 p-2 dark:border-none dark:bg-slate-800">
+<div
+  class="flex flex-row rounded bg-slate-50 p-2 dark:border-none dark:bg-slate-800"
+>
   <div
     class="flex flex-1 cursor-pointer flex-col gap-1 focus:outline-2"
     onclick={() => {
       expanded = !expanded;
-      $departuresFromStop.refetch();
+      departuresFromStop.refetch();
     }}
     role="button"
     tabindex={0}
     onkeydown={(e) => {
       if (e.key == 'Enter') expanded = !expanded;
-      $departuresFromStop.refetch();
+      departuresFromStop.refetch();
     }}
   >
     <div class="mb-1 flex items-center gap-1 font-medium dark:text-slate-50">
@@ -87,11 +87,14 @@
 
 {#if expanded}
   <div class="flex flex-col gap-1 rounded border bg-none p-1 dark:bg-slate-700">
-    {#if $departuresFromStop.isPending}
+    {#if departuresFromStop.isPending}
       <LoadingCards numberOfItems={3} />
     {/if}
-    {#if $departuresFromStop.isFetched}
-      <DeparturesList departures={$departuresFromStop?.data?.departures} expandable={false} />
+    {#if departuresFromStop.isFetched}
+      <DeparturesList
+        departures={departuresFromStop?.data?.departures}
+        expandable={false}
+      />
     {/if}
     <a
       class="flex items-center justify-center p-2 dark:text-slate-50"

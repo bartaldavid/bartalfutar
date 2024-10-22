@@ -8,12 +8,14 @@
   import RouteIcon from '$components/RouteIcon.svelte';
   import { languageTag } from '$lib/paraglide/runtime';
 
-  let { itinerary }: { itinerary: NonNullable<Directions['itineraries']>[number] } = $props();
+  let {
+    itinerary,
+  }: { itinerary: NonNullable<Directions['itineraries']>[number] } = $props();
 
   const df = new Intl.DateTimeFormat(languageTag(), {
     hour: 'numeric',
     minute: 'numeric',
-    hour12: false
+    hour12: false,
   });
 
   function isSameDay(date1: Date, date2: Date): boolean {
@@ -36,7 +38,10 @@
           <!-- TODO improve this -->
           <span
             >{isSameDay(new Date(itinerary.start), new Date(itinerary.end))
-              ? df.formatRange(new Date(itinerary.start), new Date(itinerary.end))
+              ? df.formatRange(
+                  new Date(itinerary.start),
+                  new Date(itinerary.end),
+                )
               : `${df.format(new Date(itinerary.start))} - ${df.format(new Date(itinerary.end))}`}</span
           >
         {/if}

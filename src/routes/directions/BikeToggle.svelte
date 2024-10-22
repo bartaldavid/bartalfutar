@@ -6,7 +6,10 @@
   const bikeOptions = [false, true, 'BUBI'] as const;
 </script>
 
-<button onclick={() => (bike = bikeOptions[(bikeOptions.indexOf(bike) + 1) % bikeOptions.length])}>
+<button
+  onclick={() =>
+    (bike = bikeOptions[(bikeOptions.indexOf(bike) + 1) % bikeOptions.length])}
+>
   {#if bike === 'BUBI'}
     <PedalBike />
   {:else if bike}

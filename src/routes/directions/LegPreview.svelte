@@ -3,7 +3,10 @@
   import type { Directions } from '../api/directions/+server';
   import DirectionsWalk from '~icons/material-symbols/directions-walk';
 
-  let { legs }: { legs: NonNullable<Directions['itineraries']>[number]['legs'] } = $props();
+  let {
+    legs,
+  }: { legs: NonNullable<Directions['itineraries']>[number]['legs'] } =
+    $props();
 </script>
 
 <div class="flex gap-1">

@@ -15,18 +15,18 @@
 
   let { data } = $props();
 
-  let stopData = createQuery({
+  let stopData = createQuery(() => ({
     queryKey: ['stop', data.stopId],
     refetchInterval: REFETCH_INTERVAL_MS,
     queryFn: async () =>
       await typed_fetch('/api/departures-for-stop', {
         stopId: [data.stopId],
         minutesAfter: 90,
-        limit: 30
-      })
-  });
+        limit: 30,
+      }),
+  }));
   let parent = $derived($page.url.searchParams.get('from'));
-  let stopName = $derived($stopData.data?.stops[0]?.name);
+  let stopName = $derived(stopData.data?.stops[0]?.name);
 </script>
 
 <svelte:head>
@@ -37,8 +37,8 @@
   <div class="flex items-baseline gap-1 dark:text-slate-50">
     <FavoriteToggle stopId={data.stopId} saved={data.saved} />
     <RefreshButton
-      isFetching={$stopData.isFetching}
-      onrefresh={async () => await $stopData.refetch()}
+      isFetching={stopData.isFetching}
+      onrefresh={async () => await stopData.refetch()}
     />
     <Button href={parent ?? '/'} variant="ghost" size="icon"><Close /></Button>
   </div>
@@ -46,13 +46,16 @@
 
 <PageLayout pageTitle={stopName ?? m.loading_()} {header}>
   <div class="flex flex-col gap-2">
-    {#if $stopData.isLoading}
+    {#if stopData.isLoading}
       <LoadingCards numberOfItems={3} />
     {/if}
-    {#if $stopData.isFetched}
-      <DeparturesList departures={$stopData.data?.departures} expandable={true} />
-    {:else if $stopData.isError}
-      <div class="text-red-500">{$stopData.error}</div>
+    {#if stopData.isFetched}
+      <DeparturesList
+        departures={stopData.data?.departures}
+        expandable={true}
+      />
+    {:else if stopData.isError}
+      <div class="text-red-500">{stopData.error}</div>
     {/if}
   </div>
 </PageLayout>

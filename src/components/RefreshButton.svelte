@@ -3,7 +3,10 @@
   import Autorenew from '~icons/material-symbols/autorenew';
   import Refresh from '~icons/material-symbols/refresh';
 
-  let { isFetching, onrefresh }: { isFetching: boolean; onrefresh: () => void } = $props();
+  let {
+    isFetching,
+    onrefresh,
+  }: { isFetching: boolean; onrefresh: () => void } = $props();
 </script>
 
 <Button size="icon" variant="ghost" onclick={onrefresh}>

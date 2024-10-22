@@ -2,7 +2,9 @@
   import { page } from '$app/stores';
   import MapPin from 'lucide-svelte/icons/map-pin';
 
-  let { place }: { place: { main: string; secondary: string; placeId: string } } = $props();
+  let {
+    place,
+  }: { place: { main: string; secondary: string; placeId: string } } = $props();
 </script>
 
 <a
@@ -10,7 +12,9 @@
   href="/directions?{new URLSearchParams({
     to_place_id: place.placeId,
     // this should probably be from server data so it can render on server
-    ...($page.url.searchParams.get('from') && { from: $page.url.searchParams.get('from') || '' })
+    ...($page.url.searchParams.get('from') && {
+      from: $page.url.searchParams.get('from') || '',
+    }),
   }).toString()}"
 >
   <MapPin class="mx-1" />

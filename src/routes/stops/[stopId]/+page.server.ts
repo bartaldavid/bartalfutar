@@ -6,7 +6,7 @@ export async function load({ params, parent }) {
 
   return {
     stopId: params.stopId,
-    saved: favorite_stops.includes(params.stopId)
+    saved: favorite_stops.includes(params.stopId),
   };
 }
 
@@ -27,5 +27,5 @@ export const actions = {
     }
 
     return await removeStopFromDb({ stopId, session });
-  }
+  },
 };

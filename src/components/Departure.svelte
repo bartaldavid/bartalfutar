@@ -12,7 +12,7 @@
     departure,
     expandable,
     onexpand,
-    oncollapse
+    oncollapse,
   }: {
     expanded: boolean;
     departure: DepartureType;
@@ -28,13 +28,14 @@
     relevantDate,
     isRealtime,
     isDelayed,
-    isDeparted
+    isDeparted,
   } = $derived(useTransitStopTime(departure));
 </script>
 
 <button
   class="flex w-full flex-col rounded bg-slate-100 p-4 hover:cursor-pointer dark:bg-slate-800 dark:text-slate-50"
-  onclick={() => expandable && (expanded ? oncollapse() : onexpand(departure.id))}
+  onclick={() =>
+    expandable && (expanded ? oncollapse() : onexpand(departure.id))}
   tabindex="0"
 >
   <div class="flex w-full justify-between gap-2">
@@ -59,7 +60,10 @@
         {/if}
         {#if departure.platform}
           <span class="inline-flex items-baseline rounded px-0.5 text-sm"
-            ><TrainTrack size={14} class="-rotate-45" />{departure.platform}</span
+            ><TrainTrack
+              size={14}
+              class="-rotate-45"
+            />{departure.platform}</span
           >
         {/if}
       </div>
@@ -84,7 +88,9 @@
     {#if relevantDate}
       <div class="flex shrink-0 flex-col justify-center text-center">
         <Countdown countDownToDate={relevantDate} class="font-medium" />
-        <span class="text-sm text-slate-700 dark:text-slate-100">{m.minutes_from_now()}</span>
+        <span class="text-sm text-slate-700 dark:text-slate-100"
+          >{m.minutes_from_now()}</span
+        >
       </div>
     {/if}
 

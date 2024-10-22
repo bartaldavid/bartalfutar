@@ -37,9 +37,13 @@
         </DropdownMenu.Content>
       </DropdownMenu.Root>
     {:else}
-      <Button href="/auth/signin" data-sveltekit-preload-data="off">{m.sign_in()}</Button>
+      <Button href="/auth/signin" data-sveltekit-preload-data="off"
+        >{m.sign_in()}</Button
+      >
     {/if}
   </div>
 {/snippet}
 
-<PageLayout pageTitle={m.favorites()} {header}><StopsView groups={data.stops} /></PageLayout>
+<PageLayout pageTitle={m.favorites()} {header}
+  ><StopsView groups={data.stops} /></PageLayout
+>

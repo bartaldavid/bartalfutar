@@ -18,19 +18,25 @@
     expanded = !expanded;
   }}
 >
-  <div class="my-1 flex flex-row items-center gap-2 text-balance text-start text-sm">
+  <div
+    class="my-1 flex flex-row items-center gap-2 text-balance text-start text-sm"
+  >
     <!-- <VehicleIcons vehicleType={departureGroup. ?? ''} class="self-center text-lg" /> -->
     <RouteIcon icon={departureGroup.icon} />
     <div>{departureGroup.headSign}</div>
   </div>
   <div class="flex gap-2">
     {#each departureGroup.departures ?? [] as departure}
-      {@const { relevantDate, isDelayed, isRealtime } = useTransitStopTime(departure)}
+      {@const { relevantDate, isDelayed, isRealtime } =
+        useTransitStopTime(departure)}
       {#if relevantDate}
         <Countdown
           countDownToDate={relevantDate}
           showApostrophe
-          class={cn(isDelayed && 'text-red-600 dark:text-red-400', isRealtime && 'text-green-500')}
+          class={cn(
+            isDelayed && 'text-red-600 dark:text-red-400',
+            isRealtime && 'text-green-500',
+          )}
         />
       {/if}
     {:else}

@@ -8,7 +8,7 @@ import type { components } from '$lib/schema-generated';
 export async function saveStopToDb({
   stopId,
   session,
-  fetch
+  fetch,
 }: {
   stopId: string;
   session: Session;
@@ -17,13 +17,17 @@ export async function saveStopToDb({
   const userId = session.user.id;
 
   // FIXME type this correctly
-  const { data: FIXME_type } = await futarClient.GET('/{dialect}/api/where/references', {
-    params: { query: { stopId: [stopId] }, path: { dialect: 'otp' } },
-    fetch
-  });
+  const { data: FIXME_type } = await futarClient.GET(
+    '/{dialect}/api/where/references',
+    {
+      params: { query: { stopId: [stopId] }, path: { dialect: 'otp' } },
+      fetch,
+    },
+  );
 
   // @ts-expect-error bad types in openapi
-  const data = FIXME_type.data as components['schemas']['ReferencesMethodResponse'];
+  const data =
+    FIXME_type.data as components['schemas']['ReferencesMethodResponse'];
 
   const stopRef = data?.references?.stops?.[stopId];
   const routeRefs = data?.references?.routes;
@@ -36,9 +40,10 @@ export async function saveStopToDb({
   const stopRow = { id: stopId, ...restStop };
   const routeRows = Object.entries(routeRefs).map(([routeId, data]) => ({
     id: routeId,
-    ...data
+    ...data,
   }));
-  const stopRoutesRows = stopRef?.routeIds?.map((routeId) => ({ stopId, routeId })) ?? [];
+  const stopRoutesRows =
+    stopRef?.routeIds?.map((routeId) => ({ stopId, routeId })) ?? [];
 
   // const now = performance.now();
   // TODO replace with CTE?
@@ -58,10 +63,18 @@ export async function saveStopToDb({
 }
 
 // TODO error handling?
-export async function removeStopFromDb({ stopId, session }: { stopId: string; session: Session }) {
+export async function removeStopFromDb({
+  stopId,
+  session,
+}: {
+  stopId: string;
+  session: Session;
+}) {
   const userId = session.user.id;
 
   await db
     .delete(favoriteStops)
-    .where(and(eq(favoriteStops.stopId, stopId), eq(favoriteStops.userId, userId)));
+    .where(
+      and(eq(favoriteStops.stopId, stopId), eq(favoriteStops.userId, userId)),
+    );
 }

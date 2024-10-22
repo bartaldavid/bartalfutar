@@ -2,13 +2,19 @@
   import VehicleIcons from './VehicleIcons.svelte';
   import { page } from '$app/stores';
 
-  let { groupType, groupItems }: { groupType: string; groupItems: { id: string; name: string }[] } =
+  let {
+    groupType,
+    groupItems,
+  }: { groupType: string; groupItems: { id: string; name: string }[] } =
     $props();
 </script>
 
 <div class="flex flex-row py-2">
   <div class="flex">
-    <VehicleIcons vehicleType={groupType} class="ml-1 self-center pr-3 text-3xl" />
+    <VehicleIcons
+      vehicleType={groupType}
+      class="ml-1 self-center pr-3 text-3xl"
+    />
   </div>
   <div class="flex flex-wrap gap-1">
     <!-- TODO separate this into its own stop component? -->

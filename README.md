@@ -3,19 +3,19 @@
 ## Features
 
 - Sveltekit
-	- prefetching data on the server
-	- routing with a bottom navbar
-	- authenticated SSR
-	- most of the application can be used without JS (speed and accessibility benefits)
+  - prefetching data on the server
+  - routing with a bottom navbar
+  - authenticated SSR
+  - most of the application can be used without JS (speed and accessibility benefits)
 - BKK Openapi
-	- save your favorite stops to view them at a glance
-	- search for stops
-	- view departures around you
+  - save your favorite stops to view them at a glance
+  - search for stops
+  - view departures around you
 - Firebase Backend
-	- Google sign in
-	- sign in in the backround to support great onboarding experience
-	- authenticate on server for better SSR
-	- save stops to Firestore for realtime data
+  - Google sign in
+  - sign in in the backround to support great onboarding experience
+  - authenticate on server for better SSR
+  - save stops to Firestore for realtime data
 
 ## Tech stack
 

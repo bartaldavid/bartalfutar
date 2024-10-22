@@ -11,10 +11,13 @@ export const _params = z.object({
   minutesAfter: z.number().optional(),
   lon: z.number().optional(),
   lat: z.number().optional(),
-  radius: z.number().optional()
+  radius: z.number().optional(),
 });
 
-export async function GET({ url, fetch }): Promise<TypedResponse<DepartureGroup[]>> {
+export async function GET({
+  url,
+  fetch,
+}): Promise<TypedResponse<DepartureGroup[]>> {
   const query = _params.parse(getQueryFromParams(url.searchParams));
 
   const { data: response } = await futarClient.GET(
@@ -23,10 +26,10 @@ export async function GET({ url, fetch }): Promise<TypedResponse<DepartureGroup[
       params: {
         query,
         path: {
-          dialect: 'otp'
-        }
-      }
-    }
+          dialect: 'otp',
+        },
+      },
+    },
   );
 
   const data = response?.data;
@@ -40,15 +43,15 @@ export async function GET({ url, fetch }): Promise<TypedResponse<DepartureGroup[
         icon: {
           color: data.references?.routes?.[group.routeId]?.color,
           text: data.references?.routes?.[group.routeId]?.shortName,
-          textColor: data.references?.routes?.[group.routeId]?.textColor
+          textColor: data.references?.routes?.[group.routeId]?.textColor,
         },
         departures: group.stopTimes?.map((departure) => ({
           id: departure.tripId ?? '',
           arrivalTime: departure.arrivalTime,
           departureTime: departure.departureTime,
           predictedArrivalTime: departure.predictedArrivalTime,
-          predictedDepartureTime: departure.predictedDepartureTime
-        }))
+          predictedDepartureTime: departure.predictedDepartureTime,
+        })),
       };
     }) ?? [];
 

@@ -10,7 +10,7 @@ export const _params = z.object({
   stopId: z.array(z.string()),
   limit: z.number().optional(),
   minutesBefore: z.number().optional(),
-  minutesAfter: z.number().optional()
+  minutesAfter: z.number().optional(),
 });
 
 export async function GET({ fetch, url }): Promise<
@@ -27,55 +27,68 @@ export async function GET({ fetch, url }): Promise<
       {
         stationId: query.stopId[0].split('_')[1].replace('CS', ''),
         minCount: 0,
-        maxCount: query.limit ?? 10
+        maxCount: query.limit ?? 10,
       },
-      fetch
+      fetch,
     );
 
     // console.log(data);
 
-    const departures: DepartureType[] = data.stationSchedulerDetails.departureScheduler.map(
-      (departure) => {
+    const departures: DepartureType[] =
+      data.stationSchedulerDetails.departureScheduler.map((departure) => {
         return {
           id: departure.trainId,
           ...(departure.actualOrEstimatedStart && {
-            predictedDepartureTime: Date.parse(departure.actualOrEstimatedStart) / 1000
+            predictedDepartureTime:
+              Date.parse(departure.actualOrEstimatedStart) / 1000,
           }),
           ...(departure.actualOrEstimatedArrive && {
-            predictedArrivalTime: Date.parse(departure.actualOrEstimatedArrive) / 1000
+            predictedArrivalTime:
+              Date.parse(departure.actualOrEstimatedArrive) / 1000,
           }),
-          arrivalTime: departure.arrive ? Date.parse(departure.arrive) / 1000 : Date.now() / 1000,
-          departureTime: departure.start ? Date.parse(departure.start) / 1000 : Date.now() / 1000,
+          arrivalTime: departure.arrive
+            ? Date.parse(departure.arrive) / 1000
+            : Date.now() / 1000,
+          departureTime: departure.start
+            ? Date.parse(departure.start) / 1000
+            : Date.now() / 1000,
           alerts: [departure.havarianInfok.kesesiOk ?? ''],
           headSign: departure.endStation.name,
           icon: {
-            text: departure.viszonylatiJel?.jel || departure.fullShortType || departure.name || '',
+            text:
+              departure.viszonylatiJel?.jel ||
+              departure.fullShortType ||
+              departure.name ||
+              '',
             color: departure.viszonylatiJel?.fontSzinKod,
-            textColor: departure.viszonylatiJel?.hatterSzinKod
+            textColor: departure.viszonylatiJel?.hatterSzinKod,
           },
-          ...(departure.startTrack && { platform: departure.startTrack })
+          ...(departure.startTrack && { platform: departure.startTrack }),
         };
-      }
-    );
+      });
 
     const stops = [
       {
         id: `BKK_${data.stationSchedulerDetails.station.code}_0`,
-        name: data.stationSchedulerDetails.station.name
-      }
+        name: data.stationSchedulerDetails.station.name,
+      },
     ];
 
     return typed_json({ departures, stops, source: 'MÁV' });
   }
 
-  const { data } = await futarClient.GET('/{dialect}/api/where/arrivals-and-departures-for-stop', {
-    params: { query, path: { dialect: 'otp' } }
-  });
+  const { data } = await futarClient.GET(
+    '/{dialect}/api/where/arrivals-and-departures-for-stop',
+    {
+      params: { query, path: { dialect: 'otp' } },
+    },
+  );
 
   const departures: DepartureType[] =
     data?.data?.entry?.stopTimes?.map((departure) => {
       if (!departure.tripId) return { id: 'No tripId, bad response' };
-      const routeId = data?.data?.references?.trips?.[departure.tripId]?.routeId;
+      const routeId =
+        data?.data?.references?.trips?.[departure.tripId]?.routeId;
       if (!routeId) return { id: 'No routeId, bad response' };
       return {
         id: departure.tripId,
@@ -86,13 +99,15 @@ export async function GET({ fetch, url }): Promise<
         headSign: departure.stopHeadsign,
         alerts: departure.alertIds?.map(
           // TODO alerts could be translated into EN / HU
-          (alertId) => data?.data?.references?.alerts?.[alertId].description?.someTranslation ?? ''
+          (alertId) =>
+            data?.data?.references?.alerts?.[alertId].description
+              ?.someTranslation ?? '',
         ),
         icon: {
           color: data?.data?.references?.routes?.[routeId]?.color,
           text: data?.data?.references?.routes?.[routeId]?.shortName,
-          textColor: data?.data?.references?.routes?.[routeId]?.textColor
-        }
+          textColor: data?.data?.references?.routes?.[routeId]?.textColor,
+        },
       };
     }) ?? [];
 
@@ -100,15 +115,15 @@ export async function GET({ fetch, url }): Promise<
     ? [
         {
           id: data?.data?.entry.stopId,
-          name: data?.data?.references?.stops?.[data?.data?.entry.stopId]?.name
-        }
+          name: data?.data?.references?.stops?.[data?.data?.entry.stopId]?.name,
+        },
       ]
     : [];
 
   return typed_json({
     departures,
     stops,
-    source: 'BKK'
+    source: 'BKK',
   });
 }
 
@@ -116,27 +131,30 @@ async function fetchMav(
   {
     stationId,
     minCount,
-    maxCount
+    maxCount,
   }: {
     stationId: string;
     minCount: number;
     maxCount: number;
   },
-  fetch = window.fetch
+  fetch = window.fetch,
 ) {
-  return (await fetch('https://jegy-a.mav.hu/IK_API_PROD/api/InformationApi/GetTimetable', {
-    body: JSON.stringify({
-      type: 'StationInfo',
-      travelDate: new Date().toISOString(),
-      stationNumberCode: stationId,
-      minCount: minCount.toString(),
-      maxCount: maxCount.toString()
-    }),
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json; charset=UTF-8',
-      language: 'hu',
-      UserSessionId: crypto.randomUUID()
-    }
-  }).then((res) => res.json())) as MavRoot;
+  return (await fetch(
+    'https://jegy-a.mav.hu/IK_API_PROD/api/InformationApi/GetTimetable',
+    {
+      body: JSON.stringify({
+        type: 'StationInfo',
+        travelDate: new Date().toISOString(),
+        stationNumberCode: stationId,
+        minCount: minCount.toString(),
+        maxCount: maxCount.toString(),
+      }),
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json; charset=UTF-8',
+        language: 'hu',
+        UserSessionId: crypto.randomUUID(),
+      },
+    },
+  ).then((res) => res.json())) as MavRoot;
 }

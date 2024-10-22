@@ -11,7 +11,11 @@
     },
     "plan": {
       "date": 1717798140000,
-      "from": { "name": "BKK Központi Ügyfélszolgálat", "lon": 19.0551266, "lat": 47.4985022 },
+      "from": {
+        "name": "BKK Központi Ügyfélszolgálat",
+        "lon": 19.0551266,
+        "lat": 47.4985022
+      },
       "to": { "name": "Mechwart liget", "lon": 19.031612, "lat": 47.510891 },
       "usePatterns": true,
       "itineraries": [
@@ -59,7 +63,10 @@
                 "arrival": 1717798740000,
                 "departure": 1717798740000
               },
-              "legGeometry": { "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP", "length": 9 },
+              "legGeometry": {
+                "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP",
+                "length": 9
+              },
               "legElevation": [
                 { "distance": 0, "elevation": 105.4 },
                 { "distance": 141, "elevation": 104.6 }
@@ -94,7 +101,10 @@
                   "lon": 19.0550227,
                   "lat": 47.4979541,
                   "walkingBike": false,
-                  "geometry": { "points": "u|{`HouhsB`@o@JS`@cADP", "length": 5 }
+                  "geometry": {
+                    "points": "u|{`HouhsB`@o@JS`@cADP",
+                    "length": 5
+                  }
                 }
               ]
             },
@@ -350,7 +360,10 @@
                     "arrival": 1717798740000,
                     "departure": 1717798740000
                   },
-                  "legGeometry": { "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP", "length": 9 },
+                  "legGeometry": {
+                    "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP",
+                    "length": 9
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.4 },
                     { "distance": 141, "elevation": 104.6 }
@@ -372,7 +385,10 @@
                       "lon": 19.054983,
                       "lat": 47.4985043,
                       "walkingBike": false,
-                      "geometry": { "points": "s`|`HsthsBN?t@@JAZGNS", "length": 6 }
+                      "geometry": {
+                        "points": "s`|`HsthsBN?t@@JAZGNS",
+                        "length": 6
+                      }
                     },
                     {
                       "distance": 79.61,
@@ -385,7 +401,10 @@
                       "lon": 19.0550227,
                       "lat": 47.4979541,
                       "walkingBike": false,
-                      "geometry": { "points": "u|{`HouhsB`@o@JS`@cADP", "length": 5 }
+                      "geometry": {
+                        "points": "u|{`HouhsB`@o@JS`@cADP",
+                        "length": 5
+                      }
                     }
                   ]
                 },
@@ -609,7 +628,10 @@
                     "arrival": 1717800840000,
                     "departure": 1717800840000
                   },
-                  "legGeometry": { "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP", "length": 9 },
+                  "legGeometry": {
+                    "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP",
+                    "length": 9
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.4 },
                     { "distance": 141, "elevation": 104.6 }
@@ -631,7 +653,10 @@
                       "lon": 19.054983,
                       "lat": 47.4985043,
                       "walkingBike": false,
-                      "geometry": { "points": "s`|`HsthsBN?t@@JAZGNS", "length": 6 }
+                      "geometry": {
+                        "points": "s`|`HsthsBN?t@@JAZGNS",
+                        "length": 6
+                      }
                     },
                     {
                       "distance": 79.61,
@@ -644,7 +669,10 @@
                       "lon": 19.0550227,
                       "lat": 47.4979541,
                       "walkingBike": false,
-                      "geometry": { "points": "u|{`HouhsB`@o@JS`@cADP", "length": 5 }
+                      "geometry": {
+                        "points": "u|{`HouhsB`@o@JS`@cADP",
+                        "length": 5
+                      }
                     }
                   ]
                 },
@@ -868,7 +896,10 @@
                     "arrival": 1717803900000,
                     "departure": 1717803900000
                   },
-                  "legGeometry": { "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP", "length": 9 },
+                  "legGeometry": {
+                    "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP",
+                    "length": 9
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.4 },
                     { "distance": 141, "elevation": 104.6 }
@@ -890,7 +921,10 @@
                       "lon": 19.054983,
                       "lat": 47.4985043,
                       "walkingBike": false,
-                      "geometry": { "points": "s`|`HsthsBN?t@@JAZGNS", "length": 6 }
+                      "geometry": {
+                        "points": "s`|`HsthsBN?t@@JAZGNS",
+                        "length": 6
+                      }
                     },
                     {
                       "distance": 79.61,
@@ -903,7 +937,10 @@
                       "lon": 19.0550227,
                       "lat": 47.4979541,
                       "walkingBike": false,
-                      "geometry": { "points": "u|{`HouhsB`@o@JS`@cADP", "length": 5 }
+                      "geometry": {
+                        "points": "u|{`HouhsB`@o@JS`@cADP",
+                        "length": 5
+                      }
                     }
                   ]
                 },
@@ -1132,7 +1169,10 @@
                 "arrival": 1717798800000,
                 "departure": 1717798800000
               },
-              "legGeometry": { "points": "s`|`HsthsBiCCG?o@@ICACa@q@[k@KO@A", "length": 10 },
+              "legGeometry": {
+                "points": "s`|`HsthsBiCCG?o@@ICACa@q@[k@KO@A",
+                "length": 10
+              },
               "legElevation": [
                 { "distance": 0, "elevation": 105.4 },
                 { "distance": 174, "elevation": 104.9 }
@@ -1154,7 +1194,10 @@
                   "lon": 19.054983,
                   "lat": 47.4985043,
                   "walkingBike": false,
-                  "geometry": { "points": "s`|`HsthsBiCCG?o@@ICAAa@s@[i@KQ@?", "length": 10 }
+                  "geometry": {
+                    "points": "s`|`HsthsBiCCG?o@@ICAAa@s@[i@KQ@?",
+                    "length": 10
+                  }
                 }
               ]
             },
@@ -1271,7 +1314,10 @@
                 "arrival": 1717799172000,
                 "departure": 1717799280000
               },
-              "legGeometry": { "points": "co}`HidjsB@Bg@v@DHBFZe@@@", "length": 7 },
+              "legGeometry": {
+                "points": "co}`HidjsB@Bg@v@DHBFZe@@@",
+                "length": 7
+              },
               "legElevation": [
                 { "distance": 0, "elevation": 103.7 },
                 { "distance": 61, "elevation": 103.9 }
@@ -1505,7 +1551,10 @@
                     "arrival": 1717798800000,
                     "departure": 1717798800000
                   },
-                  "legGeometry": { "points": "s`|`HsthsBiCCG?o@@ICACa@q@[k@KO@A", "length": 10 },
+                  "legGeometry": {
+                    "points": "s`|`HsthsBiCCG?o@@ICACa@q@[k@KO@A",
+                    "length": 10
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.4 },
                     { "distance": 174, "elevation": 104.9 }
@@ -1527,7 +1576,10 @@
                       "lon": 19.054983,
                       "lat": 47.4985043,
                       "walkingBike": false,
-                      "geometry": { "points": "s`|`HsthsBiCCG?o@@ICAAa@s@[i@KQ@?", "length": 10 }
+                      "geometry": {
+                        "points": "s`|`HsthsBiCCG?o@@ICAAa@s@[i@KQ@?",
+                        "length": 10
+                      }
                     }
                   ]
                 },
@@ -1641,7 +1693,10 @@
                     "arrival": 1717799172000,
                     "departure": 1717799280000
                   },
-                  "legGeometry": { "points": "co}`HidjsB@Bg@v@DHBFZe@@@", "length": 7 },
+                  "legGeometry": {
+                    "points": "co}`HidjsB@Bg@v@DHBFZe@@@",
+                    "length": 7
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 103.7 },
                     { "distance": 61, "elevation": 103.9 }
@@ -1676,7 +1731,10 @@
                       "lon": 19.0623166,
                       "lat": 47.5061354,
                       "walkingBike": false,
-                      "geometry": { "points": "gp}`HmbjsBA?DHBF@?", "length": 5 }
+                      "geometry": {
+                        "points": "gp}`HmbjsBA?DHBF@?",
+                        "length": 5
+                      }
                     },
                     {
                       "distance": 20.68,
@@ -1843,7 +1901,10 @@
                     "arrival": 1717802400000,
                     "departure": 1717802400000
                   },
-                  "legGeometry": { "points": "s`|`HsthsBiCCG?o@@ICACa@q@[k@KO@A", "length": 10 },
+                  "legGeometry": {
+                    "points": "s`|`HsthsBiCCG?o@@ICACa@q@[k@KO@A",
+                    "length": 10
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.4 },
                     { "distance": 174, "elevation": 104.9 }
@@ -1865,7 +1926,10 @@
                       "lon": 19.054983,
                       "lat": 47.4985043,
                       "walkingBike": false,
-                      "geometry": { "points": "s`|`HsthsBiCCG?o@@ICAAa@s@[i@KQ@?", "length": 10 }
+                      "geometry": {
+                        "points": "s`|`HsthsBiCCG?o@@ICAAa@s@[i@KQ@?",
+                        "length": 10
+                      }
                     }
                   ]
                 },
@@ -1979,7 +2043,10 @@
                     "arrival": 1717802772000,
                     "departure": 1717802880000
                   },
-                  "legGeometry": { "points": "co}`HidjsB@Bg@v@DHBFZe@@@", "length": 7 },
+                  "legGeometry": {
+                    "points": "co}`HidjsB@Bg@v@DHBFZe@@@",
+                    "length": 7
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 103.7 },
                     { "distance": 61, "elevation": 103.9 }
@@ -2014,7 +2081,10 @@
                       "lon": 19.0623166,
                       "lat": 47.5061354,
                       "walkingBike": false,
-                      "geometry": { "points": "gp}`HmbjsBA?DHBF@?", "length": 5 }
+                      "geometry": {
+                        "points": "gp}`HmbjsBA?DHBF@?",
+                        "length": 5
+                      }
                     },
                     {
                       "distance": 20.68,
@@ -2186,7 +2256,10 @@
                 "arrival": 1717799340000,
                 "departure": 1717799340000
               },
-              "legGeometry": { "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP", "length": 9 },
+              "legGeometry": {
+                "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP",
+                "length": 9
+              },
               "legElevation": [
                 { "distance": 0, "elevation": 105.4 },
                 { "distance": 141, "elevation": 104.6 }
@@ -2221,7 +2294,10 @@
                   "lon": 19.0550227,
                   "lat": 47.4979541,
                   "walkingBike": false,
-                  "geometry": { "points": "u|{`HouhsB`@o@JS`@cADP", "length": 5 }
+                  "geometry": {
+                    "points": "u|{`HouhsB`@o@JS`@cADP",
+                    "length": 5
+                  }
                 }
               ]
             },
@@ -2358,7 +2434,10 @@
                 "arrival": 1717799738000,
                 "departure": 1717799820000
               },
-              "legGeometry": { "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B", "length": 10 },
+              "legGeometry": {
+                "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B",
+                "length": 10
+              },
               "legElevation": [
                 { "distance": 0, "elevation": 105.1 },
                 { "distance": 95, "elevation": 105.4 }
@@ -2380,7 +2459,10 @@
                   "lon": 19.0571237,
                   "lat": 47.5097911,
                   "walkingBike": false,
-                  "geometry": { "points": "gg~`HebisB@DABKLA@SV@@", "length": 7 }
+                  "geometry": {
+                    "points": "gg~`HebisB@DABKLA@SV@@",
+                    "length": 7
+                  }
                 },
                 {
                   "distance": 5.22,
@@ -2590,7 +2672,10 @@
                     "arrival": 1717799340000,
                     "departure": 1717799340000
                   },
-                  "legGeometry": { "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP", "length": 9 },
+                  "legGeometry": {
+                    "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP",
+                    "length": 9
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.4 },
                     { "distance": 141, "elevation": 104.6 }
@@ -2612,7 +2697,10 @@
                       "lon": 19.054983,
                       "lat": 47.4985043,
                       "walkingBike": false,
-                      "geometry": { "points": "s`|`HsthsBN?t@@JAZGNS", "length": 6 }
+                      "geometry": {
+                        "points": "s`|`HsthsBN?t@@JAZGNS",
+                        "length": 6
+                      }
                     },
                     {
                       "distance": 79.61,
@@ -2625,7 +2713,10 @@
                       "lon": 19.0550227,
                       "lat": 47.4979541,
                       "walkingBike": false,
-                      "geometry": { "points": "u|{`HouhsB`@o@JS`@cADP", "length": 5 }
+                      "geometry": {
+                        "points": "u|{`HouhsB`@o@JS`@cADP",
+                        "length": 5
+                      }
                     }
                   ]
                 },
@@ -2750,7 +2841,10 @@
                     "arrival": 1717799738000,
                     "departure": 1717799820000
                   },
-                  "legGeometry": { "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B", "length": 10 },
+                  "legGeometry": {
+                    "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B",
+                    "length": 10
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.1 },
                     { "distance": 95, "elevation": 105.4 }
@@ -2772,7 +2866,10 @@
                       "lon": 19.0571237,
                       "lat": 47.5097911,
                       "walkingBike": false,
-                      "geometry": { "points": "gg~`HebisB@DABKLA@SV@@", "length": 7 }
+                      "geometry": {
+                        "points": "gg~`HebisB@DABKLA@SV@@",
+                        "length": 7
+                      }
                     },
                     {
                       "distance": 5.22,
@@ -2798,7 +2895,10 @@
                       "lon": 19.056851,
                       "lat": 47.5099481,
                       "walkingBike": false,
-                      "geometry": { "points": "ch~`Hg`isB}@tBEL@B", "length": 4 }
+                      "geometry": {
+                        "points": "ch~`Hg`isB}@tBEL@B",
+                        "length": 4
+                      }
                     }
                   ]
                 },
@@ -2941,7 +3041,10 @@
                     "arrival": 1717799700000,
                     "departure": 1717799700000
                   },
-                  "legGeometry": { "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP", "length": 9 },
+                  "legGeometry": {
+                    "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP",
+                    "length": 9
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.4 },
                     { "distance": 141, "elevation": 104.6 }
@@ -2963,7 +3066,10 @@
                       "lon": 19.054983,
                       "lat": 47.4985043,
                       "walkingBike": false,
-                      "geometry": { "points": "s`|`HsthsBN?t@@JAZGNS", "length": 6 }
+                      "geometry": {
+                        "points": "s`|`HsthsBN?t@@JAZGNS",
+                        "length": 6
+                      }
                     },
                     {
                       "distance": 79.61,
@@ -2976,7 +3082,10 @@
                       "lon": 19.0550227,
                       "lat": 47.4979541,
                       "walkingBike": false,
-                      "geometry": { "points": "u|{`HouhsB`@o@JS`@cADP", "length": 5 }
+                      "geometry": {
+                        "points": "u|{`HouhsB`@o@JS`@cADP",
+                        "length": 5
+                      }
                     }
                   ]
                 },
@@ -3101,7 +3210,10 @@
                     "arrival": 1717800098000,
                     "departure": 1717800300000
                   },
-                  "legGeometry": { "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B", "length": 10 },
+                  "legGeometry": {
+                    "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B",
+                    "length": 10
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.1 },
                     { "distance": 95, "elevation": 105.4 }
@@ -3123,7 +3235,10 @@
                       "lon": 19.0571237,
                       "lat": 47.5097911,
                       "walkingBike": false,
-                      "geometry": { "points": "gg~`HebisB@DABKLA@SV@@", "length": 7 }
+                      "geometry": {
+                        "points": "gg~`HebisB@DABKLA@SV@@",
+                        "length": 7
+                      }
                     },
                     {
                       "distance": 5.22,
@@ -3149,7 +3264,10 @@
                       "lon": 19.056851,
                       "lat": 47.5099481,
                       "walkingBike": false,
-                      "geometry": { "points": "ch~`Hg`isB}@tBEL@B", "length": 4 }
+                      "geometry": {
+                        "points": "ch~`Hg`isB}@tBEL@B",
+                        "length": 4
+                      }
                     }
                   ]
                 },
@@ -3292,7 +3410,10 @@
                     "arrival": 1717801140000,
                     "departure": 1717801140000
                   },
-                  "legGeometry": { "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP", "length": 9 },
+                  "legGeometry": {
+                    "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP",
+                    "length": 9
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.4 },
                     { "distance": 141, "elevation": 104.6 }
@@ -3314,7 +3435,10 @@
                       "lon": 19.054983,
                       "lat": 47.4985043,
                       "walkingBike": false,
-                      "geometry": { "points": "s`|`HsthsBN?t@@JAZGNS", "length": 6 }
+                      "geometry": {
+                        "points": "s`|`HsthsBN?t@@JAZGNS",
+                        "length": 6
+                      }
                     },
                     {
                       "distance": 79.61,
@@ -3327,7 +3451,10 @@
                       "lon": 19.0550227,
                       "lat": 47.4979541,
                       "walkingBike": false,
-                      "geometry": { "points": "u|{`HouhsB`@o@JS`@cADP", "length": 5 }
+                      "geometry": {
+                        "points": "u|{`HouhsB`@o@JS`@cADP",
+                        "length": 5
+                      }
                     }
                   ]
                 },
@@ -3452,7 +3579,10 @@
                     "arrival": 1717801538000,
                     "departure": 1717801620000
                   },
-                  "legGeometry": { "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B", "length": 10 },
+                  "legGeometry": {
+                    "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B",
+                    "length": 10
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.1 },
                     { "distance": 95, "elevation": 105.4 }
@@ -3474,7 +3604,10 @@
                       "lon": 19.0571237,
                       "lat": 47.5097911,
                       "walkingBike": false,
-                      "geometry": { "points": "gg~`HebisB@DABKLA@SV@@", "length": 7 }
+                      "geometry": {
+                        "points": "gg~`HebisB@DABKLA@SV@@",
+                        "length": 7
+                      }
                     },
                     {
                       "distance": 5.22,
@@ -3500,7 +3633,10 @@
                       "lon": 19.056851,
                       "lat": 47.5099481,
                       "walkingBike": false,
-                      "geometry": { "points": "ch~`Hg`isB}@tBEL@B", "length": 4 }
+                      "geometry": {
+                        "points": "ch~`Hg`isB}@tBEL@B",
+                        "length": 4
+                      }
                     }
                   ]
                 },
@@ -3643,7 +3779,10 @@
                     "arrival": 1717801500000,
                     "departure": 1717801500000
                   },
-                  "legGeometry": { "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP", "length": 9 },
+                  "legGeometry": {
+                    "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP",
+                    "length": 9
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.4 },
                     { "distance": 141, "elevation": 104.6 }
@@ -3665,7 +3804,10 @@
                       "lon": 19.054983,
                       "lat": 47.4985043,
                       "walkingBike": false,
-                      "geometry": { "points": "s`|`HsthsBN?t@@JAZGNS", "length": 6 }
+                      "geometry": {
+                        "points": "s`|`HsthsBN?t@@JAZGNS",
+                        "length": 6
+                      }
                     },
                     {
                       "distance": 79.61,
@@ -3678,7 +3820,10 @@
                       "lon": 19.0550227,
                       "lat": 47.4979541,
                       "walkingBike": false,
-                      "geometry": { "points": "u|{`HouhsB`@o@JS`@cADP", "length": 5 }
+                      "geometry": {
+                        "points": "u|{`HouhsB`@o@JS`@cADP",
+                        "length": 5
+                      }
                     }
                   ]
                 },
@@ -3803,7 +3948,10 @@
                     "arrival": 1717801898000,
                     "departure": 1717802100000
                   },
-                  "legGeometry": { "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B", "length": 10 },
+                  "legGeometry": {
+                    "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B",
+                    "length": 10
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.1 },
                     { "distance": 95, "elevation": 105.4 }
@@ -3825,7 +3973,10 @@
                       "lon": 19.0571237,
                       "lat": 47.5097911,
                       "walkingBike": false,
-                      "geometry": { "points": "gg~`HebisB@DABKLA@SV@@", "length": 7 }
+                      "geometry": {
+                        "points": "gg~`HebisB@DABKLA@SV@@",
+                        "length": 7
+                      }
                     },
                     {
                       "distance": 5.22,
@@ -3851,7 +4002,10 @@
                       "lon": 19.056851,
                       "lat": 47.5099481,
                       "walkingBike": false,
-                      "geometry": { "points": "ch~`Hg`isB}@tBEL@B", "length": 4 }
+                      "geometry": {
+                        "points": "ch~`Hg`isB}@tBEL@B",
+                        "length": 4
+                      }
                     }
                   ]
                 },
@@ -3994,7 +4148,10 @@
                     "arrival": 1717802940000,
                     "departure": 1717802940000
                   },
-                  "legGeometry": { "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP", "length": 9 },
+                  "legGeometry": {
+                    "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP",
+                    "length": 9
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.4 },
                     { "distance": 141, "elevation": 104.6 }
@@ -4016,7 +4173,10 @@
                       "lon": 19.054983,
                       "lat": 47.4985043,
                       "walkingBike": false,
-                      "geometry": { "points": "s`|`HsthsBN?t@@JAZGNS", "length": 6 }
+                      "geometry": {
+                        "points": "s`|`HsthsBN?t@@JAZGNS",
+                        "length": 6
+                      }
                     },
                     {
                       "distance": 79.61,
@@ -4029,7 +4189,10 @@
                       "lon": 19.0550227,
                       "lat": 47.4979541,
                       "walkingBike": false,
-                      "geometry": { "points": "u|{`HouhsB`@o@JS`@cADP", "length": 5 }
+                      "geometry": {
+                        "points": "u|{`HouhsB`@o@JS`@cADP",
+                        "length": 5
+                      }
                     }
                   ]
                 },
@@ -4154,7 +4317,10 @@
                     "arrival": 1717803338000,
                     "departure": 1717803480000
                   },
-                  "legGeometry": { "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B", "length": 10 },
+                  "legGeometry": {
+                    "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B",
+                    "length": 10
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.1 },
                     { "distance": 95, "elevation": 105.4 }
@@ -4176,7 +4342,10 @@
                       "lon": 19.0571237,
                       "lat": 47.5097911,
                       "walkingBike": false,
-                      "geometry": { "points": "gg~`HebisB@DABKLA@SV@@", "length": 7 }
+                      "geometry": {
+                        "points": "gg~`HebisB@DABKLA@SV@@",
+                        "length": 7
+                      }
                     },
                     {
                       "distance": 5.22,
@@ -4202,7 +4371,10 @@
                       "lon": 19.056851,
                       "lat": 47.5099481,
                       "walkingBike": false,
-                      "geometry": { "points": "ch~`Hg`isB}@tBEL@B", "length": 4 }
+                      "geometry": {
+                        "points": "ch~`Hg`isB}@tBEL@B",
+                        "length": 4
+                      }
                     }
                   ]
                 },
@@ -4345,7 +4517,10 @@
                     "arrival": 1717803300000,
                     "departure": 1717803300000
                   },
-                  "legGeometry": { "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP", "length": 9 },
+                  "legGeometry": {
+                    "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP",
+                    "length": 9
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.4 },
                     { "distance": 141, "elevation": 104.6 }
@@ -4367,7 +4542,10 @@
                       "lon": 19.054983,
                       "lat": 47.4985043,
                       "walkingBike": false,
-                      "geometry": { "points": "s`|`HsthsBN?t@@JAZGNS", "length": 6 }
+                      "geometry": {
+                        "points": "s`|`HsthsBN?t@@JAZGNS",
+                        "length": 6
+                      }
                     },
                     {
                       "distance": 79.61,
@@ -4380,7 +4558,10 @@
                       "lon": 19.0550227,
                       "lat": 47.4979541,
                       "walkingBike": false,
-                      "geometry": { "points": "u|{`HouhsB`@o@JS`@cADP", "length": 5 }
+                      "geometry": {
+                        "points": "u|{`HouhsB`@o@JS`@cADP",
+                        "length": 5
+                      }
                     }
                   ]
                 },
@@ -4505,7 +4686,10 @@
                     "arrival": 1717803698000,
                     "departure": 1717803900000
                   },
-                  "legGeometry": { "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B", "length": 10 },
+                  "legGeometry": {
+                    "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B",
+                    "length": 10
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.1 },
                     { "distance": 95, "elevation": 105.4 }
@@ -4527,7 +4711,10 @@
                       "lon": 19.0571237,
                       "lat": 47.5097911,
                       "walkingBike": false,
-                      "geometry": { "points": "gg~`HebisB@DABKLA@SV@@", "length": 7 }
+                      "geometry": {
+                        "points": "gg~`HebisB@DABKLA@SV@@",
+                        "length": 7
+                      }
                     },
                     {
                       "distance": 5.22,
@@ -4553,7 +4740,10 @@
                       "lon": 19.056851,
                       "lat": 47.5099481,
                       "walkingBike": false,
-                      "geometry": { "points": "ch~`Hg`isB}@tBEL@B", "length": 4 }
+                      "geometry": {
+                        "points": "ch~`Hg`isB}@tBEL@B",
+                        "length": 4
+                      }
                     }
                   ]
                 },
@@ -4696,7 +4886,10 @@
                     "arrival": 1717804500000,
                     "departure": 1717804500000
                   },
-                  "legGeometry": { "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP", "length": 9 },
+                  "legGeometry": {
+                    "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP",
+                    "length": 9
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.4 },
                     { "distance": 141, "elevation": 104.6 }
@@ -4718,7 +4911,10 @@
                       "lon": 19.054983,
                       "lat": 47.4985043,
                       "walkingBike": false,
-                      "geometry": { "points": "s`|`HsthsBN?t@@JAZGNS", "length": 6 }
+                      "geometry": {
+                        "points": "s`|`HsthsBN?t@@JAZGNS",
+                        "length": 6
+                      }
                     },
                     {
                       "distance": 79.61,
@@ -4731,7 +4927,10 @@
                       "lon": 19.0550227,
                       "lat": 47.4979541,
                       "walkingBike": false,
-                      "geometry": { "points": "u|{`HouhsB`@o@JS`@cADP", "length": 5 }
+                      "geometry": {
+                        "points": "u|{`HouhsB`@o@JS`@cADP",
+                        "length": 5
+                      }
                     }
                   ]
                 },
@@ -4856,7 +5055,10 @@
                     "arrival": 1717804898000,
                     "departure": 1717804980000
                   },
-                  "legGeometry": { "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B", "length": 10 },
+                  "legGeometry": {
+                    "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B",
+                    "length": 10
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.1 },
                     { "distance": 95, "elevation": 105.4 }
@@ -4878,7 +5080,10 @@
                       "lon": 19.0571237,
                       "lat": 47.5097911,
                       "walkingBike": false,
-                      "geometry": { "points": "gg~`HebisB@DABKLA@SV@@", "length": 7 }
+                      "geometry": {
+                        "points": "gg~`HebisB@DABKLA@SV@@",
+                        "length": 7
+                      }
                     },
                     {
                       "distance": 5.22,
@@ -4904,7 +5109,10 @@
                       "lon": 19.056851,
                       "lat": 47.5099481,
                       "walkingBike": false,
-                      "geometry": { "points": "ch~`Hg`isB}@tBEL@B", "length": 4 }
+                      "geometry": {
+                        "points": "ch~`Hg`isB}@tBEL@B",
+                        "length": 4
+                      }
                     }
                   ]
                 },
@@ -5047,7 +5255,10 @@
                     "arrival": 1717805100000,
                     "departure": 1717805100000
                   },
-                  "legGeometry": { "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP", "length": 9 },
+                  "legGeometry": {
+                    "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP",
+                    "length": 9
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.4 },
                     { "distance": 141, "elevation": 104.6 }
@@ -5069,7 +5280,10 @@
                       "lon": 19.054983,
                       "lat": 47.4985043,
                       "walkingBike": false,
-                      "geometry": { "points": "s`|`HsthsBN?t@@JAZGNS", "length": 6 }
+                      "geometry": {
+                        "points": "s`|`HsthsBN?t@@JAZGNS",
+                        "length": 6
+                      }
                     },
                     {
                       "distance": 79.61,
@@ -5082,7 +5296,10 @@
                       "lon": 19.0550227,
                       "lat": 47.4979541,
                       "walkingBike": false,
-                      "geometry": { "points": "u|{`HouhsB`@o@JS`@cADP", "length": 5 }
+                      "geometry": {
+                        "points": "u|{`HouhsB`@o@JS`@cADP",
+                        "length": 5
+                      }
                     }
                   ]
                 },
@@ -5207,7 +5424,10 @@
                     "arrival": 1717805498000,
                     "departure": 1717805580000
                   },
-                  "legGeometry": { "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B", "length": 10 },
+                  "legGeometry": {
+                    "points": "gg~`HebisB@DABKLA@SVDH}@vBEL@B",
+                    "length": 10
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.1 },
                     { "distance": 95, "elevation": 105.4 }
@@ -5229,7 +5449,10 @@
                       "lon": 19.0571237,
                       "lat": 47.5097911,
                       "walkingBike": false,
-                      "geometry": { "points": "gg~`HebisB@DABKLA@SV@@", "length": 7 }
+                      "geometry": {
+                        "points": "gg~`HebisB@DABKLA@SV@@",
+                        "length": 7
+                      }
                     },
                     {
                       "distance": 5.22,
@@ -5255,7 +5478,10 @@
                       "lon": 19.056851,
                       "lat": 47.5099481,
                       "walkingBike": false,
-                      "geometry": { "points": "ch~`Hg`isB}@tBEL@B", "length": 4 }
+                      "geometry": {
+                        "points": "ch~`Hg`isB}@tBEL@B",
+                        "length": 4
+                      }
                     }
                   ]
                 },
@@ -5403,7 +5629,10 @@
                 "arrival": 1717801260000,
                 "departure": 1717801260000
               },
-              "legGeometry": { "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP", "length": 9 },
+              "legGeometry": {
+                "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP",
+                "length": 9
+              },
               "legElevation": [
                 { "distance": 0, "elevation": 105.4 },
                 { "distance": 141, "elevation": 104.6 }
@@ -5438,7 +5667,10 @@
                   "lon": 19.0550227,
                   "lat": 47.4979541,
                   "walkingBike": false,
-                  "geometry": { "points": "u|{`HouhsB`@o@JS`@cADP", "length": 5 }
+                  "geometry": {
+                    "points": "u|{`HouhsB`@o@JS`@cADP",
+                    "length": 5
+                  }
                 }
               ]
             },
@@ -5683,7 +5915,12 @@
               "wheelchairAccessible": true,
               "hasAlert": false
             },
-            { "time": 1717801800000, "walkTo": false, "name": "Széna tér", "type": "walk" },
+            {
+              "time": 1717801800000,
+              "walkTo": false,
+              "name": "Széna tér",
+              "type": "walk"
+            },
             {
               "last": true,
               "time": 1717802115000,
@@ -5738,7 +5975,10 @@
                     "arrival": 1717801260000,
                     "departure": 1717801260000
                   },
-                  "legGeometry": { "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP", "length": 9 },
+                  "legGeometry": {
+                    "points": "s`|`HsthsBN?t@@JAZGp@cAJS`@cADP",
+                    "length": 9
+                  },
                   "legElevation": [
                     { "distance": 0, "elevation": 105.4 },
                     { "distance": 141, "elevation": 104.6 }
@@ -5760,7 +6000,10 @@
                       "lon": 19.054983,
                       "lat": 47.4985043,
                       "walkingBike": false,
-                      "geometry": { "points": "s`|`HsthsBN?t@@JAZGNS", "length": 6 }
+                      "geometry": {
+                        "points": "s`|`HsthsBN?t@@JAZGNS",
+                        "length": 6
+                      }
                     },
                     {
                       "distance": 79.61,
@@ -5773,7 +6016,10 @@
                       "lon": 19.0550227,
                       "lat": 47.4979541,
                       "walkingBike": false,
-                      "geometry": { "points": "u|{`HouhsB`@o@JS`@cADP", "length": 5 }
+                      "geometry": {
+                        "points": "u|{`HouhsB`@o@JS`@cADP",
+                        "length": 5
+                      }
                     }
                   ]
                 },
@@ -5969,7 +6215,10 @@
                       "lon": 19.0292634,
                       "lat": 47.5079982,
                       "walkingBike": false,
-                      "geometry": { "points": "y{}`H{scsBC?@_@DiA", "length": 4 }
+                      "geometry": {
+                        "points": "y{}`H{scsBC?@_@DiA",
+                        "length": 4
+                      }
                     },
                     {
                       "distance": 244.73,
@@ -5998,7 +6247,10 @@
                       "lon": 19.0298705,
                       "lat": 47.5101237,
                       "walkingBike": false,
-                      "geometry": { "points": "ui~`HcycsBEO]}Ac@kBFE", "length": 5 }
+                      "geometry": {
+                        "points": "ui~`HcycsBEO]}Ac@kBFE",
+                        "length": 5
+                      }
                     }
                   ]
                 }
@@ -6039,7 +6291,11 @@
         "style": {
           "color": "000000",
           "icon": { "type": "BOX", "text": "914", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "night-bus", "color": "1E1E1E", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "night-bus",
+            "color": "1E1E1E",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 11
         },
         "sortOrder": 876
@@ -6058,7 +6314,11 @@
         "style": {
           "color": "000000",
           "icon": { "type": "BOX", "text": "934", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "night-bus", "color": "1E1E1E", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "night-bus",
+            "color": "1E1E1E",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 11
         },
         "sortOrder": 887
@@ -6077,7 +6337,11 @@
         "style": {
           "color": "000000",
           "icon": { "type": "BOX", "text": "914A", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "night-bus", "color": "1E1E1E", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "night-bus",
+            "color": "1E1E1E",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 11
         },
         "sortOrder": 877
@@ -6096,7 +6360,11 @@
         "style": {
           "color": "000000",
           "icon": { "type": "BOX", "text": "950", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "night-bus", "color": "1E1E1E", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "night-bus",
+            "color": "1E1E1E",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 11
         },
         "sortOrder": 894
@@ -6115,7 +6383,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "191", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 326
@@ -6134,7 +6406,11 @@
         "style": {
           "color": "000000",
           "icon": { "type": "BOX", "text": "950A", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "night-bus", "color": "1E1E1E", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "night-bus",
+            "color": "1E1E1E",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 11
         },
         "sortOrder": 895
@@ -6153,7 +6429,11 @@
         "style": {
           "color": "000000",
           "icon": { "type": "BOX", "text": "960", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "night-bus", "color": "1E1E1E", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "night-bus",
+            "color": "1E1E1E",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 11
         },
         "sortOrder": 897
@@ -6172,7 +6452,11 @@
         "style": {
           "color": "000000",
           "icon": { "type": "BOX", "text": "990", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "night-bus", "color": "1E1E1E", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "night-bus",
+            "color": "1E1E1E",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 11
         },
         "sortOrder": 910
@@ -6191,7 +6475,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "11", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 89
@@ -6210,7 +6498,11 @@
         "style": {
           "color": "E41F18",
           "icon": { "type": "BOX", "text": "73", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "trolleybus", "color": "E41F18", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "trolleybus",
+            "color": "E41F18",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 16
         },
         "sortOrder": 201
@@ -6229,7 +6521,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "178", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 315
@@ -6248,7 +6544,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "9", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 86
@@ -6267,7 +6567,11 @@
         "style": {
           "color": "FFD800",
           "icon": { "type": "BOX", "text": "4", "textColor": "000000" },
-          "vehicleIcon": { "name": "tram", "color": "FFD800", "secondaryColor": "000000" },
+          "vehicleIcon": {
+            "name": "tram",
+            "color": "FFD800",
+            "secondaryColor": "000000"
+          },
           "groupId": 1
         },
         "sortOrder": 72
@@ -6286,7 +6590,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "39", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 139
@@ -6305,7 +6613,11 @@
         "style": {
           "color": "FFD800",
           "icon": { "type": "BOX", "text": "6", "textColor": "000000" },
-          "vehicleIcon": { "name": "tram", "color": "FFD800", "secondaryColor": "000000" },
+          "vehicleIcon": {
+            "name": "tram",
+            "color": "FFD800",
+            "secondaryColor": "000000"
+          },
           "groupId": 1
         },
         "sortOrder": 78
@@ -6324,7 +6636,11 @@
         "style": {
           "color": "000000",
           "icon": { "type": "BOX", "text": "916", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "night-bus", "color": "1E1E1E", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "night-bus",
+            "color": "1E1E1E",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 11
         },
         "sortOrder": 878
@@ -6343,7 +6659,11 @@
         "style": {
           "color": "000000",
           "icon": { "type": "BOX", "text": "979A", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "night-bus", "color": "1E1E1E", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "night-bus",
+            "color": "1E1E1E",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 11
         },
         "sortOrder": 908
@@ -6362,7 +6682,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "6", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 79
@@ -6381,7 +6705,11 @@
         "style": {
           "color": "000000",
           "icon": { "type": "BOX", "text": "923", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "night-bus", "color": "1E1E1E", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "night-bus",
+            "color": "1E1E1E",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 11
         },
         "sortOrder": 882
@@ -6400,7 +6728,11 @@
         "style": {
           "color": "000000",
           "icon": { "type": "BOX", "text": "979", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "night-bus", "color": "1E1E1E", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "night-bus",
+            "color": "1E1E1E",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 11
         },
         "sortOrder": 906
@@ -6419,7 +6751,11 @@
         "style": {
           "color": "EE7203",
           "icon": { "type": "BOX", "text": "MU3", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 8
         },
         "sortOrder": 854
@@ -6438,7 +6774,11 @@
         "style": {
           "color": "000000",
           "icon": { "type": "BOX", "text": "931", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "night-bus", "color": "1E1E1E", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "night-bus",
+            "color": "1E1E1E",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 11
         },
         "sortOrder": 885
@@ -6457,7 +6797,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "91", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 222
@@ -6476,7 +6820,11 @@
         "style": {
           "color": "000000",
           "icon": { "type": "BOX", "text": "931", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "night-bus", "color": "1E1E1E", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "night-bus",
+            "color": "1E1E1E",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 11
         },
         "sortOrder": 884
@@ -6495,7 +6843,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "291", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 397
@@ -6514,7 +6866,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "210B", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 339
@@ -6533,7 +6889,11 @@
         "style": {
           "color": "E41F18",
           "icon": { "type": "BOX", "text": "72", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "trolleybus", "color": "E41F18", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "trolleybus",
+            "color": "E41F18",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 16
         },
         "sortOrder": 200
@@ -6552,7 +6912,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "111", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 245
@@ -6571,7 +6935,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "210", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 338
@@ -6590,7 +6958,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "26", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 118
@@ -6609,7 +6981,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "16", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 100
@@ -6628,7 +7004,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "216", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 345
@@ -6647,7 +7027,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "226", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 357
@@ -6666,7 +7050,11 @@
         "style": {
           "color": "009EE3",
           "icon": { "type": "BOX", "text": "105", "textColor": "FFFFFF" },
-          "vehicleIcon": { "name": "bus", "color": "009EE3", "secondaryColor": "FFFFFF" },
+          "vehicleIcon": {
+            "name": "bus",
+            "color": "009EE3",
+            "secondaryColor": "FFFFFF"
+          },
           "groupId": 7
         },
         "sortOrder": 240
@@ -6685,7 +7073,11 @@
         "style": {
           "color": "FFD800",
           "icon": { "type": "BOX", "text": "17", "textColor": "000000" },
-          "vehicleIcon": { "name": "tram", "color": "FFD800", "secondaryColor": "000000" },
+          "vehicleIcon": {
+            "name": "tram",
+            "color": "FFD800",
+            "secondaryColor": "000000"
+          },
           "groupId": 1
         },
         "sortOrder": 103
@@ -6750,7 +7142,13 @@
         "parentStationId": "BKK_CSF00234",
         "type": "BUS",
         "wheelchairBoarding": true,
-        "routeIds": ["BKK_VP06", "BKK_0910", "BKK_1910", "BKK_2910", "BKK_9312"],
+        "routeIds": [
+          "BKK_VP06",
+          "BKK_0910",
+          "BKK_1910",
+          "BKK_2910",
+          "BKK_9312"
+        ],
         "stopColorType": "BUS",
         "style": { "colors": ["000000", "009EE3"] }
       },
@@ -7612,7 +8010,10 @@
             "routeId": "BKK_9500",
             "stopIds": [],
             "header": {
-              "translations": { "en": "service changes", "hu": "egyéb változás" },
+              "translations": {
+                "en": "service changes",
+                "hu": "egyéb változás"
+              },
               "someTranslation": "service changes"
             },
             "effectType": "NO_SERVICE"
@@ -7621,7 +8022,10 @@
             "routeId": "BKK_9501",
             "stopIds": [],
             "header": {
-              "translations": { "en": "service changes", "hu": "egyéb változás" },
+              "translations": {
+                "en": "service changes",
+                "hu": "egyéb változás"
+              },
               "someTranslation": "service changes"
             },
             "effectType": "NO_SERVICE"
@@ -7630,7 +8034,10 @@
             "routeId": "BKK_9140",
             "stopIds": [],
             "header": {
-              "translations": { "en": "service changes", "hu": "egyéb változás" },
+              "translations": {
+                "en": "service changes",
+                "hu": "egyéb változás"
+              },
               "someTranslation": "service changes"
             },
             "effectType": "NO_SERVICE"
@@ -7639,7 +8046,10 @@
             "routeId": "BKK_9141",
             "stopIds": [],
             "header": {
-              "translations": { "en": "service changes", "hu": "egyéb változás" },
+              "translations": {
+                "en": "service changes",
+                "hu": "egyéb változás"
+              },
               "someTranslation": "service changes"
             },
             "effectType": "NO_SERVICE"

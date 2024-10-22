@@ -1,8 +1,10 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   function countdown(date: Date, now: number, showApostrophe: boolean) {
     const distance = date.getTime() - now;
 
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+    );
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
@@ -12,7 +14,7 @@
     if (minutes <= 0) return `${seconds} s`;
     return `${minutes}:${seconds.toLocaleString('hu', {
       minimumIntegerDigits: 2,
-      useGrouping: false
+      useGrouping: false,
     })}`;
   }
 </script>
@@ -32,7 +34,9 @@
 
   const now = useNow();
 
-  let coundownString = $derived(countdown(countDownToDate, now.now.valueOf(), showApostrophe));
+  let coundownString = $derived(
+    countdown(countDownToDate, now.now.valueOf(), showApostrophe),
+  );
 </script>
 
 <span {...rest}>{coundownString}</span>

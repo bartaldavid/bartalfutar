@@ -10,6 +10,6 @@ export function useNow() {
   return {
     get now() {
       return now;
-    }
+    },
   };
 }

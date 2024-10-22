@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   export type TimeSelectorProps = {
     time: string;
     type: 'now' | 'arrive_at' | 'leave_at';
@@ -7,7 +7,8 @@
 
 <script lang="ts">
   import * as m from '$lib/paraglide/messages.js';
-  let { timeSetting = $bindable() }: { timeSetting: TimeSelectorProps } = $props();
+  let { timeSetting = $bindable() }: { timeSetting: TimeSelectorProps } =
+    $props();
 </script>
 
 <div class="flex gap-2 text-sm">
@@ -17,6 +18,10 @@
     <option value="leave_at">{m.leave_at()}</option>
   </select>
   {#if timeSetting.type !== 'now'}
-    <input type="time" class="bg-transparent p-0.5" bind:value={timeSetting.time} />
+    <input
+      type="time"
+      class="bg-transparent p-0.5"
+      bind:value={timeSetting.time}
+    />
   {/if}
 </div>
