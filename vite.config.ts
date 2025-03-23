@@ -1,11 +1,13 @@
 import { paraglide } from '@inlang/paraglide-sveltekit/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
+import tailwindcss from '@tailwindcss/vite';
 // import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 import Icons from 'unplugin-icons/vite';
 
 export default defineConfig({
   plugins: [
+    tailwindcss(),
     paraglide({ project: './project.inlang', outdir: './src/lib/paraglide' }),
     sveltekit(),
     // SvelteKitPWA({

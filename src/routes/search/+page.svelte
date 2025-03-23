@@ -88,7 +88,7 @@
         debounceFetch();
       }}
       bind:this={inputElement}
-      class="flex-1 bg-transparent outline-none"
+      class="flex-1 bg-transparent outline-hidden"
       name="q"
       id="search"
     />

@@ -34,7 +34,7 @@
       navItem.path === $page.url.pathname || navItem.path === parent}
     <a
       href={navItem.path}
-      class="flex flex-col items-center rounded p-2 px-6 hover:dark:text-slate-200 md:flex-row md:gap-2 active:md:dark:bg-slate-800 {active &&
+      class="flex flex-col items-center rounded p-2 px-6 dark:hover:text-slate-200 md:flex-row md:gap-2 md:dark:active:bg-slate-800 {active &&
         ' font-normal dark:text-slate-200 md:bg-slate-200 md:dark:bg-slate-800'}"
       ><navItem.icon />
       <span class="text-sm md:text-base">{navItem.label}</span></a
