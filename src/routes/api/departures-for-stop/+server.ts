@@ -22,61 +22,6 @@ export async function GET({ fetch, url }): Promise<
 > {
   const query = _params.parse(getQueryFromParams(url.searchParams));
 
-  if (isMav(query.stopId[0])) {
-    const data = await fetchMav(
-      {
-        stationId: query.stopId[0].split('_')[1].replace('CS', ''),
-        minCount: 0,
-        maxCount: query.limit ?? 10,
-      },
-      fetch,
-    );
-
-    // console.log(data);
-
-    const departures: DepartureType[] =
-      data.stationSchedulerDetails.departureScheduler.map((departure) => {
-        return {
-          id: departure.trainId,
-          ...(departure.actualOrEstimatedStart && {
-            predictedDepartureTime:
-              Date.parse(departure.actualOrEstimatedStart) / 1000,
-          }),
-          ...(departure.actualOrEstimatedArrive && {
-            predictedArrivalTime:
-              Date.parse(departure.actualOrEstimatedArrive) / 1000,
-          }),
-          arrivalTime: departure.arrive
-            ? Date.parse(departure.arrive) / 1000
-            : Date.now() / 1000,
-          departureTime: departure.start
-            ? Date.parse(departure.start) / 1000
-            : Date.now() / 1000,
-          alerts: [departure.havarianInfok.kesesiOk ?? ''],
-          headSign: departure.endStation.name,
-          icon: {
-            text:
-              departure.viszonylatiJel?.jel ||
-              departure.fullShortType ||
-              departure.name ||
-              '',
-            color: departure.viszonylatiJel?.fontSzinKod,
-            textColor: departure.viszonylatiJel?.hatterSzinKod,
-          },
-          ...(departure.startTrack && { platform: departure.startTrack }),
-        };
-      });
-
-    const stops = [
-      {
-        id: `BKK_${data.stationSchedulerDetails.station.code}_0`,
-        name: data.stationSchedulerDetails.station.name,
-      },
-    ];
-
-    return typed_json({ departures, stops, source: 'MÁV' });
-  }
-
   const { data } = await futarClient.GET(
     '/{dialect}/api/where/arrivals-and-departures-for-stop',
     {
@@ -127,34 +72,34 @@ export async function GET({ fetch, url }): Promise<
   });
 }
 
-async function fetchMav(
-  {
-    stationId,
-    minCount,
-    maxCount,
-  }: {
-    stationId: string;
-    minCount: number;
-    maxCount: number;
-  },
-  fetch = window.fetch,
-) {
-  return (await fetch(
-    'https://jegy-a.mav.hu/IK_API_PROD/api/InformationApi/GetTimetable',
-    {
-      body: JSON.stringify({
-        type: 'StationInfo',
-        travelDate: new Date().toISOString(),
-        stationNumberCode: stationId,
-        minCount: minCount.toString(),
-        maxCount: maxCount.toString(),
-      }),
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json; charset=UTF-8',
-        language: 'hu',
-        UserSessionId: crypto.randomUUID(),
-      },
-    },
-  ).then((res) => res.json())) as MavRoot;
-}
+// async function fetchMav(
+//   {
+//     stationId,
+//     minCount,
+//     maxCount,
+//   }: {
+//     stationId: string;
+//     minCount: number;
+//     maxCount: number;
+//   },
+//   fetch = window.fetch,
+// ) {
+//   return (await fetch(
+//     'https://jegy-a.mav.hu/IK_API_PROD/api/InformationApi/GetTimetable',
+//     {
+//       body: JSON.stringify({
+//         type: 'StationInfo',
+//         travelDate: new Date().toISOString(),
+//         stationNumberCode: stationId,
+//         minCount: minCount.toString(),
+//         maxCount: maxCount.toString(),
+//       }),
+//       method: 'POST',
+//       headers: {
+//         'content-type': 'application/json; charset=UTF-8',
+//         language: 'hu',
+//         UserSessionId: crypto.randomUUID(),
+//       },
+//     },
+//   ).then((res) => res.json())) as MavRoot;
+// }
