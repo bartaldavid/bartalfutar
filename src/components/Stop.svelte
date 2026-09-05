@@ -14,7 +14,7 @@
   import LoadingCards from './LoadingCards.svelte';
   import { isMav } from '$lib/util/stops';
   import MavLogo from './MavLogo.svelte';
-  import * as m from '$lib/paraglide/messages.js';
+  import { m } from '$lib/paraglide/messages.js';
 
   let { stop, saved = false }: { stop: TStop; saved?: boolean } = $props();
   let expanded = $state(false);

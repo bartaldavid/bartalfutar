@@ -4,8 +4,8 @@
   import { displayDate, useTransitStopTime } from '../lib/util/date.svelte';
   import RouteIcon from './RouteIcon.svelte';
   import type { DepartureType } from '$lib/types';
-  import TrainTrack from 'lucide-svelte/icons/train-track';
-  import * as m from '$lib/paraglide/messages.js';
+  import TrainTrack from '@lucide/svelte/icons/train-track';
+  import { m } from '$lib/paraglide/messages.js';
 
   let {
     expanded,

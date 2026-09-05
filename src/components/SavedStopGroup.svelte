@@ -20,7 +20,7 @@
     <!-- TODO separate this into its own stop component? -->
     {#each groupItems as stop (stop.id)}
       <a
-        class="flex flex-1 items-center justify-center break-words rounded bg-slate-100 p-2 text-center text-sm active:opacity-90 dark:bg-slate-800 dark:text-slate-50"
+        class="flex flex-1 items-center justify-center rounded bg-slate-100 p-2 text-center text-sm wrap-break-word active:opacity-90 dark:bg-slate-800 dark:text-slate-50"
         href={`/stops/${stop.id}?from=${encodeURIComponent($page.url.pathname)}`}
         >{stop.name}
       </a>

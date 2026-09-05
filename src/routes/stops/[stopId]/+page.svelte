@@ -11,7 +11,7 @@
   import { typed_fetch } from '../../api/endpoint-types';
   import LoadingCards from '$components/LoadingCards.svelte';
   import { Button } from '$lib/components/ui/button';
-  import * as m from '$lib/paraglide/messages.js';
+  import { m } from '$lib/paraglide/messages.js';
 
   let { data } = $props();
 

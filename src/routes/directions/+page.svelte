@@ -1,8 +1,8 @@
 <script lang="ts">
   import TimeSelector, { type TimeSelectorProps } from './TimeSelector.svelte';
-  import Locate from 'lucide-svelte/icons/locate';
-  import MapPin from 'lucide-svelte/icons/map-pin';
-  import LocateFixed from 'lucide-svelte/icons/locate-fixed';
+  import Locate from '@lucide/svelte/icons/locate';
+  import MapPin from '@lucide/svelte/icons/map-pin';
+  import LocateFixed from '@lucide/svelte/icons/locate-fixed';
   import type { PageData } from './$types';
   import PageLayout from '$components/PageLayout.svelte';
   import {
@@ -19,7 +19,7 @@
   import BikeToggle from './BikeToggle.svelte';
   import { Accordion } from 'bits-ui';
   import LoadingCards from '$components/LoadingCards.svelte';
-  import * as m from '$lib/paraglide/messages.js';
+  import { m } from '$lib/paraglide/messages.js';
   import { writable } from 'svelte/store';
 
   let { data } = $props();

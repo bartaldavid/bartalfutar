@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { ParaglideJS } from '@inlang/paraglide-sveltekit';
-  import { i18n } from '$lib/i18n';
+  // import { ParaglideJS } from '@inlang/paraglide-sveltekit';
+  // import { i18n } from '$lib/i18n';
 
   import { QueryClientProvider } from '@tanstack/svelte-query';
   import '../app.css';
@@ -26,14 +26,14 @@
   <title>BartalFUTÁR</title>
 </svelte:head>
 
-<ParaglideJS {i18n}>
-  <QueryClientProvider client={data.queryClient}>
-    <main class="mx-2 flex justify-center md:flex-row">
-      <NavBar />
-      {@render children()}
-    </main>
-    <SvelteQueryDevtools />
-  </QueryClientProvider>
+<!-- <ParaglideJS {i18n}> -->
+<QueryClientProvider client={data.queryClient}>
+  <main class="mx-2 flex justify-center md:flex-row">
+    <NavBar />
+    {@render children()}
+  </main>
+  <SvelteQueryDevtools />
+</QueryClientProvider>
 
-  <ModeWatcher />
-</ParaglideJS>
+<ModeWatcher />
+<!-- </ParaglideJS> -->

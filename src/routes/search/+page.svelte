@@ -9,17 +9,17 @@
   import { typed_fetch } from '../api/endpoint-types';
   import type { TStop } from '$lib/types';
   import { page } from '$app/stores';
-  import Search from 'lucide-svelte/icons/search';
+  import Search from '@lucide/svelte/icons/search';
   import { replaceState } from '$app/navigation';
   import PlaceCard from './PlaceCard.svelte';
-  import * as m from '$lib/paraglide/messages.js';
+  import { m } from '$lib/paraglide/messages.js';
   import { derived as derivedStore, writable } from 'svelte/store';
 
   let { data } = $props();
 
   let favorite_ids = $derived(data?.favorites_ids ?? []);
 
-  let searchQuery = $state(data.query);
+  let searchQuery = $derived(data.query);
 
   let timer: NodeJS.Timeout | undefined = $state();
 
@@ -32,17 +32,17 @@
     initialData: data?.searchData,
   }));
 
-  const placesQuery = createQuery(() => ({
-    queryKey: ['search-places', searchQuery],
-    queryFn: async () =>
-      fetch('/api/places-autocomplete?q=' + searchQuery).then(
-        (res) =>
-          res.json() as Promise<
-            { main: string; secondary: string; placeId: string }[]
-          >,
-      ),
-    enabled: searchQuery.length > searchQueryMinimumLength,
-  }));
+  // const placesQuery = createQuery(() => ({
+  //   queryKey: ['search-places', searchQuery],
+  //   queryFn: async () =>
+  //     fetch('/api/places-autocomplete?q=' + searchQuery).then(
+  //       (res) =>
+  //         res.json() as Promise<
+  //           { main: string; secondary: string; placeId: string }[]
+  //         >,
+  //     ),
+  //   enabled: searchQuery.length > searchQueryMinimumLength,
+  // }));
 
   let stopsToDisplay: TStop[] = $derived.by(() => {
     if (data?.query === searchQuery && data.searchData) {
@@ -63,7 +63,7 @@
     if (searchQuery.length > searchQueryMinimumLength) {
       timer = setTimeout(() => {
         stopsQuery.refetch();
-        placesQuery.refetch();
+        // placesQuery.refetch();
       }, debounceIntervalMs);
     }
   }
@@ -94,17 +94,17 @@
     />
   </form>
 
-  {#if placesQuery.isFetched && placesQuery.data}
+  <!-- {#if placesQuery.isFetched && placesQuery.data}
     <h2 class="mb-1 text-sm font-medium">{m.places()}</h2>
     <div class="flex flex-col gap-2">
       {#each placesQuery.data as place}
         <PlaceCard {place} />
       {/each}
     </div>
-  {/if}
+  {/if} -->
 
   {#if stopsToDisplay.length > 0}
-    <h2 class="mb-1 mt-4 text-sm font-medium">{m.stops()}</h2>
+    <h2 class="mt-4 mb-1 text-sm font-medium">{m.stops()}</h2>
     <div class="flex flex-col gap-1">
       {#each stopsToDisplay as stop}
         <Stop {stop} saved={!!stop.id && favorite_ids.includes(stop.id)} />

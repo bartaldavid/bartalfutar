@@ -3,7 +3,7 @@
   import type { DepartureType } from '$lib/types';
   import Departure from './Departure.svelte';
   import EarlierDepartures from './EarlierDepartures.svelte';
-  import * as m from '$lib/paraglide/messages.js';
+  import { m } from '$lib/paraglide/messages.js';
 
   let {
     departures = [],
@@ -48,9 +48,9 @@
     }}
   />
 {:else}
-  <div class="flex flex-col items-center justify-center w-full h-12">
+  <div class="flex h-12 w-full flex-col items-center justify-center">
     <!-- FIXME 90 should be a variable grabbed from the request -->
-    <span class="dark:text-gray-200 text-slate-600"
+    <span class="text-slate-600 dark:text-gray-200"
       >{m.no_departures_in_the_next()}</span
     >
   </div>

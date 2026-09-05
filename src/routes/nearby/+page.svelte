@@ -16,7 +16,7 @@
   } from '$lib/stores/geolocation-permission.svelte';
   import { typed_fetch } from '../api/endpoint-types';
   import { Button } from '$lib/components/ui/button';
-  import * as m from '$lib/paraglide/messages.js';
+  import { m } from '$lib/paraglide/messages.js';
 
   let nearbyDepartures = createQuery(() => ({
     queryKey: ['departuresForLocation', $location.position?.coords],
@@ -74,7 +74,7 @@
       {#each nearbyDepartures.data ?? [] as departureGroup (departureGroup.id + departureGroup.headSign)}
         <DepartureGroup {departureGroup} />
       {:else}
-        <div class="text-gray-500 text-center">
+        <div class="text-center text-gray-500">
           {m.no_departures_in_the_next()}
         </div>
       {/each}

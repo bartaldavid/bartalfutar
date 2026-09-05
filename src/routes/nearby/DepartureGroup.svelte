@@ -5,7 +5,7 @@
   import Countdown from '../../components/Countdown.svelte';
   import RouteIcon from '../../components/RouteIcon.svelte';
   import TripDetails from '../../components/TripDetails.svelte';
-  import * as m from '$lib/paraglide/messages.js';
+  import { m } from '$lib/paraglide/messages.js';
 
   let { departureGroup }: { departureGroup: DepartureGroup } = $props();
 
@@ -19,7 +19,7 @@
   }}
 >
   <div
-    class="my-1 flex flex-row items-center gap-2 text-balance text-start text-sm"
+    class="my-1 flex flex-row items-center gap-2 text-start text-sm text-balance"
   >
     <!-- <VehicleIcons vehicleType={departureGroup. ?? ''} class="self-center text-lg" /> -->
     <RouteIcon icon={departureGroup.icon} />

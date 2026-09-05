@@ -2,11 +2,11 @@
   import StopsView from '../../components/StopsView.svelte';
   import PageLayout from '../../components/PageLayout.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
-  import UserCircle from 'lucide-svelte/icons/circle-user';
+  import UserCircle from '@lucide/svelte/icons/circle-user';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import Button from '$lib/components/ui/button/button.svelte';
   import { signOut } from '@auth/sveltekit/client';
-  import * as m from '$lib/paraglide/messages.js';
+  import { m } from '$lib/paraglide/messages.js';
   // import DropdownMenuContent from '$lib/components/ui/dropdown-menu/dropdown-menu-content.svelte';
 
   let { data } = $props();

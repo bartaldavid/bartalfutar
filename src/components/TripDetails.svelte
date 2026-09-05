@@ -7,7 +7,7 @@
   } from '../lib/util/date.svelte';
   import { typed_fetch } from '../routes/api/endpoint-types';
   import { useNow } from '$lib/stores/now.svelte';
-  import * as m from '$lib/paraglide/messages.js';
+  import { m } from '$lib/paraglide/messages.js';
 
   let { tripId }: { tripId: string } = $props();
 
