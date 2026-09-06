@@ -15,12 +15,12 @@
 </script>
 
 <div
-  class="mb-24 flex w-full flex-col dark:text-white md:w-72 {topMargin
+  class="mb-24 flex w-full flex-col md:w-80 dark:text-white {topMargin
     ? 'mt-12'
     : ''}"
 >
   {#if pageTitle}
-    <div class="mb-4 mt-12 flex items-center justify-between">
+    <div class="mt-12 mb-4 flex items-center justify-between">
       <h1 class="text-lg dark:text-white">{pageTitle}</h1>
       {#if header}
         {@render header()}

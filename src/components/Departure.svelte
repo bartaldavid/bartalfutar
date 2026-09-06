@@ -40,14 +40,16 @@
 >
   <div class="flex w-full justify-between gap-2">
     <div class="flex flex-col gap-1">
-      <div class="flex items-baseline gap-1">
+      <div class="flex items-baseline gap-1 font-medium">
         {#if isDelayed || !isRealtime}
-          <span class="">{displayDate(departureDate)}</span>
+          <span class={delayInMinutes >= 1 ? 'line-through opacity-50' : ''}
+            >{displayDate(departureDate)}</span
+          >
         {/if}
         {#if isRealtime}
           <span
             class={delayInMinutes >= 1
-              ? 'text-red-500 dark:text-red-400'
+              ? 'text-red-500  dark:text-red-400'
               : 'text-green-600 dark:text-green-400'}
           >
             {displayDate(predictedDepartureDate)}
@@ -71,16 +73,18 @@
       <div class="flex flex-row items-baseline gap-1 text-left">
         {#if departure.icon}
           <RouteIcon icon={departure.icon} />
-          <span class="text-start">{departure.headSign}</span>
+          <span class="text-start font-light">{departure.headSign}</span>
         {/if}
       </div>
 
       {#if departure.alerts?.length}
-        {#each departure.alerts ?? [] as alert}
-          <div class="text-left text-sm text-red-400">
-            {@html alert}
-          </div>
-        {/each}
+        <div class="text-xs">
+          {#each departure.alerts ?? [] as alert}
+            <div class="text-left text-xs text-red-400">
+              {@html alert}
+            </div>
+          {/each}
+        </div>
       {/if}
     </div>
 
