@@ -100,7 +100,7 @@
             : m.location_denied_helper()}
         </p>
         {#if $geolocationPermissionState === 'prompt'}
-          <Button on:click={() => loadLocation()}>{m.allow()}</Button>
+          <Button onclick={() => loadLocation()}>{m.allow()}</Button>
         {/if}
       </div>
     {/if}
