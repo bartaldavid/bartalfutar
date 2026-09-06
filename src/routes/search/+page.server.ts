@@ -12,6 +12,7 @@ export async function load({ fetch, url, locals }) {
   const userId = (await locals.auth())?.user.id;
 
   if (query !== '') {
+    console.log('Searching for stops with query server side:', query);
     const data = await typed_fetch(
       '/api/stops-for-location',
       { q: query },

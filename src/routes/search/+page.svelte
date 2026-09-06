@@ -8,7 +8,7 @@
   import { onMount } from 'svelte';
   import { typed_fetch } from '../api/endpoint-types';
   import type { TStop } from '$lib/types';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import Search from '@lucide/svelte/icons/search';
   import { replaceState } from '$app/navigation';
   import PlaceCard from './PlaceCard.svelte';
@@ -19,16 +19,17 @@
 
   let favorite_ids = $derived(data?.favorites_ids ?? []);
 
-  let searchQuery = $derived(data.query);
+  let inputValue = $derived(data.query);
+  let debouncedValue = $derived(data.query);
 
   let timer: NodeJS.Timeout | undefined = $state();
 
   // TODO combine these with createQueries
   const stopsQuery = createQuery(() => ({
-    queryKey: ['search', searchQuery],
+    queryKey: ['search', debouncedValue],
     queryFn: async () =>
-      typed_fetch('/api/stops-for-location', { q: searchQuery }),
-    enabled: searchQuery.length > searchQueryMinimumLength,
+      typed_fetch('/api/stops-for-location', { q: debouncedValue }),
+    enabled: debouncedValue.length > searchQueryMinimumLength,
     initialData: data?.searchData,
   }));
 
@@ -45,7 +46,7 @@
   // }));
 
   let stopsToDisplay: TStop[] = $derived.by(() => {
-    if (data?.query === searchQuery && data.searchData) {
+    if (data?.query === inputValue && data.searchData) {
       return data?.searchData ?? [];
     } else {
       return stopsQuery.data ?? [];
@@ -57,15 +58,15 @@
   function debounceFetch() {
     clearTimeout(timer);
 
-    $page.url.searchParams.set('q', searchQuery);
-    replaceState($page.url, history.state);
-
-    if (searchQuery.length > searchQueryMinimumLength) {
-      timer = setTimeout(() => {
-        stopsQuery.refetch();
-        // placesQuery.refetch();
-      }, debounceIntervalMs);
-    }
+    timer = setTimeout(() => {
+      debouncedValue = inputValue;
+      // stopsQuery.refetch();
+      // placesQuery.refetch();
+      const url = new URL(page.url);
+      if (debouncedValue) url.searchParams.set('q', inputValue);
+      else url.searchParams.delete('q');
+      replaceState(url, history.state);
+    }, debounceIntervalMs);
   }
 
   onMount(() => {
@@ -83,7 +84,7 @@
     <input
       type="search"
       placeholder={m.search_placeholder()}
-      bind:value={searchQuery}
+      bind:value={inputValue}
       oninput={() => {
         debounceFetch();
       }}
@@ -104,7 +105,7 @@
   {/if} -->
 
   {#if stopsToDisplay.length > 0}
-    <h2 class="mt-4 mb-1 text-sm font-medium">{m.stops()}</h2>
+    <!-- <h2 class="mt-4 mb-1 text-sm font-medium">{m.stops()}</h2> -->
     <div class="flex flex-col gap-1">
       {#each stopsToDisplay as stop}
         <Stop {stop} saved={!!stop.id && favorite_ids.includes(stop.id)} />
