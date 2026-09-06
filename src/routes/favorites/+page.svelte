@@ -5,7 +5,7 @@
   import UserCircle from '@lucide/svelte/icons/circle-user';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import Button from '$lib/components/ui/button/button.svelte';
-  import { signOut } from '@auth/sveltekit/client';
+  import { signOut, signIn } from '@auth/sveltekit/client';
   import { m } from '$lib/paraglide/messages.js';
   // import DropdownMenuContent from '$lib/components/ui/dropdown-menu/dropdown-menu-content.svelte';
 
@@ -37,7 +37,10 @@
         </DropdownMenu.Content>
       </DropdownMenu.Root>
     {:else}
-      <Button href="/auth/signin" data-sveltekit-preload-data="off"
+      <!-- <Button href="/auth/signin" data-sveltekit-preload-data="off"
+        >{m.sign_in()}</Button
+      > -->
+      <Button onclick={() => signIn('google')} data-sveltekit-preload-data="off"
         >{m.sign_in()}</Button
       >
     {/if}
