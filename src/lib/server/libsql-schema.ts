@@ -2,6 +2,7 @@ import type { components } from '$lib/schema-generated';
 import { relations, sql } from 'drizzle-orm';
 import type { ProviderType } from '@auth/sveltekit/providers';
 import {
+  index,
   integer,
   primaryKey,
   real,
@@ -40,11 +41,11 @@ export const accounts = sqliteTable(
     id_token: text('id_token'),
     session_state: text('session_state'),
   },
-  (account) => ({
-    compoundKey: primaryKey({
+  (account) => [
+    primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-  }),
+  ],
 );
 
 export const sessions = sqliteTable('session', {
@@ -62,9 +63,7 @@ export const verificationTokens = sqliteTable(
     token: text('token').notNull(),
     expires: integer('expires', { mode: 'timestamp_ms' }).notNull(),
   },
-  (vt) => ({
-    compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  }),
+  (vt) => [primaryKey({ columns: [vt.identifier, vt.token] })],
 );
 
 // bartalfutar data
@@ -130,9 +129,10 @@ export const favoriteStops = sqliteTable(
       .notNull()
       .references(() => users.id),
   },
-  (table) => ({
-    pk: primaryKey({ columns: [table.stopId, table.userId] }),
-  }),
+  (table) => [
+    primaryKey({ columns: [table.stopId, table.userId] }),
+    index('favorite_stops_user_id_index').on(table.userId),
+  ],
 );
 
 export const favoriteStopsRelations = relations(favoriteStops, ({ one }) => ({
@@ -152,9 +152,7 @@ export const stopsRoutes = sqliteTable(
     stopId: text('stop_id').references(() => stops.id),
     routeId: text('route_id').references(() => routes.id),
   },
-  (table) => ({
-    pk: primaryKey({ columns: [table.stopId, table.routeId] }),
-  }),
+  (table) => [primaryKey({ columns: [table.stopId, table.routeId] })],
 );
 
 export const stopsRoutesRelations = relations(stopsRoutes, ({ one }) => ({
