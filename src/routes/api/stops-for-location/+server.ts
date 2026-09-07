@@ -3,6 +3,7 @@ import { typed_json, type TypedResponse } from '$lib/util/fetch.js';
 import { z } from 'zod';
 import { getQueryFromParams } from '../endpoint-types.js';
 import { futarClient } from '$lib/server/futar.js';
+import { searchQueryMinimumLength } from '$lib/data/constants.js';
 
 export const _params = z.object({
   q: z.string(),
@@ -14,7 +15,7 @@ export const _params = z.object({
 export async function GET({ url, fetch }): Promise<TypedResponse<TStop[]>> {
   const query = _params.parse(getQueryFromParams(url.searchParams));
 
-  if (query.q.length < 4) return typed_json([]);
+  if (query.q.length <= searchQueryMinimumLength) return typed_json([]);
 
   const { data: response } = await futarClient.GET(
     '/{dialect}/api/where/stops-for-location',

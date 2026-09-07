@@ -11,13 +11,12 @@
   import { page } from '$app/state';
   import Search from '@lucide/svelte/icons/search';
   import { replaceState } from '$app/navigation';
-  import PlaceCard from './PlaceCard.svelte';
   import { m } from '$lib/paraglide/messages.js';
-  import { derived as derivedStore, writable } from 'svelte/store';
 
   let { data } = $props();
 
   let favorite_ids = $derived(data?.favorites_ids ?? []);
+  let favorite_stops = $derived(data?.favorites ?? []);
 
   let inputValue = $derived(data.query);
   let debouncedValue = $derived(data.query);
@@ -30,7 +29,6 @@
     queryFn: async () =>
       typed_fetch('/api/stops-for-location', { q: debouncedValue }),
     enabled: debouncedValue.length > searchQueryMinimumLength,
-    initialData: data?.searchData,
   }));
 
   // const placesQuery = createQuery(() => ({
@@ -45,13 +43,11 @@
   //   enabled: searchQuery.length > searchQueryMinimumLength,
   // }));
 
-  let stopsToDisplay: TStop[] = $derived.by(() => {
-    if (data?.query === inputValue && data.searchData) {
-      return data?.searchData ?? [];
-    } else {
-      return stopsQuery.data ?? [];
-    }
-  });
+  let stopsToDisplay: TStop[] = $derived(
+    debouncedValue.length > searchQueryMinimumLength
+      ? (stopsQuery.data ?? [])
+      : favorite_stops,
+  );
 
   let inputElement: HTMLInputElement;
 
@@ -60,8 +56,7 @@
 
     timer = setTimeout(() => {
       debouncedValue = inputValue;
-      // stopsQuery.refetch();
-      // placesQuery.refetch();
+
       const url = new URL(page.url);
       if (debouncedValue) url.searchParams.set('q', inputValue);
       else url.searchParams.delete('q');
