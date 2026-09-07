@@ -36,7 +36,7 @@
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
-    {:else}
+    {:else if Object.entries(data.stops).length > 0}
       <!-- <Button href="/auth/signin" data-sveltekit-preload-data="off"
         >{m.sign_in()}</Button
       > -->
